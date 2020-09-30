@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="Callan McGill">
+    <meta name="author" content="Callan McGill">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Peano Axioms (Draft)">
+    <meta name="twitter:description" content="Explorations into the natural numbers">
+        <title>Peano Axioms (Draft)</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+<body>
+    <!DOCTYPE html>
+    <header>
+        <nav>
+          
+          <a id="beacon" href="/">
+              <div id="home-text"> HOME </div>
+          </a>
+        </nav>
+        <div class="right-sidebar">
+            <a class="ext-link" href="https://github.com/boarders">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+        <script type="text/javascript"
+                src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+        </script>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                Peano Axioms (Draft)
+            </span>
+            <br>
+            <br>
+            <span class="byline">by Callan McGill</span>
+            <br>
+            <span class="date">Sep 27, 2020</span>
+            <br>
+            <br>
+            <div class="metadata"> </div>
+            </div>
+    </div>
+    <span class="quote"> "If there is one thing in mathematics that fascinates me more than anything else (and doubtless always has), it is neither ‘number’ nor ‘size,’ but always form."  - Grothendieck</span>
+    </div>
+    <article class="post">
+        <p>The 19th century brought about a revolution in the foundations of mathematics culminating in the Zermelo–Frankel axioms. This gave a foundational theory, <em>set theory</em>, in which the main branches of mathematics could be encoded. Within this mileux arose the axiomatic method whereby mathematical objects came to be characterized not by any particular construction, but by the set of axioms (or laws) which an object satisfies. This eventually gave rise to the development of category theory as a foundational theory of mathematics characterizing objects via their universal properties. <span class="math inline">\(\def\N{\mathsf{N}}\)</span></p>
+<p>Let us turn then to a paradigmatic case; a characterization of the natural numbers. Peano gave an axiomatization of the natural numbers as a set <span class="math inline">\(\N\)</span> with the following properties:</p>
+<ul>
+<li>There exist terms <span class="math inline">\(0 \in \N\)</span> and <span class="math inline">\(\mathrm{s} : \N \rightarrow \N\)</span>.</li>
+<li><span class="math inline">\(\N\)</span> carries an equivalence relation <span class="math inline">\(\simeq\;\subset\N \times\N\)</span> (to be explained below).</li>
+<li><span class="math inline">\(\mathrm{s}\)</span> reflects <span class="math inline">\(\simeq\)</span>-equivalence: <span class="math display">\[ \forall \; \mathrm{n}, \mathrm{m} \in \N \; . \; \mathrm{s} (\mathrm{n}) \simeq \mathrm{s} (\mathrm{m}) \Rightarrow \mathrm{m} \simeq \mathrm{n} \]</span></li>
+<li><span class="math inline">\(0\)</span> is never (equivalent to) the successor of any number: <span class="math display">\[ \nexists \; \mathrm{n} \in \mathbb{N} \; . \; \mathrm{s}(n) \simeq 0 \]</span></li>
+<li><span class="math inline">\(\N\)</span> satisfies induction: if <span class="math inline">\(\phi : \N \rightarrow \mathbb{B}\)</span> is a predicate and the following conditions hold:
+<ul>
+<li><span class="math inline">\(\phi(0)\)</span> is true.</li>
+<li><span class="math inline">\(\forall \; \mathrm{n} \in \mathbb{N} \; . \; \phi(n) \Rightarrow \phi(\mathrm{s}(\mathrm{n}))\)</span></li>
+</ul>
+then <span class="math inline">\(\phi\)</span> is true for all <span class="math inline">\(\mathrm{n} \in \N\)</span>.</li>
+</ul>
+<p>How can we prove that this uniquely determines the natural numbers? Our strategy would roughly go as follows:</p>
+<ul>
+<li>Give a particular construction of <span class="math inline">\(\mathbb{N}\)</span> showing it satisfies the axioms.</li>
+<li>For any set <span class="math inline">\(\N\)</span> satisfying the axioms construct maps: <span class="math display">\[\begin{aligned} 
+  \mathrm{from} &amp;: \mathbb{N} \rightarrow \mathsf{N} \\
+  \mathrm{to}   &amp;: \mathsf{N} \rightarrow \mathbb{N} \\
+\end{aligned}\]</span></li>
+<li>Use induction with the following predicates: <span class="math display">\[\begin{aligned} 
+  \phi_{\mathbb{N}}(n) &amp;= n \simeq_\mathbb{N} \mathrm{to} \circ \mathrm{from}(n) \\
+  \phi_{\mathsf{N}}(n) &amp;= n \simeq_\mathsf{N} \mathrm{to} \circ \mathrm{from} (n)
+\end{aligned}\]</span> to show the these maps form an equivalence.</li>
+</ul>
+<p>Let’s try to formalise this, with some necessary adjustments along the way, in Agda. We start with a few imports we will need later:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">module</span> Peano <span class="kw">where</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">open</span> <span class="kw">import</span> Relation<span class="ot">.</span>Binary<span class="ot">.</span>PropositionalEquality</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>  <span class="kw">using</span> <span class="ot">(_</span>≡<span class="ot">_;</span> refl<span class="ot">;</span> <span class="ot">_</span>≢<span class="ot">_;</span> cong<span class="ot">;</span> trans<span class="ot">;</span> sym<span class="ot">)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="kw">open</span> <span class="kw">import</span> Function</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>  <span class="kw">using</span> <span class="ot">(_</span>∘<span class="ot">_)</span></span></code></pre></div>
+<p>Typically in Agda (or Haskell) we define the (unary) natural numbers as follows:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">data</span> ℕ <span class="ot">:</span> <span class="dt">Set</span> <span class="kw">where</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>  Zero <span class="ot">:</span> ℕ</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>  Succ <span class="ot">:</span> ℕ <span class="ot">-&gt;</span> ℕ</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="co">-- This allows us to use numeric literals.</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="pp">{-# BUILTIN NATURAL ℕ #-}</span></span></code></pre></div>
+<p>Now out first port of call is to formulate equivalence relations:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">record</span> Rel <span class="ot">(</span>A <span class="ot">:</span> <span class="dt">Set</span><span class="ot">)</span> <span class="ot">:</span> <span class="dt">Set₁</span> <span class="kw">where</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>  <span class="kw">field</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    <span class="ot">_</span>≃<span class="ot">_</span> <span class="ot">:</span> A <span class="ot">→</span> A <span class="ot">→</span> <span class="dt">Set</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    reflexivity  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">→</span> a ≃ a</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>    symmetry     <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a b <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">→</span> a ≃ b <span class="ot">→</span> b ≃ a</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>    transitivity <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a b c <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">→</span> a ≃ b <span class="ot">→</span> b ≃ c <span class="ot">→</span> a ≃ c</span></code></pre></div>
+<p>We note that this definition is slightly different from what is typical in mathematics. Rather than a (mere) subset of the diagonal we use a dependent type taking two arguments and returning what we can think of as the <em>evidence</em> that the two values are equal. The axioms this satisfies are reflexivity, that any element is equal to itself; symmetry, that we can freely reverse equalities; and transitivity, that we can compose equalities. Let’s show that <span class="math inline">\(\mathbb{N}\)</span>, under Agda’s built-in equality type <span class="math inline">\(\equiv\)</span>, forms an equivalence relation. As a brief reminder, here is how the equality type is defined in Agda (ignoring level polymorphsim):</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">data</span> <span class="ot">_</span>≡<span class="ot">_</span> <span class="ot">{</span>A <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">(</span>x <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">:</span> A <span class="ot">→</span> <span class="dt">Set</span> <span class="kw">where</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>  refl <span class="ot">:</span> x ≡ x</span></code></pre></div>
+<p>That is to say, that we can give a term <span class="math inline">\(\mathrm{refl}\)</span> of type <span class="math inline">\(\mathrm{a} \equiv \mathrm{b}\)</span> so long as Agda can directly compute that <span class="math inline">\(\mathrm{a}\)</span> and <span class="math inline">\(\mathrm{b}\)</span> are equal within the particular context. For example, if we define addition:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ot">_</span>+<span class="ot">_</span> <span class="ot">:</span> ℕ <span class="ot">-&gt;</span> ℕ <span class="ot">-&gt;</span> ℕ</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="ot">_</span>+<span class="ot">_</span> Zero     m <span class="ot">=</span> m</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="ot">_</span>+<span class="ot">_</span> <span class="ot">(</span>Succ n<span class="ot">)</span> m <span class="ot">=</span> Succ <span class="ot">(</span>n + m<span class="ot">)</span></span></code></pre></div>
+<p>then we can give the following (unnamed) definition:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="ot">_</span> <span class="ot">:</span> <span class="dv">2</span> + <span class="dv">2</span> ≡ <span class="dv">4</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="ot">_</span> <span class="ot">=</span> refl</span></code></pre></div>
+<p>as Agda can compute that both sides are equal.</p>
+<p>Back to an equivalence on <span class="math inline">\(\mathbb{N}\)</span>, let’s see that <span class="math inline">\(\equiv\)</span> satisfies the axioms:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>ℕ-refl <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>n <span class="ot">:</span> ℕ<span class="ot">}</span> <span class="ot">→</span> n ≡ n</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>ℕ-refl <span class="ot">=</span> refl</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>ℕ-symm <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>n m <span class="ot">:</span> ℕ<span class="ot">}</span> <span class="ot">→</span> n ≡ m <span class="ot">→</span> m ≡ n</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>ℕ-symm eq <span class="kw">rewrite</span> eq <span class="ot">=</span> refl</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>ℕ-trans <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>m n r <span class="ot">:</span> ℕ<span class="ot">}</span> <span class="ot">→</span> m ≡ n <span class="ot">→</span> n ≡ r <span class="ot">→</span> m ≡ r</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>ℕ-trans  m≡n n≡r <span class="kw">rewrite</span> m≡n <span class="ot">|</span> n≡r <span class="ot">=</span> refl</span></code></pre></div>
+<p>Here we make use of Agda’s rewrite mechanism. By providing an equality proof of the form <span class="math inline">\(\mathrm{a} \equiv \mathrm{b}\)</span>, rewrite will replace subexpressions in the goal of the form <span class="math inline">\(\mathrm{a}\)</span> with <span class="math inline">\(\mathrm{b}\)</span>. For example, in <span class="math inline">\(\mathbb{N}\mathrm{-symm}\)</span>, we use the equality term we are given as an argument to rewrite so that each appearance of <span class="math inline">\(\mathrm{n}\)</span> is replaced with <span class="math inline">\(\mathrm{m}\)</span>, at which point we may fill the hole with <span class="math inline">\(\mathrm{refl} : \mathrm{m} \equiv \mathrm{m}\)</span>.</p>
+<p>It is worth noting that we haven’t used anything special about <span class="math inline">\(\mathbb{N}\)</span> and these same definitions would work to prove that <em>any</em> set forms an equivalence relation under <span class="math inline">\(\equiv\)</span>.</p>
+<p>Now we can write an instance of Rel for <span class="math inline">\(\mathbb{N}\)</span>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="kw">open</span> Rel <span class="ot">{{...}}</span> <span class="kw">public</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a><span class="kw">instance</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>  ≡-Nat <span class="ot">:</span> Rel ℕ</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a>  ≡-Nat <span class="ot">=</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true"></a>    <span class="kw">record</span> </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true"></a>    <span class="ot">{</span> <span class="ot">_</span>≃<span class="ot">_</span>          <span class="ot">=</span> <span class="ot">_</span>≡<span class="ot">_</span> </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true"></a>    <span class="ot">;</span> reflexivity  <span class="ot">=</span> ℕ-refl </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true"></a>    <span class="ot">;</span> symmetry     <span class="ot">=</span> ℕ-symm </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true"></a>    <span class="ot">;</span> transitivity <span class="ot">=</span> ℕ-trans </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true"></a>    <span class="ot">}</span></span></code></pre></div>
+<p>Here we use Agda’s instance arguments mechanism. We start by bringing the fields of Rel into scope for those instances which can resolved. This is essentially equivalent to us defining top-level functions of the form:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="ot">_</span>≃<span class="ot">_</span>         <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>A <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">{{_</span> <span class="ot">:</span> Rel A<span class="ot">}}</span> <span class="ot">→</span> A <span class="ot">→</span> A <span class="ot">→</span> <span class="dt">Set</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>reflexivity <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>A <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">{{_</span> <span class="ot">:</span> Rel A<span class="ot">}}</span> <span class="ot">{</span>a b <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>a ≃ a<span class="ot">)</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="co">-- etc.</span></span></code></pre></div>
+<p>Implicit arguments <span class="math inline">\(\{\{\_ : \mathrm{Rel} \mathrm{A}\}\}\)</span> are resolved by searching for instances we have available in scope. In particular, we define an instance of Rel for <span class="math inline">\(\mathbb{N}\)</span> which means that we may use these methods on <span class="math inline">\(\mathbb{N}\)</span> and Agda will infer the instance we have provided.</p>
+<p>Now we are in a position to formalise the Peano axioms. In much the same way as we have done with equivalence relations we use records to encode algebraic structure:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="kw">record</span> Peano <span class="ot">(</span>N <span class="ot">:</span> <span class="dt">Set</span><span class="ot">)</span> <span class="ot">{{</span>rel <span class="ot">:</span> Rel N<span class="ot">}}</span> <span class="ot">:</span> <span class="dt">Set₁</span> <span class="kw">where</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>  <span class="kw">field</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a>    zero        <span class="ot">:</span> N</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a>    succ        <span class="ot">:</span> N <span class="ot">→</span> N</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a>    s-injective <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a b <span class="ot">:</span> N<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>succ a<span class="ot">)</span> ≃ <span class="ot">(</span>succ b<span class="ot">)</span> <span class="ot">→</span> a ≃ b</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a>    zero≠succ   <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">(</span>a <span class="ot">:</span> N<span class="ot">)</span> <span class="ot">→</span> zero ≃ <span class="ot">(</span>succ a<span class="ot">)</span> <span class="ot">→</span> ⊥</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true"></a>    induction   <span class="ot">:</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true"></a>       <span class="ot">∀</span> <span class="ot">(</span>P <span class="ot">:</span> N <span class="ot">→</span> <span class="dt">Set</span><span class="ot">)</span> <span class="ot">(</span>a <span class="ot">:</span> N<span class="ot">)</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true"></a>       <span class="ot">→</span> <span class="ot">(</span>z <span class="ot">:</span> P zero<span class="ot">)</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true"></a>       <span class="ot">→</span> <span class="ot">(</span>s <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>b <span class="ot">:</span> N<span class="ot">}</span> <span class="ot">→</span> P b <span class="ot">→</span> P <span class="ot">(</span>succ b<span class="ot">))</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true"></a>       <span class="ot">→</span> P a</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true"></a>    induction-zero <span class="ot">:</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true"></a>       <span class="ot">∀</span> <span class="ot">(</span>P <span class="ot">:</span> N <span class="ot">→</span> <span class="dt">Set</span><span class="ot">)</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true"></a>       <span class="ot">→</span> <span class="ot">(</span>z <span class="ot">:</span> P zero<span class="ot">)</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true"></a>       <span class="ot">→</span> <span class="ot">(</span>s <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>b <span class="ot">:</span> N<span class="ot">}</span> <span class="ot">→</span> P b <span class="ot">→</span> P <span class="ot">(</span>succ b<span class="ot">))</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true"></a>       <span class="ot">→</span> <span class="ot">(</span>induction P zero z s ≡ z<span class="ot">)</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true"></a>    induction-succ <span class="ot">:</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true"></a>       <span class="ot">∀</span> <span class="ot">(</span>P <span class="ot">:</span> N <span class="ot">→</span> <span class="dt">Set</span><span class="ot">)</span> <span class="ot">(</span>a <span class="ot">:</span> N<span class="ot">)</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true"></a>       <span class="ot">→</span> <span class="ot">(</span>z <span class="ot">:</span> <span class="ot">(</span>P zero<span class="ot">))</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true"></a>       <span class="ot">→</span> <span class="ot">(</span>s <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>b <span class="ot">:</span> N<span class="ot">}</span> <span class="ot">→</span> P b <span class="ot">→</span> P <span class="ot">(</span>succ b<span class="ot">))</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true"></a>       <span class="ot">→</span> <span class="ot">(</span>induction P <span class="ot">(</span>succ a<span class="ot">)</span> z s ≡ s <span class="ot">(</span>induction P a z s<span class="ot">))</span></span></code></pre></div>
+<p>Several things are worth noting about this defintion:</p>
+<ul>
+<li>We again make use of instance arguments so that the input type <span class="math inline">\(\N\)</span> has the structure of an equivalence relation. This is somewhat similar to a typeclass extension definition in Haskell:</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a>    <span class="kw">class</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> <span class="dt">Ord</span> a</span></code></pre></div>
+<ul>
+<li>We upgrade induction from a unary predicate <span class="math inline">\(\phi : \N -&gt; \mathbb{B}\)</span> to a dependent type <span class="math inline">\(\mathrm{P} : \N \rightarrow \mathrm{Set}\)</span>.</li>
+<li>As we will see later, we would like this upgraded principle to be able to <em>compute</em>. As such we add two laws that dictate how computation should unfold.</li>
+</ul>
+<p>Let’s now prove that <span class="math inline">\(\mathbb{N}\)</span> satisfies induction and injectivity of <span class="math inline">\(\mathrm{Succ}\)</span>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>ℕ-induction <span class="ot">:</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>  <span class="ot">∀</span> <span class="ot">(</span>P <span class="ot">:</span> ℕ <span class="ot">→</span> <span class="dt">Set</span><span class="ot">)</span> <span class="ot">(</span>a <span class="ot">:</span> ℕ<span class="ot">)</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a>  <span class="ot">→</span> <span class="ot">(</span>P Zero<span class="ot">)</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a>  <span class="ot">→</span> <span class="ot">(∀</span> <span class="ot">{</span>b <span class="ot">:</span> ℕ<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>P b<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>P <span class="ot">(</span>Succ b<span class="ot">)))</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a>  <span class="ot">→</span> <span class="ot">(</span>P a<span class="ot">)</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a>ℕ-induction P Zero p[zero] p[succ] <span class="ot">=</span> p[zero]</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a>ℕ-induction P <span class="ot">(</span>Succ n<span class="ot">)</span> p[zero] p[succ] </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true"></a>  <span class="ot">=</span> p[succ] <span class="ot">(</span>ℕ-induction P n p[zero] p[succ]<span class="ot">)</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true"></a>Succ-inj <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>n m <span class="ot">:</span> ℕ<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>Succ n<span class="ot">)</span> ≡ <span class="ot">(</span>Succ m<span class="ot">)</span> <span class="ot">→</span> n ≡ m</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true"></a>Succ-inj refl <span class="ot">=</span> refl</span></code></pre></div>
+<p>This is much as we might expect, induction is identical to the recursion principle for <span class="math inline">\(\mathbb{N}\)</span> and <span class="math inline">\(\mathrm{Succ}\)</span>-<span class="math inline">\(\mathrm{inj}\)</span> follows definitionally after we case match on equality. We can now make <span class="math inline">\(\mathbb{N}\)</span> an instance of <span class="math inline">\(\mathrm{Peano}\)</span>:</p>
+<pre><code>instance
+  ℕ-Peano : Peano ℕ
+  ℕ-Peano = 
+    record
+      { zero           = Zero
+      ; succ           = Succ
+      ; s-injective    = Succ-inj
+      ; zero≠succ      = λ n ()
+      ; induction      = ℕ-induction
+      ; induction-zero = λ P z s   → refl
+      ; induction-succ = λ P a z s → refl
+      }</code></pre>
+<p>In the last two cases the <span class="math inline">\(\mathrm{induction}\)</span> laws hold definitionally from how we have defined <span class="math inline">\(\mathbb{N}\)</span>-<span class="math inline">\(\mathrm{induction}\)</span>.</p>
+<p>Now, given any set <span class="math inline">\(\mathsf{N}\)</span> satisfying the Peano axioms we want to define functions to and from <span class="math inline">\(\mathbb{N}\)</span>:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>from-ℕ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>N <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">{{_</span> <span class="ot">:</span> Rel N<span class="ot">}}</span> <span class="ot">→</span> <span class="ot">{{</span> <span class="ot">_</span> <span class="ot">:</span> Peano N <span class="ot">}}</span> <span class="ot">→</span> ℕ <span class="ot">→</span> N</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a>from-ℕ <span class="ot">{</span>N<span class="ot">}</span> n <span class="ot">=</span> induction <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">-&gt;</span> N <span class="ot">)</span> n zero succ</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a>to-ℕ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>N <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">{{_</span> <span class="ot">:</span> Rel N<span class="ot">}}</span> <span class="ot">→</span> <span class="ot">{{_</span> <span class="ot">:</span> Peano N<span class="ot">}}</span> <span class="ot">→</span> N <span class="ot">→</span> ℕ</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true"></a>to-ℕ n <span class="ot">=</span> induction <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> ℕ<span class="ot">)</span> n zero succ</span></code></pre></div>
+<p>Pleasantly both definitions are essentially identical using instance resolution to determine the relevant inducton principle and values to use. Now we can show these form equivalences. To get a flavour let us step through the development for the first equality:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a>to∘from <span class="ot">:</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a>  <span class="ot">∀</span> <span class="ot">{</span>N <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">{{</span> <span class="ot">_</span> <span class="ot">:</span> Rel N <span class="ot">}}</span> <span class="ot">→</span> <span class="ot">{{</span>peano <span class="ot">:</span> Peano N<span class="ot">}}</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a>  <span class="ot">→</span> <span class="ot">(</span>n <span class="ot">:</span> ℕ<span class="ot">)</span> <span class="ot">→</span> to-ℕ <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">(</span>from-ℕ n<span class="ot">)</span> ≡ n</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a>to∘from n <span class="ot">=</span> <span class="ot">{!!}</span></span></code></pre></div>
+<p>Asking Agda for the goal gives us:</p>
+<pre class="terminal"><code>Goal: Peano.induction peano (λ _ → ℕ)
+      (ℕ-induction (λ _ → N) n (Peano.zero peano) (Peano.succ peano)) 0
+      Succ
+      ≡ n
+————————————————————————————————————————————————————————————
+n     : ℕ
+peano : Peano N  (not in scope, instance)
+_     : Rel N    (instance)
+N     : Set      (not in scope)
+</code></pre>
+<p>We can see that in order for <span class="math inline">\(\mathbb{N}\)</span>-<span class="math inline">\(\mathrm{induction}\)</span> to make progress we need to split on <span class="math inline">\(\mathrm{n}\)</span>:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a>to∘from <span class="ot">:</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a>  <span class="ot">∀</span> <span class="ot">{</span>N <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">{{</span> <span class="ot">_</span> <span class="ot">:</span> Rel N <span class="ot">}}</span> <span class="ot">→</span> <span class="ot">{{</span>peano <span class="ot">:</span> Peano N<span class="ot">}}</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a>  <span class="ot">→</span> <span class="ot">(</span>n <span class="ot">:</span> ℕ<span class="ot">)</span> <span class="ot">→</span> to-ℕ <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">(</span>from-ℕ n<span class="ot">)</span> ≡ n</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a>to∘from Zero     <span class="ot">=</span> <span class="ot">{!!}</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a>to∘from <span class="ot">(</span>Succ n<span class="ot">)</span> <span class="ot">=</span> <span class="ot">{!!}</span></span></code></pre></div>
+<p>The new goal for <span class="math inline">\(\mathrm{Zero}\)</span> is:</p>
+<pre class="terminal"><code>Goal: Peano.induction peano (λ _ → ℕ) (Peano.zero peano) 0 Succ ≡ 0</code></pre>
+<p>This is precisely our <span class="math inline">\(\mathrm{induction}\)</span>-<span class="math inline">\(\mathrm{zero}\)</span> principle! Similarly we can now use the <span class="math inline">\(\mathrm{induction}\)</span>-<span class="math inline">\(\mathrm{succ}\)</span> principle in the second case and then recurse giving us:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a>to∘from <span class="ot">:</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a>  <span class="ot">∀</span> <span class="ot">{</span>N <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">{{</span> <span class="ot">_</span> <span class="ot">:</span> Rel N <span class="ot">}}</span> <span class="ot">→</span> <span class="ot">{{</span>peano <span class="ot">:</span> Peano N<span class="ot">}}</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a>  <span class="ot">→</span> <span class="ot">(</span>n <span class="ot">:</span> ℕ<span class="ot">)</span> <span class="ot">→</span> to-ℕ <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">(</span>from-ℕ n<span class="ot">)</span> ≡ n</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true"></a>to∘from Zero <span class="ot">=</span>  <span class="ot">(</span>induction-zero <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> ℕ<span class="ot">)</span> Zero Succ<span class="ot">)</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true"></a>to∘from <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">{{_}}</span> <span class="ot">{{</span>peano<span class="ot">}}</span> <span class="ot">(</span>Succ n<span class="ot">)</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true"></a>  <span class="kw">rewrite</span> </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true"></a>    <span class="ot">(</span>induction-succ </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true"></a>      <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> ℕ<span class="ot">)</span> </span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true"></a>      <span class="ot">(</span>ℕ-induction <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> N<span class="ot">)</span> n <span class="ot">(</span>Peano<span class="ot">.</span>zero peano<span class="ot">)</span> <span class="ot">(</span>Peano<span class="ot">.</span>succ peano<span class="ot">))</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true"></a>      Zero </span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true"></a>      Succ<span class="ot">)</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true"></a>  <span class="ot">|</span> to∘from <span class="ot">{</span>N<span class="ot">}</span> n</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true"></a>  <span class="ot">=</span> refl</span></code></pre></div>
+<p>The slightly gnarly explicit arguments in the second case are to help along the rewrite mechanism as it didn’t seem to cooperate with a less verbosity.</p>
+<p>The other proof is similarly a case of following our nose (or rather following the typechecker). We first remind ourselves of some equality principles we have imported above (again simplifying away level polymorphism):</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="co">-- Funtions preserve equality:</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a>cong </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>  <span class="ot">:</span> <span class="ot">{</span>A <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">{</span>B <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">(</span>f <span class="ot">:</span> A <span class="ot">→</span> B<span class="ot">)</span> <span class="ot">{</span>x y <span class="ot">:</span> A<span class="ot">}</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a>  <span class="ot">→</span> x ≡ y <span class="ot">→</span> f x ≡ f y</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true"></a><span class="co">-- The transitivity principle for ≡</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true"></a>trans <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a b c <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">→</span> a ≡ b <span class="ot">→</span> b ≡ c <span class="ot">→</span> a ≡ c</span></code></pre></div>
+<p>We also will need the fact that we can lift any propositional equality into an equivalence relation:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a>liftEq <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>A <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span>  <span class="ot">{{</span>r <span class="ot">:</span> Rel A<span class="ot">}}</span> <span class="ot">→</span> <span class="ot">{</span>a b <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">→</span> a ≡ b <span class="ot">→</span> <span class="ot">(</span>a ≃ b<span class="ot">)</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a>liftEq refl <span class="ot">=</span> reflexivity</span></code></pre></div>
+<p>With these can now give the proof:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="co">-- We make use of the liftEq as we prove the stronger claim</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a><span class="co">-- that from-ℕ (to-ℕ n) ≡ n</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a>from∘to <span class="ot">:</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true"></a>  <span class="ot">∀</span> <span class="ot">{</span>N <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}{{</span> rel <span class="ot">:</span> Rel N<span class="ot">}}</span> <span class="ot">→</span> <span class="ot">{{</span>peano <span class="ot">:</span> Peano N<span class="ot">}}</span> </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true"></a>  <span class="ot">→</span> <span class="ot">(</span>n <span class="ot">:</span> N<span class="ot">)</span> <span class="ot">→</span> from-ℕ <span class="ot">(</span>to-ℕ n<span class="ot">)</span> ≃ n</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true"></a>from∘to n <span class="ot">=</span> </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true"></a>  <span class="kw">let</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true"></a>    prop-eq <span class="ot">:</span> from-ℕ <span class="ot">(</span>to-ℕ n<span class="ot">)</span> ≡ n</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true"></a>    prop-eq <span class="ot">=</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true"></a>      induction</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true"></a>     <span class="co">-- we use induction on the principle</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true"></a>     <span class="co">-- we are trying to show.</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true"></a>        <span class="ot">(λ</span> n <span class="ot">→</span> from-ℕ <span class="ot">(</span>to-ℕ  n<span class="ot">)</span> ≡ n<span class="ot">)</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true"></a>        n </span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true"></a>        zero-lem</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true"></a>        <span class="ot">(λ</span> <span class="ot">{</span>prev<span class="ot">}</span> <span class="ot">→</span> succ-lem prev <span class="ot">)</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true"></a>  <span class="kw">in</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true"></a> <span class="co">-- We then lift the equality from ≡ to ≃</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true"></a>    liftEq prop-eq</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true"></a>  <span class="co">-- In the zero case we apply induction-zero underneath from-ℕ</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true"></a>  <span class="co">-- and then use the definition of from-ℕ.</span></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true"></a>  zero-lem </span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true"></a>    <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">{{_</span> <span class="ot">:</span> Rel N<span class="ot">}}</span> <span class="ot">{{</span>peano <span class="ot">:</span> Peano N<span class="ot">}}</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true"></a>    <span class="ot">→</span> from-ℕ <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">(</span>induction <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> ℕ<span class="ot">)</span> zero Zero Succ<span class="ot">)</span> ≡ zero</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true"></a>  zero-lem <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">=</span></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true"></a>    <span class="kw">let</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true"></a>      pf1 <span class="ot">:</span> from-ℕ <span class="ot">(</span>induction <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> ℕ<span class="ot">)</span> zero Zero Succ<span class="ot">)</span> ≡ from-ℕ Zero</span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true"></a>      pf1 <span class="ot">=</span> cong from-ℕ <span class="ot">(</span>induction-zero <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> ℕ<span class="ot">)</span> Zero Succ<span class="ot">)</span></span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true"></a></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true"></a>      pf2 <span class="ot">:</span> from-ℕ Zero ≡ zero</span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true"></a>      pf2 <span class="ot">=</span> refl</span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true"></a>    <span class="kw">in</span></span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true"></a>      trans pf1 pf2</span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true"></a>  <span class="co">-- In the successor case we analogously apply induction-succ</span></span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true"></a>  <span class="co">-- underneath from-ℕ and then recursely use the previous proof.</span></span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true"></a>  succ-lem </span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true"></a>    <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">{{_</span> <span class="ot">:</span> Rel N<span class="ot">}}</span> <span class="ot">{{</span>peano <span class="ot">:</span> Peano N<span class="ot">}}</span> <span class="ot">(</span>prev <span class="ot">:</span> N<span class="ot">)</span></span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true"></a>    <span class="ot">→</span> from-ℕ <span class="ot">(</span>induction <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> ℕ<span class="ot">)</span> prev Zero Succ<span class="ot">)</span> ≡ prev </span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true"></a>    <span class="ot">→</span> from-ℕ <span class="ot">(</span>induction <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> ℕ<span class="ot">)</span> <span class="ot">(</span>succ prev<span class="ot">)</span> Zero Succ<span class="ot">)</span> ≡ succ prev</span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true"></a>  succ-lem prev pf <span class="ot">=</span> </span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true"></a>    <span class="kw">let</span></span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true"></a>      pf1 <span class="ot">:</span> from-ℕ <span class="ot">(</span>induction <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> ℕ<span class="ot">)</span> <span class="ot">(</span>succ prev<span class="ot">)</span> Zero Succ<span class="ot">)</span></span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true"></a>          ≡ from-ℕ <span class="ot">(</span>Succ <span class="ot">(</span>induction <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> ℕ<span class="ot">)</span> prev Zero Succ<span class="ot">))</span></span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true"></a>      pf1 <span class="ot">=</span> cong <span class="ot">(</span>from-ℕ<span class="ot">)</span> <span class="ot">(</span>induction-succ <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> ℕ<span class="ot">)</span> prev Zero Succ<span class="ot">)</span></span>
+<span id="cb22-46"><a href="#cb22-46" aria-hidden="true"></a></span>
+<span id="cb22-47"><a href="#cb22-47" aria-hidden="true"></a>      pf2 <span class="ot">:</span> from-ℕ <span class="ot">(</span>Succ <span class="ot">(</span>induction <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> ℕ<span class="ot">)</span> prev Zero Succ<span class="ot">))</span> ≡ <span class="ot">(</span>succ prev<span class="ot">)</span></span>
+<span id="cb22-48"><a href="#cb22-48" aria-hidden="true"></a>      pf2 <span class="ot">=</span> cong succ pf</span>
+<span id="cb22-49"><a href="#cb22-49" aria-hidden="true"></a>    <span class="kw">in</span> </span>
+<span id="cb22-50"><a href="#cb22-50" aria-hidden="true"></a>      trans pf1 pf2</span></code></pre></div>
+<p>This shows that any two types which satisfy the Peano axioms are equivalent in the sense that there are maps between them which form an isomorphism up to equivalence.</p>
+<p>This is quite interesting as it stands but we might wonder if there is a more direct characterization of the natural numbers? After all, our original definition as a recursive algebraic data type seems to give a perfectly good specification of what the natural numbers are and how they can be built. Let us turn to a characterization of <span class="math inline">\(\mathbb{N}\)</span> given by Lawvere that allows us to recover this intuition.</p>
+<p>We define the category of discrete dynamical systems which has:</p>
+<ul>
+<li>Objects given by set <span class="math inline">\(X\)</span> along with a starting point <span class="math inline">\(x_0 \in X\)</span> and a self-map <span class="math inline">\(f : X \rightarrow X\)</span>.</li>
+<li>Morphisms given by those set maps <span class="math inline">\(\phi : X \rightarrow Y\)</span> which take basepoint to basepoint and which commute with the self-map: <span class="math display">\[
+\begin{array}{lll}
+X          &amp; \xrightarrow{\phi} &amp; Y      \\ 
+\downarrow &amp;             &amp; \downarrow    \\ 
+X          &amp; \xrightarrow{\phi} &amp; Y      \\ 
+\end{array}
+\]</span></li>
+</ul>
+<p>Lawvere then observed that the natural numbers are the initial object in the category of discrete dynamical systems. In other words, every other dynamical system receives a unique map from <span class="math inline">\(\left( \mathbb{N}\; , \; 0 : \mathbb{N}\; ,\; \mathrm{s}\; : \; \mathbb{N} \rightarrow \mathbb{N}\right)\)</span>. Let us phrase this idea in terms of language more familiar to functional programmers. First define a “pattern functor”:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="kw">data</span> NatP <span class="ot">(</span>r <span class="ot">:</span> <span class="dt">Set</span><span class="ot">)</span> <span class="ot">:</span> <span class="dt">Set</span> <span class="kw">where</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a>  ZeroP <span class="ot">:</span> NatP r</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a>  SuccP <span class="ot">:</span> r <span class="ot">→</span> NatP r</span></code></pre></div>
+<p>This has the same shape as <span class="math inline">\(\mathbb{N}\)</span> but we leave the recursion open (this same pattern of open recursion is the animating idea behind <a href="https://hackage.haskell.org/package/recursion-schemes">recursion schemes</a>). We can show that this is a functor (we don’t worry here about the functor laws):</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a><span class="kw">record</span> Functor <span class="ot">(</span>F <span class="ot">:</span> <span class="dt">Set</span> <span class="ot">→</span> <span class="dt">Set</span><span class="ot">)</span> <span class="ot">:</span> <span class="dt">Set₁</span> <span class="kw">where</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a>  <span class="kw">constructor</span> Func</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true"></a>  <span class="kw">field</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true"></a>    Arr <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>A B <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>f <span class="ot">:</span> A <span class="ot">→</span> B<span class="ot">)</span> <span class="ot">→</span> F A <span class="ot">→</span> F B</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true"></a>    </span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true"></a><span class="kw">open</span> Functor <span class="ot">{{...}}</span> <span class="kw">public</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true"></a><span class="kw">instance</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true"></a>  NatP-Functor <span class="ot">:</span> Functor NatP</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true"></a>  NatP-Functor <span class="ot">=</span> Func map</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true"></a>    <span class="kw">where</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true"></a>    map <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>A <span class="ot">→</span> B<span class="ot">)</span> <span class="ot">→</span> NatP A <span class="ot">→</span> NatP B</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true"></a>    map f ZeroP     <span class="ot">=</span> ZeroP</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true"></a>    map f <span class="ot">(</span>SuccP x<span class="ot">)</span> <span class="ot">=</span> SuccP <span class="ot">(</span>f x<span class="ot">)</span></span></code></pre></div>
+<p>Functional programmers might recognise that the dynamical systems above discussed above are in fact <span class="math inline">\(\mathrm{F}\)</span>-algebras for this pattern functor which we define as follows:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a><span class="kw">record</span> Alg <span class="ot">(</span>F <span class="ot">:</span> <span class="dt">Set</span> <span class="ot">→</span> <span class="dt">Set</span><span class="ot">)</span> <span class="ot">(</span>A <span class="ot">:</span> <span class="dt">Set</span><span class="ot">)</span> <span class="ot">:</span> <span class="dt">Set</span> <span class="kw">where</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a>  <span class="kw">field</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a>    μ <span class="ot">:</span> F A <span class="ot">→</span> A</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true"></a><span class="kw">open</span> Alg <span class="ot">{{...}}</span> <span class="kw">public</span></span></code></pre></div>
+<p>It is then easy for us to check that <span class="math inline">\(\mathbb{N}\)</span> is indeed an algebra for this functor:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="kw">instance</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a>  ℕ-Alg <span class="ot">:</span> Alg NatP ℕ</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true"></a>  ℕ-Alg <span class="ot">=</span> <span class="kw">record</span> <span class="ot">{</span> μ <span class="ot">=</span> alg <span class="ot">}</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true"></a>    <span class="kw">where</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true"></a>    alg <span class="ot">:</span> NatP ℕ <span class="ot">→</span> ℕ</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true"></a>    alg ZeroP     <span class="ot">=</span> Zero</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true"></a>    alg <span class="ot">(</span>SuccP x<span class="ot">)</span> <span class="ot">=</span> Succ x</span></code></pre></div>
+<p>Just as in Lawvere’s characterization we now wish to show that this algebra is initial. First we have to define maps between algebras. Suppose <span class="math inline">\(\mathrm{A}\)</span> and <span class="math inline">\(\mathrm{B}\)</span> are <span class="math inline">\(\mathrm{F}\)</span>-algebras. We then say a map <span class="math inline">\(f : \mathrm{A} \rightarrow \mathrm{B}\)</span> is an <span class="math inline">\(\mathrm{F}\)</span>-algeba homomorphism when the following diagram commutes (where the downward arrows are the algebra maps):</p>
+<p><span class="math display">\[
+\begin{array}{lll}
+F A          &amp; \xrightarrow{F f} &amp; F B  \\ 
+\downarrow &amp;             &amp; \downarrow   \\ 
+A          &amp; \xrightarrow{f} &amp; B         \\ 
+\end{array}
+\]</span></p>
+<p>In other words the algebra map commutes with the map in question or in equations:</p>
+<p><span class="math display">\[
+f \circ \mu_{A} \equiv \mu_{B} \circ (F f)
+\]</span></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a><span class="kw">record</span> Alg-Homo <span class="ot">(</span>A B <span class="ot">:</span> <span class="dt">Set</span><span class="ot">)</span> <span class="ot">{</span>F <span class="ot">:</span> <span class="dt">Set</span> <span class="ot">→</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">{{</span>f <span class="ot">:</span> Functor F<span class="ot">}}</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a>  <span class="ot">(</span>FA <span class="ot">:</span> Alg F A<span class="ot">)</span> <span class="ot">(</span>FB <span class="ot">:</span> Alg F B<span class="ot">)</span> <span class="ot">:</span> <span class="dt">Set₁</span> <span class="kw">where</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true"></a>  <span class="kw">constructor</span> AlgHom</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true"></a>  <span class="kw">field</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true"></a>    ↓-map  <span class="ot">:</span> A <span class="ot">→</span> B</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true"></a>    μ-comm </span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true"></a>      <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">(</span>fa <span class="ot">:</span> F A<span class="ot">)</span> </span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true"></a>      <span class="ot">→</span> ↓-map <span class="ot">(</span>Alg<span class="ot">.</span>μ FA fa<span class="ot">)</span> ≡ <span class="ot">(</span>Alg<span class="ot">.</span>μ FB<span class="ot">)</span> <span class="ot">(</span>Arr ↓-map fa<span class="ot">)</span></span></code></pre></div>
+<p>Now we can try to prove that the algebra structure on <span class="math inline">\(\mathbb{N}\)</span> is initial. We first show there is an induced map to every other <span class="math inline">\(\mathrm{F}\)</span>-<span class="math inline">\(\mathrm{algebra}\)</span>:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a>ℕ-weakly-initial</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true"></a>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>A <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true"></a>  <span class="ot">→</span> <span class="ot">{{</span>FA <span class="ot">:</span> Alg NatP A<span class="ot">}}</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true"></a>  <span class="ot">→</span> Alg-Homo ℕ A ℕ-Alg FA</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true"></a>ℕ-weakly-initial <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">=</span> AlgH init-ℕ law</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true"></a>  init-ℕ <span class="ot">:</span> ℕ <span class="ot">→</span> A</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true"></a>  init-ℕ Zero     <span class="ot">=</span> μ ZeroP</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true"></a>  init-ℕ <span class="ot">(</span>Succ n<span class="ot">)</span> <span class="ot">=</span> μ <span class="ot">(</span>SuccP <span class="ot">(</span>init-ℕ n<span class="ot">))</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true"></a></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true"></a>  law <span class="ot">:</span> <span class="ot">(</span>nP <span class="ot">:</span> NatP ℕ<span class="ot">)</span> <span class="ot">→</span> init-ℕ <span class="ot">(</span>μ nP<span class="ot">)</span> ≡ μ <span class="ot">(</span>Arr init-ℕ nP<span class="ot">)</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true"></a>  law ZeroP     <span class="ot">=</span> refl</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true"></a>  law <span class="ot">(</span>SuccP x<span class="ot">)</span> <span class="ot">=</span> refl</span></code></pre></div>
+<p>We define the map via the structure of the algebra. <span class="math inline">\(\mathrm{Zero}\)</span> maps to the basepoint of <span class="math inline">\(\mathrm{A}\)</span> and for the successor we apply the self-map and then recurse. For the <span class="math inline">\(\mu\)</span>-<span class="math inline">\(\mathrm{law}\)</span> we first case split as this is how <span class="math inline">\(\mathrm{init}\)</span>-<span class="math inline">\(\mathbb{N}\)</span> is defined. At this point we can see that the laws hold definitionally from how we have defined the map.</p>
+<p>We can then show uniqueness:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a>ℕ-init-uniq <span class="ot">:</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a>  <span class="ot">∀</span> <span class="ot">{</span>A <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true"></a>  <span class="ot">→</span> <span class="ot">{{</span>FA <span class="ot">:</span> Alg NatP A<span class="ot">}}</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true"></a>  <span class="ot">→</span> <span class="ot">(</span>alg-hom <span class="ot">:</span> Alg-Homo ℕ A ℕ-Alg FA<span class="ot">)</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true"></a>  <span class="ot">→</span> <span class="ot">∀</span> <span class="ot">(</span>n <span class="ot">:</span> ℕ<span class="ot">)</span> </span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true"></a>  <span class="ot">→</span> <span class="ot">(</span>Alg-Homo<span class="ot">.</span>↓-map alg-hom n<span class="ot">)</span> </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true"></a>  ≡ <span class="ot">(</span>Alg-Homo<span class="ot">.</span>↓-map <span class="ot">(</span>ℕ-weakly-initial <span class="ot">{{</span>FA<span class="ot">}})</span> n<span class="ot">)</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true"></a>ℕ-init-uniq alg-hom Zero <span class="ot">=</span> μ-comm ZeroP</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true"></a>    <span class="kw">open</span> Alg-Homo alg-hom <span class="kw">public</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true"></a>ℕ-init-uniq <span class="ot">{{</span>FA<span class="ot">}}</span> alg-hom <span class="ot">(</span>Succ n<span class="ot">)</span> <span class="ot">=</span> </span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true"></a>  <span class="kw">let</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true"></a>    pf1 <span class="ot">:</span>  ↓-map <span class="ot">(</span>Succ n<span class="ot">)</span> ≡ μ <span class="ot">(</span>SuccP <span class="ot">(</span>↓-map n<span class="ot">))</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true"></a>    pf1 <span class="ot">=</span> μ-comm <span class="ot">(</span>SuccP n<span class="ot">)</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true"></a></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true"></a>    pf2 <span class="ot">:</span>  μ <span class="ot">(</span>SuccP <span class="ot">(</span>↓-map n<span class="ot">))</span> ≡ μ <span class="ot">(</span>SuccP <span class="ot">(</span>Alg-Homo<span class="ot">.</span>↓-map ℕ-weakly-initial n<span class="ot">))</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true"></a>    pf2 <span class="ot">=</span> cong <span class="ot">(</span>μ ∘ SuccP<span class="ot">)</span> <span class="ot">(</span>ℕ-init-uniq alg-hom n<span class="ot">)</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true"></a>  <span class="kw">in</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true"></a>    trans pf1 pf2</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true"></a>    <span class="kw">open</span> Alg-Homo alg-hom <span class="kw">public</span></span></code></pre></div>
+<p>We don’t infer algebra homomorphisms and so we need to pass each argument separately and open the various records to bring the fields into scope. In the first case we have the following goal:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a>↓-map <span class="dv">0</span> ≡ μ ZeroP</span></code></pre></div>
+<p>We note that this is definitionally equivalent to showing:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a>↓-map <span class="ot">(</span>μ ZeroP<span class="ot">)</span> ≡ μ <span class="ot">(</span>Arr ↓-map ZeroP<span class="ot">)</span></span></code></pre></div>
+<p>and this is the <span class="math inline">\(\mu\)</span>-<span class="math inline">\(\mathrm{comm}\)</span> law!</p>
+<p>In the successor case we have to prove:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a>↓-map <span class="ot">(</span>Succ n<span class="ot">)</span> ≡ μ <span class="ot">(</span>SuccP <span class="ot">(</span>Alg-Homo<span class="ot">.</span>↓-map ℕ-weakly-initial n<span class="ot">))</span></span></code></pre></div>
+<p>We use a similar observation as above to first rewrite the left-hand-side using the <span class="math inline">\(\mu\)</span>-<span class="math inline">\(\mathrm{comm}\)</span> law. At that point (as before) rewrite the inner part by recursion showing the result.</p>
+<p>One nice thing about this characterization (beyond being much simpler to reason about!) is that the same idea of initial algebra semantics works just as well for any algebraic data type. Moreover this definition is <em>categorical</em>, allowing us to define a natural number object in any cartesian closed category.</p>
+<p>Thank you for reading! Hopefully this has given some ideas for how we can explore mathematical ideas in Agda leveraging the typechecker to guide our proofs. Feel free to contact me <a href="mailto:callan.mcgill@gmail.com">here</a> with questions, thoughts, ideas, or all of the above. <!---
+Thanks go to [DRAFT READERS HERE] for providing valuable feedback.
+--></p>
+
+        <br>
+        <br>
+
+        <!--Share buttons-->
+
+     </div>
+</article>
+
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>
