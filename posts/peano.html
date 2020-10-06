@@ -6,9 +6,9 @@
     <meta name="author" content="Callan McGill">
     <meta name=viewport content="width=device-width, initial-scale=1">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Peano Axioms (Draft)">
-    <meta name="twitter:description" content="Explorations into the natural numbers">
-        <title>Peano Axioms (Draft)</title>
+    <meta name="twitter:title" content="On Characterizing Nat in Agda">
+    <meta name="twitter:description" content="Explorations into characterizing natural numbers">
+        <title>On Characterizing Nat in Agda</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/syntax.css">
 </head>
@@ -35,13 +35,13 @@
     <div class="wrapper">
         <div class="masthead">
             <span class="title">
-                Peano Axioms (Draft)
+                On Characterizing Nat in Agda
             </span>
             <br>
             <br>
             <span class="byline">by Callan McGill</span>
             <br>
-            <span class="date">Sep 27, 2020</span>
+            <span class="date">Oct 27, 2020</span>
             <br>
             <br>
             <div class="metadata"> </div>
@@ -50,9 +50,9 @@
     <span class="quote"> "If there is one thing in mathematics that fascinates me more than anything else (and doubtless always has), it is neither ‘number’ nor ‘size,’ but always form."  - Grothendieck</span>
     </div>
     <article class="post">
-        <p>The 19th century brought about an unprecedented revolution in the foundations of mathematics culminating in the Zermelo–Frankel (ZF) axioms. The ZF axioms gave a logical basis to Cantor’s <em>set theory</em> as a foundational theory , in which the main branches of mathematics (analysis, topology, geometry and number theory) could be encoded and thusly understood. It was through this newly-systematized approach that the axiomatic method was born. This is of historical and philosophical interest as it marks a decisive structuralist turn in mathematical thought. It is at this time that mathematical objects begin to be characterized not by any particular construction, but by the collection of axioms (or laws) an object satisfies. <span class="math inline">\(\def\N{\mathsf{N}}\)</span></p>
-<p>Consider a paradigmatic case; characterizing the natural numbers. In this post we will explore two different formulations of the natural numbers, the first given by Peano in the late 19th century, the second, a more categorical approach inspired by Lawvere. This will provide us a springboard upon which to explore <em>how</em> we can formulate and reason about mathematical structures in Agda. Since Agda is based on dependent type theory our formulations will be <a href="https://en.wikipedia.org/wiki/Constructivism_(philosophy_of_mathematics)"><em>constructive</em></a>. This means our constructions will be <em>proof relevant</em>. In this setting, proofs are first-class entities and as such our algebraic structures will encode both the operations a structure has along with proofs of the properties that it satisfies.</p>
-<p>We will assume the reader has some familiarity with Agda (with reminders sprinkled in throughout) and has an interest in formalizing mathematics.</p>
+        <p>The 19th century brought about an unprecedented revolution in the foundations of mathematics culminating in the Zermelo–Frankel (ZF) axioms. The ZF axioms gave a logical basis to Cantor’s <em>set theory</em> as a foundational theory, in which the main branches of mathematics (analysis, topology, geometry and number theory) could be encoded and thusly understood. It was through this newly-systematized approach that the axiomatic method was born. This is of historical and philosophical interest as it marks a decisive structuralist turn in mathematical thought. It is at this time that mathematical objects begin to be characterized not by any particular construction, but by the collection of axioms (or laws) an object satisfies. <span class="math inline">\(\def\N{\mathsf{N}}\)</span></p>
+<p>Consider a paradigmatic case: characterizing the natural numbers. In this post we will explore two different formulations of the natural numbers, the first of which is given by Peano in the late 19th century, and the second of which is a more categorical approach inspired by Lawvere. This will provide us a springboard upon which to explore <em>how</em> we can formulate and reason about mathematical structures in Agda. Since Agda is based on dependent type theory, our formulations will be <a href="https://en.wikipedia.org/wiki/Constructivism_(philosophy_of_mathematics)"><em>constructive</em></a>. This means our constructions will be <em>proof relevant</em>. In this setting, proofs are first-class entities and as such our algebraic structures will encode both the operations a structure has along with proofs of the properties that it satisfies.</p>
+<p>We will assume the reader has some familiarity with Agda (with relevant materials noted throughout) and has an interest in formalizing mathematics.</p>
 <p>Let us begin with Peano’s axioms. A set <span class="math inline">\(\N\)</span> satisfies Peano’s axioms if the following properties hold:</p>
 <ul>
 <li>There exist terms <span class="math inline">\(0 \in \N\)</span> and <span class="math inline">\(\mathrm{s} : \N \rightarrow \N\)</span>.</li>
@@ -66,7 +66,7 @@
 </ul>
 then <span class="math inline">\(\phi\)</span> is true for all <span class="math inline">\(\mathrm{n} \in \N\)</span>.</li>
 </ul>
-<p>How can we prove that this uniquely determines the natural numbers? Our strategy would roughly go as follows:</p>
+<p>How can we prove that this uniquely determines the natural numbers? Our strategy would go roughly as follows:</p>
 <ul>
 <li>Give a particular construction of <span class="math inline">\(\mathbb{N}\)</span> showing it satisfies the axioms.</li>
 <li>For any set <span class="math inline">\(\N\)</span> satisfying the axioms, construct maps: <span class="math display">\[\begin{aligned}
@@ -90,8 +90,8 @@ then <span class="math inline">\(\phi\)</span> is true for all <span class="math
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>  Zero <span class="ot">:</span> ℕ</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>  Succ <span class="ot">:</span> ℕ <span class="ot">-&gt;</span> ℕ</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="co">-- This allows us to use numeric literals.</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="pp">{-# BUILTIN NATURAL ℕ #-}</span></span></code></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="pp">{-# BUILTIN NATURAL ℕ #-}</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="co">-- This allows us to use numeric literals.</span></span></code></pre></div>
 <p>Our first port of call is to formulate equivalence relations. In Agda we usually encode algebraic structures as <a href="https://agda.readthedocs.io/en/v2.6.1.1/language/record-types.html">records</a>. As mentioned in the introduction, since proofs are first-class, we carry around not just the structure of the binary relation but also the properties it satisfies:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">record</span> EqRel <span class="ot">(</span>A <span class="ot">:</span> <span class="dt">Set</span><span class="ot">)</span> <span class="ot">:</span> <span class="dt">Set₁</span> <span class="kw">where</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>  <span class="kw">field</span></span>
@@ -99,7 +99,7 @@ then <span class="math inline">\(\phi\)</span> is true for all <span class="math
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    reflexivity  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a <span class="ot">:</span> A<span class="ot">}</span>     <span class="ot">→</span> a ≃ a</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>    symmetry     <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a b <span class="ot">:</span> A<span class="ot">}</span>   <span class="ot">→</span> a ≃ b <span class="ot">→</span> b ≃ a</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>    transitivity <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a b c <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">→</span> a ≃ b <span class="ot">→</span> b ≃ c <span class="ot">→</span> a ≃ c</span></code></pre></div>
-<p>We note that this definition is slightly different from what is typical in mathematics. Rather than a <em>subset</em> of the diagonal we make use of a two-argument dependent type <span class="math inline">\(\_ \simeq \_\)</span>. Given <span class="math inline">\(\mathrm{a}, \mathrm{b} : \mathrm{A}\)</span>, the type <span class="math inline">\(\mathrm{a}\;\simeq\;\mathrm{b}\)</span> gives the collection of <em>evidence</em> that <span class="math inline">\(\mathrm{a}\)</span> and <span class="math inline">\(\mathrm{b}\)</span> are equal. The axioms this satisfies are reflexivity (that any element is equal to itself) symmetry (that we can freely reverse equalities) and transitivity (that we can compose equalities).</p>
+<p>We note that this definition is slightly different from what is typical in mathematics. Rather than a <em>subset</em> of the diagonal, we make use of a two-argument dependent type <span class="math inline">\(\_ \simeq \_\)</span>. Given <span class="math inline">\(\mathrm{a}, \mathrm{b} : \mathrm{A}\)</span>, the type <span class="math inline">\(\mathrm{a}\;\simeq\;\mathrm{b}\)</span> gives the collection of <em>evidence</em> that <span class="math inline">\(\mathrm{a}\)</span> and <span class="math inline">\(\mathrm{b}\)</span> are equal. The axioms this satisfies are reflexivity (that any element is equal to itself) symmetry (that we can freely reverse equalities) and transitivity (that we can compose equalities).</p>
 <p>Let’s show that Agda’s built-in equality type, <span class="math inline">\(\equiv\)</span>, is an equivalence relation on <span class="math inline">\(\mathbb{N}\)</span>. As a brief reminder, here is how the equality type is defined, if we ignore <a href="https://agda.readthedocs.io/en/v2.6.1.1/language/universe-levels.html">level polymorphism</a>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">data</span> <span class="ot">_</span>≡<span class="ot">_</span> <span class="ot">{</span>A <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">(</span>x <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">:</span> A <span class="ot">→</span> <span class="dt">Set</span> <span class="kw">where</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>  refl <span class="ot">:</span> x ≡ x</span></code></pre></div>
@@ -116,11 +116,11 @@ then <span class="math inline">\(\phi\)</span> is true for all <span class="math
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>ℕ-refl <span class="ot">=</span> refl</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>ℕ-symm <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>n m <span class="ot">:</span> ℕ<span class="ot">}</span> <span class="ot">→</span> n ≡ m <span class="ot">→</span> m ≡ n</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>ℕ-symm eq <span class="kw">rewrite</span> eq <span class="ot">=</span> refl</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>ℕ-symm n≡m <span class="kw">rewrite</span> n≡m <span class="ot">=</span> refl</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>ℕ-trans <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>m n r <span class="ot">:</span> ℕ<span class="ot">}</span> <span class="ot">→</span> m ≡ n <span class="ot">→</span> n ≡ r <span class="ot">→</span> m ≡ r</span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>ℕ-trans  m≡n n≡r <span class="kw">rewrite</span> m≡n <span class="ot">|</span> n≡r <span class="ot">=</span> refl</span></code></pre></div>
-<p>Here we make use of Agda’s <a href="https://agda.readthedocs.io/en/v2.6.1/language/with-abstraction.html#with-rewrite">rewrite construction</a>. By providing an equality proof of the form <span class="math inline">\(\mathrm{a} \equiv \mathrm{b}\)</span>, the rewrite construction will replace subexpressions in the goal of the form <span class="math inline">\(\mathrm{a}\)</span> with <span class="math inline">\(\mathrm{b}\)</span>. For example, in <span class="math inline">\(\mathbb{N}\mathrm{-symm}\)</span>, we use the equality term we are given as an argument to rewrite so that each appearance of <span class="math inline">\(\mathrm{n}\)</span> is replaced with <span class="math inline">\(\mathrm{m}\)</span>. At this point we may fill the hole with <span class="math inline">\(\mathrm{refl} : \mathrm{m} \equiv \mathrm{m}\)</span>.</p>
+<p>Here we make use of Agda’s <a href="https://agda.readthedocs.io/en/v2.6.1/language/with-abstraction.html#with-rewrite">rewrite construction</a>. By providing an equality proof of the form <span class="math inline">\(\mathrm{a} \equiv \mathrm{b}\)</span>, the rewrite construction will replace subexpressions in the goal of the form <span class="math inline">\(\mathrm{a}\)</span> with <span class="math inline">\(\mathrm{b}\)</span>. For example, in <span class="math inline">\(\mathbb{N}\mathrm{-symm}\)</span>, we use the equality term we are given, <span class="math inline">\(\mathrm{n} \equiv \mathrm{m}\)</span>, as an argument to rewrite so that each appearance of <span class="math inline">\(\mathrm{n}\)</span> is replaced with <span class="math inline">\(\mathrm{m}\)</span>. At this point we may fill the hole with <span class="math inline">\(\mathrm{refl} : \mathrm{m} \equiv \mathrm{m}\)</span>.</p>
 <p>It is worth noting that we haven’t used anything special about <span class="math inline">\(\mathbb{N}\)</span> and these same definitions would work to prove that <em>any</em> set forms an equivalence relation under <span class="math inline">\(\equiv\)</span>.</p>
 <p>Now we can write an instance of EqRel for <span class="math inline">\(\mathbb{N}\)</span>:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="kw">open</span> EqRel <span class="ot">{{...}}</span> <span class="kw">public</span></span>
@@ -139,7 +139,7 @@ then <span class="math inline">\(\phi\)</span> is true for all <span class="math
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>reflexivity <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>A <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">{{_</span> <span class="ot">:</span> EqRel A<span class="ot">}}</span> <span class="ot">{</span>a b <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>a ≃ a<span class="ot">)</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="co">-- etc.</span></span></code></pre></div>
 <p>Implicit arguments <span class="math inline">\(\{\{\_ : \mathrm{EqRel}\; \mathrm{A}\}\}\)</span> are resolved by searching for instances we have available in scope. In particular, we define an instance of EqRel for <span class="math inline">\(\mathbb{N}\)</span> which means that we may use these methods on <span class="math inline">\(\mathbb{N}\)</span> and Agda will infer the instance we have provided.</p>
-<p>Now we are in a position to formalise the Peano axioms. In much the same way as we have done with equivalence relations we again use records to encode algebraic structure:</p>
+<p>Now we are in a position to formalise the Peano axioms. In much the same way as we have done with equivalence relations, we again use records to encode algebraic structure:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="kw">record</span> Peano <span class="ot">(</span>N <span class="ot">:</span> <span class="dt">Set</span><span class="ot">)</span> <span class="ot">{{</span>rel <span class="ot">:</span> EqRel N<span class="ot">}}</span> <span class="ot">:</span> <span class="dt">Set₁</span> <span class="kw">where</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>  <span class="kw">field</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a>    zero        <span class="ot">:</span> N</span>
@@ -195,15 +195,15 @@ then <span class="math inline">\(\phi\)</span> is true for all <span class="math
       ; induction-zero = λ P z s   → refl
       ; induction-succ = λ P a z s → refl
       }</code></pre>
-<p>In the last two cases the <span class="math inline">\(\mathrm{induction}\)</span> laws hold definitionally from how we have defined <span class="math inline">\(\mathbb{N}\)</span>-<span class="math inline">\(\mathrm{induction}\)</span>.</p>
-<p>Now, given any set <span class="math inline">\(\mathsf{N}\)</span> satisfying the Peano axioms we want to define functions to and from <span class="math inline">\(\mathbb{N}\)</span>:</p>
+<p>In the last two cases, the <span class="math inline">\(\mathrm{induction}\)</span> laws hold definitionally from how we have defined <span class="math inline">\(\mathbb{N}\)</span>-<span class="math inline">\(\mathrm{induction}\)</span>.</p>
+<p>Now, suppose <span class="math inline">\(\mathsf{N}\)</span> is a set satisfying the Peano axioms, we want to then define functions to and from <span class="math inline">\(\mathbb{N}\)</span>:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>from-ℕ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>N <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">{{_</span> <span class="ot">:</span> EqRel N<span class="ot">}}</span> <span class="ot">→</span> <span class="ot">{{</span> <span class="ot">_</span> <span class="ot">:</span> Peano N<span class="ot">}}</span> <span class="ot">→</span> ℕ <span class="ot">→</span> N</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a>from-ℕ <span class="ot">{</span>N<span class="ot">}</span> n <span class="ot">=</span> induction <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">-&gt;</span> N<span class="ot">)</span> n zero succ</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a>to-ℕ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>N <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">{{_</span> <span class="ot">:</span> EqRel N<span class="ot">}}</span> <span class="ot">→</span> <span class="ot">{{_</span> <span class="ot">:</span> Peano N<span class="ot">}}</span> <span class="ot">→</span> N <span class="ot">→</span> ℕ</span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true"></a>to-ℕ n <span class="ot">=</span> induction <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> ℕ<span class="ot">)</span> n zero succ</span></code></pre></div>
-<p>Pleasantly both definitions are essentially identical, using instance resolution to determine the relevant induction principle and values to use. Here we see the power of constructive induction. We don’t use induction to prove a <em>property</em> per se, but to compute. Since the dependent types in question are constant induction simply <em>is</em> recursion!</p>
+<p>Pleasantly both definitions are essentially identical, using instance resolution to determine the relevant induction principle and values to use. Here we see the power of constructive induction. We don’t use induction to prove a <em>property</em> per se, but to compute. Since the dependent types in question are constant, induction simply <em>is</em> recursion!</p>
 <p>Now we can show these maps form equivalences. To get a flavour let us step through the development for the first equality:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a>to∘from <span class="ot">:</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a>  <span class="ot">∀</span> <span class="ot">{</span>N <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">{{</span> <span class="ot">_</span> <span class="ot">:</span> EqRel N <span class="ot">}}</span> <span class="ot">→</span> <span class="ot">{{</span>peano <span class="ot">:</span> Peano N<span class="ot">}}</span></span>
@@ -307,7 +307,7 @@ N     : Set      (not in scope)
 <span id="cb22-50"><a href="#cb22-50" aria-hidden="true"></a>        zero-lem</span>
 <span id="cb22-51"><a href="#cb22-51" aria-hidden="true"></a>        <span class="ot">(λ</span> <span class="ot">{</span>prev<span class="ot">}</span> <span class="ot">→</span> succ-lem prev<span class="ot">)</span></span></code></pre></div>
 <p>This shows that any two types which satisfy the Peano axioms are equivalent in the sense that there are maps between them which form an isomorphism up to equivalence.</p>
-<p>This is quite interesting as it stands but we might wonder if there is a more direct characterization of the natural numbers? After all, our original definition as a recursive algebraic data type seems to give a perfectly good specification of what the natural numbers <em>are</em>. Let us turn to a characterization of <span class="math inline">\(\mathbb{N}\)</span> given by Lawvere.</p>
+<p>This is quite interesting as it stands, but we might wonder if there is a more direct characterization of the natural numbers. After all, our original definition as a recursive algebraic data type seems to give a perfectly good specification of what the natural numbers <em>are</em>. Let us turn to a characterization of <span class="math inline">\(\mathbb{N}\)</span> given by Lawvere.</p>
 <p>We define the category of discrete dynamical systems, whose:</p>
 <ul>
 <li>Objects are sets <span class="math inline">\(X\)</span> equipped with a starting point <span class="math inline">\(x_0 \in X\)</span> and a self-map <span class="math inline">\(f : X \rightarrow X\)</span>.</li>
@@ -319,7 +319,7 @@ X          &amp; \xrightarrow{\phi} &amp; Y      \\
 \end{array}
 \]</span></li>
 </ul>
-<p>Lawvere then observed that the natural numbers are the initial object in the category of discrete dynamical systems. In other words, every other dynamical system receives a <em>unique</em> map from the discrete dynamical system <span class="math inline">\(\left( \mathbb{N}\; , \; 0 : \mathbb{N}\; ,\; \mathrm{s}\; : \; \mathbb{N} \rightarrow \mathbb{N}\right)\)</span>.</p>
+<p>Lawvere then observed that the natural numbers are the <a href="https://ncatlab.org/nlab/show/initial+object">initial object</a> in the category of discrete dynamical systems. In other words, every other dynamical system receives a <em>unique</em> map from the discrete dynamical system <span class="math inline">\(\left( \mathbb{N}\; , \; 0 : \mathbb{N}\; ,\; \mathrm{s}\; : \; \mathbb{N} \rightarrow \mathbb{N}\right)\)</span>.</p>
 <p>Let us phrase this idea in terms of language more familiar to functional programmers. First define a “pattern functor” for <span class="math inline">\(\mathbb{N}\)</span>:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="kw">data</span> NatP <span class="ot">(</span>r <span class="ot">:</span> <span class="dt">Set</span><span class="ot">)</span> <span class="ot">:</span> <span class="dt">Set</span> <span class="kw">where</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a>  ZeroP <span class="ot">:</span> NatP r</span>
@@ -339,7 +339,7 @@ X          &amp; \xrightarrow{\phi} &amp; Y      \\
 <span id="cb24-12"><a href="#cb24-12" aria-hidden="true"></a>    map <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>A <span class="ot">→</span> B<span class="ot">)</span> <span class="ot">→</span> NatP A <span class="ot">→</span> NatP B</span>
 <span id="cb24-13"><a href="#cb24-13" aria-hidden="true"></a>    map f ZeroP     <span class="ot">=</span> ZeroP</span>
 <span id="cb24-14"><a href="#cb24-14" aria-hidden="true"></a>    map f <span class="ot">(</span>SuccP x<span class="ot">)</span> <span class="ot">=</span> SuccP <span class="ot">(</span>f x<span class="ot">)</span></span></code></pre></div>
-<p>Functional programmers might recognise that the discrete dynamical systems discussed above are in fact <span class="math inline">\(\mathrm{F}\)</span>-algebras for this pattern functor, which we define as follows:</p>
+<p>Functional programmers might recognise that the discrete dynamical systems discussed above are in fact <a href="https://en.wikipedia.org/wiki/F-algebra"><span class="math inline">\(\mathrm{F}\)</span>-algebras</a> for this pattern functor, which we define as follows:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a><span class="kw">record</span> Alg <span class="ot">(</span>F <span class="ot">:</span> <span class="dt">Set</span> <span class="ot">→</span> <span class="dt">Set</span><span class="ot">)</span> <span class="ot">(</span>A <span class="ot">:</span> <span class="dt">Set</span><span class="ot">)</span> <span class="ot">:</span> <span class="dt">Set</span> <span class="kw">where</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a>  <span class="kw">field</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a>    μ <span class="ot">:</span> F A <span class="ot">→</span> A</span>
@@ -357,7 +357,7 @@ X          &amp; \xrightarrow{\phi} &amp; Y      \\
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true"></a>  alg <span class="ot">:</span> NatP A <span class="ot">→</span> A</span>
 <span id="cb27-5"><a href="#cb27-5" aria-hidden="true"></a>  alg ZeroP     <span class="ot">=</span> basepoint</span>
 <span id="cb27-6"><a href="#cb27-6" aria-hidden="true"></a>  alg <span class="ot">(</span>SuccP a<span class="ot">)</span> <span class="ot">=</span> self-map a</span></code></pre></div>
-<p>and we leave as an exercise to show that there is an isomorphism between <span class="math inline">\(\mathrm{NatP}\)</span> algebra structures on <span class="math inline">\(\mathrm{A}\)</span> and discrete dynamical system structures (an observation we can upgrade to an isomorphism between the respective categories).</p>
+<p>and we leave, as an exercise, to show that there is an isomorphism between <span class="math inline">\(\mathrm{NatP}\)</span> algebra structures on <span class="math inline">\(\mathrm{A}\)</span> and discrete dynamical system structures (an observation we can upgrade to an isomorphism between the respective categories).</p>
 <p>Let’s give the algebra structure for <span class="math inline">\(\mathbb{N}\)</span>:</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a><span class="kw">instance</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true"></a>  ℕ-Alg <span class="ot">:</span> Alg NatP ℕ</span>
@@ -374,7 +374,7 @@ F A          &amp; \xrightarrow{F m} &amp; F B  \\
 A          &amp; \xrightarrow{m} &amp; B        \\
 \end{array}
 \]</span></p>
-<p>In other words the algebra map commutes with the map in question, or in equations: <span class="math display">\[
+<p>In other words, the algebra map commutes with the map in question, or in equations: <span class="math display">\[
 f \circ \mu_{A} \equiv \mu_{B} \circ (F f)
 \]</span></p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="kw">record</span> Alg-Homo <span class="ot">(</span>A B <span class="ot">:</span> <span class="dt">Set</span><span class="ot">)</span> <span class="ot">{</span>F <span class="ot">:</span> <span class="dt">Set</span> <span class="ot">→</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">{{</span>f <span class="ot">:</span> Functor F<span class="ot">}}</span></span>
