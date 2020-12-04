@@ -116,7 +116,7 @@ time                 7.146 ms   (7.075 ms .. 7.198 ms)
                      0.999 R²   (0.999 R² .. 1.000 R²)
 mean                 7.137 ms   (7.091 ms .. 7.192 ms)
 std dev              145.2 μs   (110.9 μs .. 213.8 μs)</code></pre>
-<p>After some more thought, I reaslised that we could build an <code>IntSet</code> of the entries and then find the first that is the complement of 2020 in each case:</p>
+<p>After some more thought, I realised that we could build an <code>IntSet</code> of the entries and then find the first that is the complement of 2020 in each case:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ot">s1 ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>s1 xs <span class="ot">=</span> </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span> [ x <span class="op">*</span> (<span class="dv">2020</span> <span class="op">-</span> x) </span>
