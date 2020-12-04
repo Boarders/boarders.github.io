@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="Callan McGill">
+    <meta name="author" content="Callan McGill">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Advent of Code (Days 1-3)">
+    <meta name="twitter:description" content="Haskell soltuions to Advent Of Code days 1 to 3.">
+        <title>Advent of Code (Days 1-3)</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+<body>
+    <!DOCTYPE html>
+    <header>
+        <nav>
+          
+          <a id="beacon" href="/">
+              <div id="home-text"> HOME </div>
+          </a>
+        </nav>
+        <div class="right-sidebar">
+            <a class="ext-link" href="https://github.com/boarders">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+        <script type="text/javascript" async
+                src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+        </script>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                Advent of Code (Days 1-3)
+            </span>
+            <br>
+            <br>
+            <span class="byline">by Callan McGill</span>
+            <br>
+            <span class="date">Dec 3, 2020</span>
+            <br>
+            <br>
+            <div class="metadata"> </div>
+            </div>
+    </div>
+    <span class="quote"> "I will honor Christmas in my heart, and try to keep it all the year."  - Charles Dickens</span>
+    </div>
+    <article class="post">
+        <p>The capacity for humans to suffuse ritual with new meaning is one of life’s great joys. Advent of Code is one such ritual pleasure for me – something that has, in its 5 short years, brightened my holiday season more than any Christmas bauble ever could (though you did try, Rockefeller tree!). I began participating in this particular coding-based ritual around the time that I was giving both programming and Haskell a serious go; this was shortly after unhappily leaving a PhD program that didn’t quite fit. Advent of Code played no small part in both salving my then beleaguered soul and getting to grips with the nuts and bolts that make up so much of what we do as programmers. I would be remiss if I didn’t point out that Advent of Code has redefined my holiday rituals in the best way possible. For this gift I am forever thankful to Advent of Code’s creator Eric Wastl.</p>
+<p>I like each year to both aim to get as far as I can through Advent of Code’s 25 puzzles, but also to try to have some wider focus. One year I may take the opportunity to see how far I can get in a new language, another to see how elegant the code I write can be. This year I decided I wanted to concentrate on some mix of Haskell’s algorithmic elegance with reasonably good performance in mind. Here’s how that turned out the first three days:</p>
+<h2 id="day-1">Day 1</h2>
+<p>Day 1 gave us input consisting of a list of integers as so:</p>
+<pre class="terminal"><code>1721
+979
+366
+299
+675
+1456</code></pre>
+<p>In the first puzzle, we were to find the product of the (unique) two integers in the list that sum to 2020. The second called for the product of the three (unqiue) integers that sum to 2020. In general, it is good practice to separate out the proessing of input (parsing) from the algorithm itself. Since we had such constrained input, we stuck with only using a <code>ByteString</code> to read the input. Therefore, our parsing step was as follows:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.ByteString.Char8</span> <span class="kw">as</span> <span class="dt">ByteString</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ot">parseInput ::</span> <span class="dt">IO</span> [<span class="dt">Int</span>]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>parseInput <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  bs <span class="ot">&lt;-</span> <span class="dt">ByteString</span><span class="op">.</span><span class="fu">readFile</span> <span class="st">&quot;input/day1.dat&quot;</span>  </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pure</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span> <span class="fu">fmap</span> (<span class="fu">fst</span> <span class="op">.</span> fromJust <span class="op">.</span> <span class="dt">ByteString</span><span class="op">.</span><span class="fu">readInt</span>) </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span> <span class="dt">ByteString</span><span class="op">.</span><span class="fu">lines</span> </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">$</span> bs</span></code></pre></div>
+<p>Here we made use of the <code>readInt</code> function of type <code>readInt :: ByteString -&gt; Maybe (Int, ByteString)</code> and we used an unsafe <code>fromJust</code> since the input consisted of only integers.</p>
+<p>I originally started with the elegant but naive quadratic and cubic solutions making use of list comprehensions:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">sum_2020 ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sum_2020 xs <span class="ot">=</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span> [ x <span class="op">*</span> y <span class="op">|</span> x <span class="ot">&lt;-</span> xs, y <span class="ot">&lt;-</span> <span class="fu">tail</span> xs, x <span class="op">+</span> y <span class="op">==</span> <span class="dv">2020</span>]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ot">sum3_2020 ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>sum3_2020 xs <span class="ot">=</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span> [ x <span class="op">*</span> y <span class="op">*</span> z </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>       <span class="op">|</span> x <span class="ot">&lt;-</span> xs, y <span class="ot">&lt;-</span> <span class="fu">tail</span> xs</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>       , z <span class="ot">&lt;-</span> <span class="fu">tail</span> (<span class="fu">tail</span> xs)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>       , x <span class="op">+</span> y <span class="op">+</span> z <span class="op">==</span> <span class="dv">2020</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>       ]</span></code></pre></div>
+<p>We could then measure how this performed using criterion as follows:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Criterion.Main</span>  <span class="kw">as</span> <span class="dt">Criterion</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  (bench, bgroup, defaultMain, env, nf)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Day1</span> <span class="kw">as</span> <span class="dt">Day1</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  Criterion.defaultMain <span class="op">.</span> <span class="fu">pure</span> <span class="op">$</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    Criterion.bgroup <span class="st">&quot;advent of code&quot;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    [ Criterion.env Day1.parseInput <span class="op">$</span> \ <span class="op">~</span>d1 <span class="ot">-&gt;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>         Criterion.bgroup <span class="st">&quot;day1&quot;</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        [ Criterion.bench <span class="st">&quot;sol1&quot;</span> <span class="op">$</span> </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>            Criterion.nf Day1.sum_2020  d1</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        , Criterion.bench <span class="st">&quot;sol2&quot;</span> <span class="op">$</span> </span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>            Criterion.nf Day1.sum3_2020 d1</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    ]</span></code></pre></div>
+<p>Here we used Criterion’s <code>env</code> function which allowed us to separate out the time spent parsing from the algorithms themselves. The performance of the first solution (on such a small input) was quite reasonable but the cubic performance starts to sting for problem 2:</p>
+<pre class="terminal"><code>benchmarking advent of code/day1/sol1
+time                 14.96 μs   (14.87 μs .. 15.06 μs)
+                     1.000 R²   (1.000 R² .. 1.000 R²)
+mean                 14.96 μs   (14.90 μs .. 15.04 μs)
+std dev              227.6 ns   (185.3 ns .. 288.1 ns)
+variance introduced by outliers: 12% (moderately inflated)
+
+benchmarking advent of code/day1/sol2
+time                 7.146 ms   (7.075 ms .. 7.198 ms)
+                     0.999 R²   (0.999 R² .. 1.000 R²)
+mean                 7.137 ms   (7.091 ms .. 7.192 ms)
+std dev              145.2 μs   (110.9 μs .. 213.8 μs)</code></pre>
+<p>After some more thought, I reaslised that we could build an <code>IntSet</code> of the entries and then find the first that is the complement of 2020 in each case:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ot">s1 ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>s1 xs <span class="ot">=</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span> [ x <span class="op">*</span> (<span class="dv">2020</span> <span class="op">-</span> x) </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>         <span class="op">|</span> x <span class="ot">&lt;-</span> xs, (<span class="dv">2020</span> <span class="op">-</span> x) <span class="ot">`IntSet.member`</span> ints</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>         ]</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ot">    ints ::</span> <span class="dt">IntSet.IntSet</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    ints <span class="ot">=</span> IntSet.fromList xs</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="ot">s2 ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>s2 xs <span class="ot">=</span> </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span> [ x <span class="op">*</span> y <span class="op">*</span> (<span class="dv">2020</span> <span class="op">-</span> x <span class="op">-</span> y) </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>         <span class="op">|</span> x <span class="ot">&lt;-</span> xs</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>         , y <span class="ot">&lt;-</span> <span class="fu">tail</span> xs</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>         , (<span class="dv">2020</span> <span class="op">-</span> x <span class="op">-</span> y) <span class="ot">`IntSet.member`</span> ints</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>         ]</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="ot">    ints ::</span> <span class="dt">IntSet.IntSet</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    ints <span class="ot">=</span> IntSet.fromList xs</span></code></pre></div>
+<p>The performance here was quite a bit better:</p>
+<pre class="terminal"><code>benchmarking advent of code/day1/sol1
+time                 6.033 μs   (5.961 μs .. 6.144 μs)
+                     0.998 R²   (0.995 R² .. 0.999 R²)
+mean                 6.070 μs   (5.996 μs .. 6.209 μs)
+std dev              301.0 ns   (198.5 ns .. 466.5 ns)
+variance introduced by outliers: 61% (severely inflated)
+
+benchmarking advent of code/day1/sol2
+time                 86.29 μs   (85.34 μs .. 87.68 μs)
+                     0.999 R²   (0.998 R² .. 0.999 R²)
+mean                 86.13 μs   (85.36 μs .. 87.13 μs)
+std dev              3.090 μs   (2.620 μs .. 3.636 μs)
+variance introduced by outliers: 36% (moderately inflated)</code></pre>
+<p>At this point there were probably various further improvements we could haved tried, but in the spirit of the season, I grabbed myself a Kinder Surprise and decided that this was a satisfactory place for me to leave things.</p>
+<h2 id="day-2">Day 2</h2>
+<p>This challenge gave us input data as follows:</p>
+<pre class="terminal"><code>1-3 a: abcde
+1-3 b: cdefg
+2-9 c: ccccccccc</code></pre>
+<p>Here we were to read <code>1-3 a</code> as a password policy. The text following the colon can then be read as the given password. Our task was to count the number of passwords from the input that meet the given policy. The first puzzle’s policy, read as <code>1-3 a</code>, states that the password contains between one and three a’s (inclusive). In the second puzzles’s policy, we read the same piece of text, <code>1-3 a</code>, to demand that either of the letters at password positions one or three is an ‘a’, but not both.</p>
+<p>In order to get the input, we used <code>attoparsec</code> to parse the policy and password:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Attoparsec.ByteString.Char8</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Range</span> <span class="ot">=</span> <span class="dt">Range</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  {<span class="ot"> low  ::</span> <span class="op">!</span><span class="dt">Int</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  ,<span class="ot"> high ::</span> <span class="op">!</span><span class="dt">Int</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">PassInfo</span> <span class="ot">=</span> <span class="dt">PassInfo</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  {<span class="ot"> passRange ::</span> <span class="op">!</span><span class="dt">Range</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  ,<span class="ot"> target    ::</span> <span class="op">!</span><span class="dt">Char</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  ,<span class="ot"> password  ::</span> <span class="op">!</span><span class="dt">ByteString</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="ot">parsePassInfo ::</span> <span class="dt">Parser</span> <span class="dt">PassInfo</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>parsePassInfo <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  l <span class="ot">&lt;-</span> decimal</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  void <span class="op">$</span> char <span class="ch">&#39;-&#39;</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  h <span class="ot">&lt;-</span> decimal</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  void <span class="op">$</span> space</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  tgt <span class="ot">&lt;-</span> anyChar</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  void <span class="op">$</span> char <span class="ch">&#39;:&#39;</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  void <span class="op">$</span> space</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  pass <span class="ot">&lt;-</span> takeByteString</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pure</span> (<span class="dt">PassInfo</span> (<span class="dt">Range</span> l h) tgt pass)</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="ot">parseInput ::</span> <span class="dt">IO</span> (<span class="dt">Either</span> <span class="dt">String</span> [<span class="dt">PassInfo</span>])</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>parseInput <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  bs <span class="ot">&lt;-</span> <span class="dt">ByteString</span><span class="op">.</span><span class="fu">readFile</span> <span class="st">&quot;input/day2.dat&quot;</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    input <span class="ot">=</span> </span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>      <span class="fu">traverse</span> (parseOnly parsePassInfo) (<span class="dt">ByteString</span><span class="op">.</span><span class="fu">lines</span> bs)</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pure</span> input</span></code></pre></div>
+<p>For the first part we define a function to count the occurences of a letter using <code>foldl'</code> from <code>Data.ByteString.Char8</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ot">countLetter ::</span> <span class="dt">ByteString</span> <span class="ot">-&gt;</span> <span class="dt">Char</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>countLetter bs tgt <span class="ot">=</span> <span class="dt">ByteString</span><span class="op">.</span><span class="fu">foldl</span> occurs <span class="dv">0</span> bs</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ot">    occurs ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Char</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    occurs acc c <span class="op">|</span> c <span class="op">==</span> tgt  <span class="ot">=</span> acc <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                 <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> acc</span></code></pre></div>
+<p>We can then count the number of valid passwords as follows:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ot">valid1 ::</span> <span class="dt">PassInfo</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>valid1 (<span class="dt">PassInfo</span> (<span class="dt">Range</span> l h) tgt pass) <span class="ot">=</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> c <span class="ot">=</span> countLetter pass tgt <span class="kw">in</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    (l <span class="op">&lt;=</span> c <span class="op">&amp;&amp;</span> c <span class="op">&lt;=</span> h)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ot">s1 ::</span> <span class="dt">Either</span> <span class="dt">String</span> [<span class="dt">PassInfo</span>] <span class="ot">-&gt;</span> <span class="dt">Either</span> <span class="dt">String</span> <span class="dt">Int</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>s1 <span class="ot">=</span> <span class="fu">fmap</span> (<span class="fu">length</span> <span class="op">.</span> <span class="fu">filter</span> valid1)</span></code></pre></div>
+<p>Part 2 is much the same, only we just need to check the letter only occurs once:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ot">occursOnce ::</span> <span class="dt">ByteString</span> <span class="ot">-&gt;</span> <span class="dt">Range</span> <span class="ot">-&gt;</span> <span class="dt">Char</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>occursOnce bs (<span class="dt">Range</span> l&#39; h&#39;) c <span class="ot">=</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  bs <span class="ot">`ByteString.index`</span> l <span class="op">==</span> c <span class="op">&amp;&amp;</span> bs <span class="ot">`ByteString.index`</span> h <span class="op">/=</span> c <span class="op">||</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  bs <span class="ot">`ByteString.index`</span> l <span class="op">/=</span> c <span class="op">&amp;&amp;</span> bs <span class="ot">`ByteString.index`</span> h <span class="op">==</span> c</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a> <span class="co">-- go from 1 to 0-indexing </span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    l <span class="ot">=</span> l&#39; <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    h <span class="ot">=</span> h&#39; <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="ot">valid2 ::</span> <span class="dt">PassInfo</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>valid2 (<span class="dt">PassInfo</span> <span class="fu">range</span> tgt pass) <span class="ot">=</span> occursOnce pass <span class="fu">range</span> tgt</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="ot">s2 ::</span> <span class="dt">Either</span> <span class="dt">String</span> [<span class="dt">PassInfo</span>] <span class="ot">-&gt;</span> <span class="dt">Either</span> <span class="dt">String</span> <span class="dt">Int</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>s2 <span class="ot">=</span> <span class="fu">fmap</span> (<span class="fu">length</span> <span class="op">.</span> <span class="fu">filter</span> valid2)</span></code></pre></div>
+<p>The performance in both cases here was quite reasonble without further effort and so I didn’t put more time into experimenting with any tweaks here (off for another Kinder sweet):</p>
+<pre class="terminal"><code>benchmarking advent of code/day2/sol1
+time                 62.30 μs   (61.10 μs .. 63.93 μs)
+                     0.996 R²   (0.992 R² .. 0.999 R²)
+mean                 63.08 μs   (62.21 μs .. 64.70 μs)
+std dev              3.788 μs   (2.581 μs .. 6.136 μs)
+variance introduced by outliers: 63% (severely inflated)
+
+benchmarking advent of code/day2/sol2
+time                 9.889 μs   (9.668 μs .. 10.11 μs)
+                     0.996 R²   (0.993 R² .. 0.998 R²)
+mean                 10.07 μs   (9.874 μs .. 10.41 μs)
+std dev              887.2 ns   (435.9 ns .. 1.405 μs)
+variance introduced by outliers: 83% (severely inflated)</code></pre>
+<h2 id="day-3">Day 3</h2>
+<p>Day 3 presented us with an ascii map as input:</p>
+<pre class="terminal"><code>..##.......
+#...#...#..
+.#....#..#.
+..#.#...#.#
+.#...##..#.
+..#.##.....
+.#.#.#....#
+.#........#
+#.##...#...
+#...##....#
+.#..#...#.#</code></pre>
+<p>We were to view the map as cylindrical in the sense that, as we take any step off the map to the right, we would wind up back on the lefthand side. In the first puzzle we were tasked with traversing the map from top to bottom with each step going one down and three to the right. This started from the top left square. As we did this, we counted the number of ’#’s we encountered.</p>
+<p>We parsed the input by splitting it into lines which we could then fold over:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ot">parseInput ::</span> <span class="dt">IO</span> [<span class="dt">ByteString</span>]</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>parseInput <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  bs <span class="ot">&lt;-</span> <span class="dt">ByteString</span><span class="op">.</span><span class="fu">readFile</span> <span class="st">&quot;input/day3.dat&quot;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pure</span> <span class="op">$</span> <span class="dt">ByteString</span><span class="op">.</span><span class="fu">lines</span> bs</span></code></pre></div>
+<p>The main difficulty here was figuring out the index on a cylindrical map. We created a custom data type for the map’s row length and the size of the step we were taking:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Step</span> <span class="ot">=</span> <span class="dt">Step</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  {<span class="ot"> rowLenS ::</span> <span class="op">!</span><span class="dt">Int</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  ,<span class="ot"> stepS   ::</span> <span class="op">!</span><span class="dt">Int</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+<p>We then find the cylindrical index as follows:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ot">findInd ::</span> <span class="dt">Step</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>findInd (<span class="dt">Step</span> rowLen step) row <span class="ot">=</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  row <span class="op">*</span> step <span class="ot">`mod`</span> rowLen</span></code></pre></div>
+<p>Since we were on a cylindrical map, we needed to take the product of the row and the stride length modulo the row length. We could then count the ‘#’’s we see:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ot">countTrees ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">ByteString</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>countTrees step bss <span class="ot">=</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">snd</span> <span class="op">.</span> foldl&#39; c (<span class="dv">0</span>, <span class="dv">0</span>) <span class="op">$</span> bss</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    rowLen <span class="ot">=</span> <span class="dt">ByteString</span><span class="op">.</span><span class="fu">length</span> <span class="op">.</span> <span class="fu">head</span> <span class="op">$</span> bss</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    st <span class="ot">=</span> <span class="dt">Step</span> rowLen step</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="ot">    c ::</span> (<span class="dt">Int</span>, <span class="dt">Int</span>) <span class="ot">-&gt;</span> <span class="dt">ByteString</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Int</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    c (row, count) bs <span class="ot">=</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>       ( row <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>       , count <span class="op">+</span> <span class="fu">fromEnum</span> (bs <span class="ot">`index`</span> findInd st row <span class="op">==</span> <span class="ch">&#39;#&#39;</span>)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>       )</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="ot">s1 ::</span> [<span class="dt">ByteString</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>s1 <span class="ot">=</span> countTrees <span class="dv">3</span></span></code></pre></div>
+<p>Here we again used <code>foldl'</code> (this time over lists) and added to the count if the character at the cylindrical index was a ‘#’.</p>
+<p>For the second part, we were asked to do the same task only this time using: paths going down 1 and to the right 1, 3, 5 and 7 respectively; and a path going down 2 and along 1. Since my fold wasn’t well equipped for skipping between rows, I decided to hackily copy and paste what I already had for the last case:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ot">countTrees2 ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">ByteString</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>countTrees2 step bss <span class="ot">=</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    (\(_,_,cnt) <span class="ot">-&gt;</span> cnt) <span class="op">.</span> foldl&#39; c (<span class="dt">True</span>, <span class="dv">0</span>, <span class="dv">0</span>) <span class="op">$</span> bss</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    rowLen <span class="ot">=</span> <span class="dt">ByteString</span><span class="op">.</span><span class="fu">length</span> <span class="op">.</span> <span class="fu">head</span> <span class="op">$</span> bss</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    st <span class="ot">=</span> <span class="dt">Step</span> rowLen step</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="ot">    c ::</span> (<span class="dt">Bool</span>, <span class="dt">Int</span>, <span class="dt">Int</span>) <span class="ot">-&gt;</span> <span class="dt">ByteString</span> <span class="ot">-&gt;</span> (<span class="dt">Bool</span>, <span class="dt">Int</span>, <span class="dt">Int</span>)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    c (alt, jump, count) bs <span class="ot">=</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>      <span class="kw">if</span> alt</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">then</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>          ( <span class="fu">not</span> alt</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>          , jump <span class="op">+</span> <span class="dv">1</span> </span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>          , count <span class="op">+</span> <span class="fu">fromEnum</span> (bs <span class="ot">`index`</span> findInd st jump <span class="op">==</span> <span class="ch">&#39;#&#39;</span>)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>        <span class="kw">else</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>          (<span class="fu">not</span> alt, jump, count)</span></code></pre></div>
+<p>In the accumulator we kept track of a boolean which we alternated for those rows we wished to count versus those we were skipping. The second puzzle then asked us to multiply all of these together which we did as follows:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ot">s2 ::</span> [<span class="dt">ByteString</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>s2 input <span class="ot">=</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    (<span class="fu">product</span> <span class="op">.</span> <span class="fu">map</span> (\i <span class="ot">-&gt;</span> countTrees i input) <span class="op">$</span> [<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">7</span>]) </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">*</span> countTrees2 <span class="dv">1</span> input</span></code></pre></div>
+<p>The performance here was also reasonable on the first try, and so again I didn’t put any further efforts into doing better, this time trading my keyboard for two Kinder bonbons:</p>
+<pre class="terminal"><code>
+benchmarking advent of code/day3/sol1
+time                 5.614 μs   (5.585 μs .. 5.647 μs)
+                     1.000 R²   (1.000 R² .. 1.000 R²)
+mean                 5.660 μs   (5.623 μs .. 5.700 μs)
+std dev              130.4 ns   (102.9 ns .. 173.3 ns)
+variance introduced by outliers: 26% (moderately inflated)
+
+benchmarking advent of code/day3/sol2
+time                 24.18 μs   (23.99 μs .. 24.36 μs)
+                     1.000 R²   (1.000 R² .. 1.000 R²)
+mean                 24.17 μs   (24.07 μs .. 24.30 μs)
+std dev              374.4 ns   (304.0 ns .. 496.4 ns)
+variance introduced by outliers: 12% (moderately inflated)</code></pre>
+<p>Thank you for reading! The full code for this post is available <a href="https://github.com/Boarders/advent-of-code/tree/master/2020">here</a>. Please feel free to contact me <a href="mailto:callan.mcgill@gmail.com">here</a> with questions, thoughts, ideas, or all of the above.</p>
+<p><i>With warmest thanks to Alixandra Prybyla for their valuable feedback.</i></p>
+
+        <br>
+        <br>
+
+        <!--Share buttons-->
+
+     </div>
+</article>
+
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>
