@@ -75,7 +75,7 @@ True</code></pre>
 <p><span class="math display">\[
      \begin{aligned}
       \ap{\Y}{g} \be \; &amp;\ap{(\la{x} \ap{g}{(\ap{x}{x})})}{(\la{x} \ap{g}{(\ap{x}{x})})} \\
-                 \be \; &amp;\ap{g}{\ap{(\la{x} \ap{g}{(\ap{x}{x})})}{(\la{x} \ap{g}{(\ap{x}{x})})}} \\
+                 \be \; &amp;\ap{g}({\ap{(\la{x} \ap{g}{(\ap{x}{x})})}{(\la{x} \ap{g}{(\ap{x}{x})})}}) \\
         \equiv_\beta \; &amp;\ap{g}{(\ap{Y}{g})}
     \end{aligned}\]</span></p>
 <p>Fixed point combinators allow us to write recursive functions. For example, supposing we have already <a href="https://en.wikipedia.org/wiki/Church_encoding">encoded</a> Booleans and Natural numbers as certain lambda terms, then in a language which allowed recursive definitions we could write: <span class="math display">\[
@@ -122,7 +122,7 @@ True</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">halt ::</span> <span class="dt">Nat</span> <span class="ot">-&gt;</span> <span class="dt">Nat</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>halt ⊥ <span class="ot">=</span> <span class="dv">0</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>halt _ <span class="ot">=</span> <span class="dv">1</span></span></code></pre></div>
-<p>Of course, this specification is not legal Haskell (and moreover we are claiming that no function can have this behaviour). This formulation may appear slightly different to the Halting problem insomuch as we are only considering the (partial) natural numbers, but we can observe that for any <span class="math inline">\(\rm{f} :: \rm{Nat} \rightarrow \rm{Nat}\)</span> we can use <span class="math inline">\(\ap{h}{(\ap{f}{n})}\)</span> to determine if <span class="math inline">\(\rm{f}\)</span> halts on input <span class="math inline">\(\rm{n}\)</span> and so this would allow us to determine on which inputs <span class="math inline">\(\rm{f}\)</span> terminates.</p>
+<p>Of course, this specification is not legal Haskell (and moreover we are claiming that no function can have this behaviour). This formulation may appear slightly different to the Halting problem insomuch as we are only considering the (partial) natural numbers, but we can observe that for any <code>f :: Nat -&gt; Nat</code> we can use <code>halt (f n)</code> to determine if <code>f</code> halts on input <code>n</code> and so this would allow us to determine on which inputs <code>f</code> terminates.</p>
 <p>In order to mimic the argument above, let’s use a fixed point function similar to <span class="math inline">\(\Y\)</span>, aptly named <a href="https://hackage.haskell.org/package/base-4.14.0.0/docs/Data-Function.html#v:fix"><span class="math inline">\(\mathrm{fix}\)</span></a>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ot">fix ::</span> (a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a</span>
@@ -147,19 +147,22 @@ True</code></pre>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>bottom <span class="ot">=</span> fix <span class="fu">id</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ot">p ::</span> <span class="dt">Natural</span> <span class="ot">-&gt;</span> <span class="dt">Natural</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>p n <span class="ot">=</span> <span class="kw">if</span> h n <span class="op">==</span> <span class="dv">0</span> <span class="kw">then</span> <span class="dv">1</span> <span class="kw">else</span> bottom</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>p n <span class="ot">=</span> <span class="kw">if</span> halt n <span class="op">==</span> <span class="dv">0</span> <span class="kw">then</span> <span class="dv">1</span> <span class="kw">else</span> bottom</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ot">d ::</span> <span class="dt">Natural</span></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> fix p</span></code></pre></div>
 <p>As above let us think about the value of <span class="math inline">\((\ap{h}{problem})\)</span>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>d ≡ fix d ≡ p d ≡ <span class="kw">if</span> h d <span class="op">==</span> <span class="dv">0</span> <span class="kw">then</span> <span class="dv">1</span> <span class="kw">else</span> bottom</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>    d</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  ≡ fix d</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  ≡ p d</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  ≡ <span class="kw">if</span> halt d <span class="op">==</span> <span class="dv">0</span> <span class="kw">then</span> <span class="dv">1</span> <span class="kw">else</span> bottom</span></code></pre></div>
 <p>As before:</p>
 <ul>
-<li>If <span class="math inline">\(\ap{h}{d}\)</span> is <span class="math inline">\(0\)</span> then it is 1.</li>
-<li>If <span class="math inline">\(\ap{h}{d}\)</span> is <span class="math inline">\(1\)</span> then it is 0.</li>
+<li>If <code>halt d</code> is <span class="math inline">\(0\)</span> then it is 1.</li>
+<li>If <code>halt d</code> is <span class="math inline">\(1\)</span> then it is 0.</li>
 </ul>
-<p>We therefore conclude that no such <span class="math inline">\(\rm{h}\)</span> can be written in Haskell and so we cannot tell (in general) whether a term of type <span class="math inline">\(\mathrm{Natural}\)</span> will diverge or not. We should note that there is nothing special about <span class="math inline">\(\mathrm{Natural}\)</span> in this argument and we could have picked any type containing at least two distinct terms along with some ability to compare terms for equality.</p>
-<p>Thank you for reading! Hopefully this has demonstrated the unity of ideas between the lambda calculus and a functional language like Haskell and the naturality of studying computability theory from this perspective. In the <a href="to%20do">next post</a>, we will formalise this argument in Agda.</p>
+<p>We therefore conclude that no such function <code>h</code> can be written in Haskell and so we cannot tell (in general) whether a term of type <span class="math inline">\(\mathrm{Natural}\)</span> will diverge or not. We should note that there is nothing special about <span class="math inline">\(\mathrm{Natural}\)</span> in this argument and we could have picked any type containing at least two distinct terms along with some ability to compare terms for equality.</p>
+<p>Thank you for reading! Hopefully this has demonstrated the unity of ideas between the lambda calculus and a functional language like Haskell and the naturality of studying computability theory from this perspective. In the <a href="https://boarders.github.io/posts/halting2.html">next post</a>, we will formalise this argument in Agda.</p>
 
         <br>
         <br>
