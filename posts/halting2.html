@@ -41,7 +41,7 @@
             <br>
             <span class="byline">by Callan McGill</span>
             <br>
-            <span class="date">Dec 4, 2020</span>
+            <span class="date">Dec 7, 2020</span>
             <br>
             <br>
             <div class="metadata"> </div>
@@ -50,7 +50,7 @@
     <span class="quote"> "Everything is vague to a degree you do not realize till you have tried to make it precise."  - Bertrand Russell</span>
     </div>
     <article class="post">
-        <p>In this post we are going to take the argument from <a href="https://boarders.github.io/posts/halting1.html">last time</a> and formalise it in Agda. To begin, let’s grab some imports:</p>
+        <p><a href="https://boarders.github.io/posts/halting1.html">Last time</a>, we showed the undecidability of the halting problem using the lambda calculus as our model of computation. In this post, we are going to take that argument and formalise it in Agda. To begin, let’s grab some imports:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> Halt <span class="kw">where</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>List</span>
@@ -170,7 +170,7 @@ sub₁ (s (s z)) = tt
 -- Our parallel substitution then works as expected:
 subst-term₁ : subst sub₁ term₁ ≡ bool tt ff tt
 subst-term₁ = refl</code></pre>
-<p>From parallel substitution, it is easy for us to define ordinary substitution of a single binding variable by defining a context morphism which decrements all variables in <span class="math inline">\(\Gamma\)</span> and returns the term we are substituting for the initial variable:</p>
+<p>From parallel substitution, it is easy for us to define ordinary substitution of a single binding variable. We define the context morphism that decrements all variables in <span class="math inline">\(\Gamma\)</span> and returns the substituting term for the initial variable:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sub <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>ty tyB<span class="ot">}</span> <span class="ot">→</span> Expr Γ tyB <span class="ot">→</span> ty ∈ <span class="ot">(</span>Γ , tyB<span class="ot">)</span> <span class="ot">→</span> Expr Γ ty</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sub term z   <span class="ot">=</span> term</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>sub <span class="ot">_</span> <span class="ot">(</span>s pf<span class="ot">)</span> <span class="ot">=</span> var pf</span>
@@ -276,7 +276,7 @@ subst-term₁ = refl</code></pre>
   halt-ff :
     ∀ {Γ ty}
     (e : Expr Γ ty) → app halt e ⇓ ff → ¬ Halt e</code></pre>
-<p>We assume we have a function <code>halt</code> that takes an argument of any type (in the meta-language, agda, since our language doesn’t itself have polymorphism) and returns a bool. That this function applies to terms of any type is irrelevant to the argument we give here which would work just as well were we to simply use <code>𝔹</code>.</p>
+<p>We assume we have a function <code>halt</code> that takes an argument of any type (in the meta-language, agda, since our language doesn’t itself have polymorphism) and returns a bool. That this function applies to terms of any type is irrelevant to the argument we give here. This would work just as well were we to simply use <code>𝔹</code>.</p>
 <p>We also assume that it is decidable that halt always returns <code>tt</code> or <code>ff</code>. Furthermore, the terms <code>halt-tt</code> and <code>halt-ff</code> encode our assumptions regarding applying the <code>halt</code> function - if it returns <code>tt</code>, then the term is normalizing and conversely, if it returns <code>ff</code>, then it is non-normalizing.</p>
 <p>We can now define our three terms from last time:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Since fix takes a binding term we write fix (var z)</span></span>
@@ -294,7 +294,7 @@ subst-term₁ = refl</code></pre>
 <div class="sourceCode" id="cb16"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>halt-⊥ <span class="ot">:</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">{</span>e1 e2 <span class="ot">:</span> Expr Γ ty<span class="ot">}</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> e1 ⇓ e2 <span class="ot">→</span> ¬ <span class="ot">(</span>Halt e2<span class="ot">)</span> <span class="ot">→</span> ¬ <span class="ot">(</span>Halt e1<span class="ot">)</span></span></code></pre></div>
-<p>In order to prove this would we like to use that if <code>e1</code> steps to a value then there exists some reduction sequence where <code>e2</code> also steps to that same value. This follows from the more general property of confluence:</p>
+<p>In order to prove this, we would like to use the following: if <code>e1</code> steps to a value then there exists some reduction sequence where <code>e2</code> also steps to that same value. This follows from the more general property of confluence:</p>
 <p><strong>Definition [Confluence]</strong>: A reduction relation <span class="math inline">\(\rightarrow\)</span> on a set <span class="math inline">\(\mathcal{T}\)</span> is confluent if for any <span class="math inline">\(e1, e2, e3 \in \mathcal{T}\)</span> there exists an <span class="math inline">\(e4\)</span> such that the following diagram commutes: <span class="math display">\[
     \require{AMScd}
     \begin{CD}
@@ -330,7 +330,7 @@ subst-term₁ = refl</code></pre>
 <p>We can then put together <code>halt-⊥</code> and <code>bot-non-term</code> to show that any term that steps to <code>bot</code> cannot terminate:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>⇓-bot-⊥ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>e <span class="ot">:</span> Expr Γ ty<span class="ot">)</span> <span class="ot">→</span> e ⇓ bot <span class="ot">→</span> ¬ Halt e</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>⇓-bot-⊥ e st <span class="ot">=</span> halt-⊥ st bot-non-term</span></code></pre></div>
-<p>Now, we are better placed to show that if <code>halt fix-problem</code> reduces to <code>tt</code> then <code>fix-problem</code> reduces to <code>bot</code> and thus we get a contradiction. The final general result we will need for this concerns the big step evaluation semantics to <code>bool</code>. We could abstract this as a more general theorem connecting small and big-step semantics but instead we will only give the results that are useful for our purposes:</p>
+<p>Now, we are better placed to show that if <code>halt fix-problem</code> reduces to <code>tt</code> then <code>fix-problem</code> reduces to <code>bot</code> and thus we get a contradiction. The final general result we will need is one that connects the big step operational semantics of Booleans to that of our conditional function, <code>bool</code>.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- In both cases if there is no reduction then we directly step.</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- Otherwise we reduce the conditional and recurse on the result.</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>bool-stepper-tt</span>
@@ -401,7 +401,7 @@ subst-term₁ = refl</code></pre>
 <span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span>app <span class="ot">(</span>halt <span class="ot">{</span>Γ<span class="ot">})</span> fix-problem<span class="ot">)</span> ⇓ tt</span>
 <span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span>fix-problem <span class="ot">{</span>Γ<span class="ot">})</span> ⇓ bot</span>
 <span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a>fp-step4 <span class="ot">{</span>Γ<span class="ot">}</span> ⇓-tt <span class="ot">=</span> fix-problem →⟨ fp-step2 ⟩ fp-step3 ⇓-tt</span></code></pre></div>
-<p>The other half of the argument, assuming <code>halt (fix-problem) ⇓ ff</code>, is quite a bit simpler since to prove halting we only need to exhibit some particular sequence of reductions:</p>
+<p>The other half of the argument, assuming <code>halt (fix-problem) ⇓ ff</code>, is quite a bit simpler. To prove halting, we only need to exhibit some particular sequence of reductions:</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>fp-step5</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>   <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span>app <span class="ot">(</span>halt <span class="ot">{</span>Γ<span class="ot">})</span> fix-problem<span class="ot">)</span> ⇓ ff</span>
@@ -416,7 +416,7 @@ subst-term₁ = refl</code></pre>
 <span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span>app <span class="ot">(</span>halt <span class="ot">{</span>Γ<span class="ot">})</span> fix-problem<span class="ot">)</span> ⇓ ff</span>
 <span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> fix-problem ⇓ tt</span>
 <span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>fp-step6 ⇓-ff <span class="ot">=</span> fix-problem →⟨ fp-step2 ⟩ fp-step5 ⇓-ff</span></code></pre></div>
-<p>Finally let’s package up these results into their respective contradictions:</p>
+<p>Finally, let’s package up these results into their respective contradictions:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fix-problem-tt</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">(</span>app <span class="ot">(</span>halt <span class="ot">{</span>Γ<span class="ot">})</span> fix-problem<span class="ot">)</span> ⇓ tt</span>
@@ -428,12 +428,13 @@ subst-term₁ = refl</code></pre>
 <span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> <span class="ot">(</span>app <span class="ot">(</span>halt <span class="ot">{</span>Γ<span class="ot">})</span> fix-problem<span class="ot">)</span> ⇓ ff</span>
 <span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> <span class="ot">(</span>¬ Halt <span class="ot">{</span>Γ<span class="ot">}</span> fix-problem<span class="ot">)</span> <span class="ot">→</span> ⊥</span>
 <span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>fix-problem-ff ⇓-ff ¬h <span class="ot">=</span> ¬h <span class="ot">(</span>halts V-tt <span class="ot">(</span>fp-step6 ⇓-ff<span class="ot">))</span></span></code></pre></div>
-<p>and put everthing together:</p>
+<p>and put everything together:</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode agda"><code class="sourceCode agda"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>halting <span class="ot">:</span> ⊥</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>halting <span class="kw">with</span> halt-ret <span class="ot">{</span>nil<span class="ot">}</span> fix-problem</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>halting <span class="ot">|</span> inj₁ ⇓tt  <span class="ot">=</span> fix-problem-tt ⇓tt <span class="ot">(</span>halt-tt fix-problem ⇓tt<span class="ot">)</span></span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>halting <span class="ot">|</span> inj₂ ⇓ff  <span class="ot">=</span> fix-problem-ff ⇓ff <span class="ot">(</span>halt-ff fix-problem ⇓ff<span class="ot">)</span></span></code></pre></div>
-<p>Hopefully this post has given an approachable account of formalising one of the central result in computability theory. We hope to have also demonstrated, from a programming language theory perspective, why to prefer the lambda calculus as a foundational theory of computation. Thank you for reading! The full code for these examples is available <a href="https://github.com/Boarders/agda-halting">here</a>.</p>
+<p>Hopefully this post has given an approachable account of formalising one of the central results in computability theory. We hope to have also demonstrated, from a programming language theory perspective, some of the advantages of the lambda calculus as a foundational theory of computation (over, for example, Turing machines). Thank you for reading! The full code for this proof is available <a href="https://github.com/Boarders/agda-halting">here</a>.</p>
+<p><i>With warmest thanks to Alixandra Prybyla and Sam Derbyshire for their valuable feedback.</i></p>
 
         <br>
         <br>
