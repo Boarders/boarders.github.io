@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="Callan McGillx">
+    <meta name="author" content="Callan McGill">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The Halting Problem (part 2)">
+    <meta name="twitter:description" content="Exploring the Halting problem in Agda">
+        <title>The Halting Problem (part 2)</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+<body>
+    <!DOCTYPE html>
+    <header>
+      <nav class="left-sidebar">
+    		<a class="beacon" href="/">
+              <div id="home-text"> HOME </div>
+        </a>
+    		<a class="beacon" href="/about.html">
+              <div id="about-text"> ABOUT </div>
+          </a>		
+        </nav>
+        <div class="right-sidebar">
+            <a class="ext-link" href="https://github.com/boarders">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+            <a class="ext-link" href="https://mathstodon.xyz/@boarders">
+            <img src="/images/mathstodon-logo.png" alt="Mathstodon Profile"/>
+        </a>
+		</div>
+        <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['\\(', '\\)']],
+            displayMath: [['\\[', '\\]']],
+            processEscapes: true,
+            processEnvironments: true
+          },
+          options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+          }
+        };
+        </script>
+        <script type="text/javascript" id="MathJax-script" async
+                src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+        </script>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                The Halting Problem (part 2)
+            </span>
+            <br>
+            <br>
+            <span class="byline">by Callan McGill</span>
+            <br>
+            <span class="date">Dec 7, 2020</span>
+            <br>
+            <br>
+            <div class="metadata"> </div>
+            </div>
+    </div>
+    <span class="quote"> "Everything is vague to a degree you do not realize till you have tried
+to make it precise."  - Bertrand Russell</span>
+    </div>
+    <article class="post">
+        <p><a href="https://boarders.github.io/posts/halting1.html">Last
+time</a>, we showed the undecidability of the halting problem using the
+lambda calculus as our model of computation. In this post, we are going
+to take that argument and formalise it in Agda. To begin, let’s grab
+some imports:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <dfn>Halt</dfn> <span class="kw">where</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>List</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">using</span> <span class="ot">(</span>List<span class="ot">;</span> <dfn>[</dfn>]<span class="ot">;</span> <span class="ot">_</span>∷<span class="ot">_)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Relation<span class="ot">.</span>Nullary</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>   <span class="kw">using</span> <span class="ot">(</span>¬<span class="ot">_)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Empty</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">using</span> <span class="ot">(</span>⊥<span class="ot">;</span> ⊥-elim<span class="ot">)\</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Product</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">using</span> <span class="ot">(</span>Σ-syntax<span class="ot">;</span> <span class="ot">_</span>×<span class="ot">_)</span> <span class="kw">renaming</span> <span class="ot">(_</span><dfn>,</dfn><span class="ot">_</span> <span class="kw">to</span> Sg<span class="ot">)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Relation<span class="ot">.</span>Binary<span class="ot">.</span>PropositionalEquality</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">using</span> <span class="ot">(_</span>≡<span class="ot">_;</span> refl<span class="ot">)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Sum</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">using</span> <span class="ot">(_</span>⊎<span class="ot">_;</span> inj₁<span class="ot">;</span> inj₂<span class="ot">)</span></span></code></pre></div>
+<p>For this development we will use a typed lambda calculus essentially
+identical to <a
+href="https://en.wikipedia.org/wiki/Programming_Computable_Functions">PCF</a>
+(only with booleans instead of natural numbers), as this makes the
+formalisation quite tidy. In order to get the basic semantics of the
+language we will closely follow the <a
+href="https://plfa.github.io/DeBruijn/">DeBruijn</a> chapter from the
+fantastic <a href="https://plfa.github.io/">Programming Language
+Foundations in Agda</a>.</p>
+<p>Our language will be simply-typed, having only booleans, <span
+class="math inline">\(\mathbb{B}\)</span>, and function types:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <dfn><span class="dt">Type</span></dfn> <span class="ot">:</span> <span class="dt">Set</span> <span class="kw">where</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="cn">𝔹</span>  <span class="ot">:</span>  <dfn><span class="dt">Type</span></dfn></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">_</span><span class="cn">⇒</span><span class="ot">_</span> <span class="ot">:</span> <dfn><span class="dt">Type</span></dfn> <span class="ot">→</span> <dfn><span class="dt">Type</span></dfn> <span class="ot">→</span> <dfn><span class="dt">Type</span></dfn></span></code></pre></div>
+<p>We make use of intrinsically well-scoped, well-typed terms and so we
+use ‘proof-carrying’ de-bruijn indices for variables. In this set-up
+indices act both as an index into a typing context and as a
+<em>proof</em> that the variable is well-typed in the current
+context.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- A typing context is represented as a list of types.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><dfn>Con</dfn> <span class="ot">:</span> <span class="dt">Set</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><dfn>Con</dfn> <span class="ot">=</span> List <dfn><span class="dt">Type</span></dfn></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- We use <dfn>∙</dfn> for the empty context.</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><dfn>∙</dfn> <span class="ot">:</span> <dfn>Con</dfn></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><dfn>∙</dfn> <span class="ot">=</span> <dfn>[</dfn>]</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- _,_ extends contexts to the right as is typical in type theory</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">-- and so we use a view the list in reverse order.</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">infixl</span> <span class="dv">6</span> <span class="ot">_</span><dfn>,</dfn><span class="ot">_</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>,</dfn><span class="ot">_</span> <span class="ot">:</span> <dfn>Con</dfn> <span class="ot">→</span> <dfn><span class="dt">Type</span></dfn> <span class="ot">→</span> <dfn>Con</dfn></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>,</dfn><span class="ot">_</span> con ty <span class="ot">=</span> ty ∷ con</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">-- A type for de-bruijn indices into a context. The index represents</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">-- a pointer into a context along with a proof that the</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">-- context contains the given type at that position.</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">-- For example, given the context:</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">--</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">--   Γ = <span class="cn">𝔹</span><dfn>,</dfn> <span class="cn">𝔹</span> <span class="cn">⇒</span> <span class="cn">𝔹</span></span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co">--</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co">-- we have:</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co">--    <span class="cn">z</span>   : <span class="cn">𝔹</span> <span class="cn">⇒</span> <span class="cn">𝔹</span> ∈ Γ</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">--    <span class="cn">s</span> <span class="cn">z</span> : <span class="cn">𝔹</span> ∈ Γ</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="kw">infix</span> <span class="dv">4</span> <span class="ot">_</span>∈<span class="ot">_</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="ot">_</span>∈<span class="ot">_</span>  <span class="ot">(</span>t <span class="ot">:</span> <dfn><span class="dt">Type</span></dfn><span class="ot">)</span> <span class="ot">:</span> <dfn>Con</dfn> <span class="ot">→</span> <span class="dt">Set</span> <span class="kw">where</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="cn">z</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>ts<span class="ot">}</span> <span class="ot">→</span> t ∈ <span class="ot">(</span>t ∷ ts<span class="ot">)</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  <span class="cn">s</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>r<span class="ot">}</span> <span class="ot">{</span>ts<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>t ∈ ts<span class="ot">)</span> <span class="ot">→</span> t ∈ <span class="ot">(</span>r ∷ ts<span class="ot">)</span></span></code></pre></div>
+<p>We can now define the terms of our language. Here
+<code>Expr Γ ty</code> denotes a term of type <code>ty</code> in the
+typing context <code>Γ</code>:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <dfn>Expr</dfn> <span class="ot">(</span>Γ <span class="ot">:</span> <dfn>Con</dfn><span class="ot">)</span> <span class="ot">:</span> <dfn><span class="dt">Type</span></dfn> <span class="ot">→</span> <span class="dt">Set</span> <span class="kw">where</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="cn">var</span>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a <span class="ot">:</span> <dfn><span class="dt">Type</span></dfn><span class="ot">}</span> <span class="ot">→</span> a ∈ Γ <span class="ot">→</span> <dfn>Expr</dfn> Γ a</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="cn">app</span>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a b<span class="ot">}</span> <span class="ot">→</span> <dfn>Expr</dfn> Γ <span class="ot">(</span>a <span class="cn">⇒</span> b<span class="ot">)</span> <span class="ot">→</span> <dfn>Expr</dfn> Γ a <span class="ot">→</span> <dfn>Expr</dfn> Γ b</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="cn">lam</span>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a b<span class="ot">}</span> <span class="ot">→</span> <dfn>Expr</dfn> <span class="ot">(</span>Γ, a<span class="ot">)</span> b <span class="ot">→</span> <dfn>Expr</dfn> Γ <span class="ot">(</span>a <span class="cn">⇒</span> b<span class="ot">)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="cn">tt</span>   <span class="ot">:</span> <dfn>Expr</dfn> Γ <span class="cn">𝔹</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="cn">ff</span>   <span class="ot">:</span> <dfn>Expr</dfn> Γ <span class="cn">𝔹</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="cn">bool</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a<span class="ot">}</span> <span class="ot">→</span> <dfn>Expr</dfn> Γ <span class="cn">𝔹</span> <span class="ot">→</span> <dfn>Expr</dfn> Γ a <span class="ot">→</span> <dfn>Expr</dfn> Γ a <span class="ot">→</span> <dfn>Expr</dfn> Γ a</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="cn">fix</span>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a<span class="ot">}</span> <span class="ot">→</span> <dfn>Expr</dfn> <span class="ot">(</span>Γ <dfn>,</dfn> a<span class="ot">)</span> a <span class="ot">→</span> <dfn>Expr</dfn> Γ a</span></code></pre></div>
+<p>The names are largely self-explanatory but we observe that we use
+<code>bool</code> for the conditional instead of <code>if</code>. It is
+also worth noting that as <code>lam</code> and <code>fix</code> are
+binding forms, they take arguments with contexts extended by the type of
+the bound variable.</p>
+<p>We give an identical approach to variable substitution as in <a
+href="https://plfa.github.io/">PLFA</a> by first defining context
+extension and variable renaming:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><dfn>ext</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ Δ <span class="ot">:</span> <dfn>Con</dfn><span class="ot">}</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">(∀</span> <span class="ot">{</span>ty <span class="ot">:</span> <dfn><span class="dt">Type</span></dfn><span class="ot">}</span> <span class="ot">→</span> ty ∈ Γ <span class="ot">→</span> ty ∈ Δ<span class="ot">)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">(∀</span> <span class="ot">{</span>ty tyB <span class="ot">:</span> <dfn><span class="dt">Type</span></dfn><span class="ot">}</span> <span class="ot">→</span> ty ∈ Γ <dfn>,</dfn> tyB <span class="ot">→</span> ty ∈ Δ <dfn>,</dfn> tyB<span class="ot">)</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><dfn>ext</dfn> ρ <span class="cn">z</span> <span class="ot">=</span> <span class="cn">z</span>             <span class="co">-- if it is the newly bound variable</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                        <span class="co">-- we simply return it.</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><dfn>ext</dfn> ρ <span class="ot">(</span><span class="cn">s</span> x<span class="ot">)</span> <span class="ot">=</span> <span class="cn">s</span> <span class="ot">(</span>ρ x<span class="ot">)</span>   <span class="co">-- otherwise we perform the substitution</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                        <span class="co">-- and take successor.</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- <dfn>rename</dfn> is defined by structural recursion, extending the renaming</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">-- at binding sites and applying it to variables.</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><dfn>rename</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ Δ<span class="ot">}</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">(∀</span> <span class="ot">{</span>ty<span class="ot">}</span> <span class="ot">→</span> ty ∈ Γ <span class="ot">→</span> ty ∈ Δ<span class="ot">)</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">(∀</span> <span class="ot">{</span>ty<span class="ot">}</span> <span class="ot">→</span> <dfn>Expr</dfn> Γ ty <span class="ot">→</span> <dfn>Expr</dfn> Δ ty<span class="ot">)</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><dfn>rename</dfn> ρ <span class="ot">(</span><span class="cn">var</span> x<span class="ot">)</span> <span class="ot">=</span> <span class="cn">var</span> <span class="ot">(</span>ρ x<span class="ot">)</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><dfn>rename</dfn> ρ <span class="ot">(</span><span class="cn">app</span> rator rand<span class="ot">)</span> <span class="ot">=</span> <span class="cn">app</span> <span class="ot">(</span><dfn>rename</dfn> ρ rator<span class="ot">)</span> <span class="ot">(</span><dfn>rename</dfn> ρ rand<span class="ot">)</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><dfn>rename</dfn> ρ <span class="ot">(</span><span class="cn">lam</span> body<span class="ot">)</span> <span class="ot">=</span> <span class="cn">lam</span> <span class="ot">(</span><dfn>rename</dfn> <span class="ot">(</span><dfn>ext</dfn> ρ<span class="ot">)</span> body<span class="ot">)</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><dfn>rename</dfn> ρ <span class="cn">tt</span> <span class="ot">=</span> <span class="cn">tt</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><dfn>rename</dfn> ρ <span class="cn">ff</span> <span class="ot">=</span> <span class="cn">ff</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><dfn>rename</dfn> ρ <span class="ot">(</span><span class="cn">bool</span> b th el<span class="ot">)</span> <span class="ot">=</span> <span class="cn">bool</span> <span class="ot">(</span><dfn>rename</dfn> ρ b<span class="ot">)</span> <span class="ot">(</span><dfn>rename</dfn> ρ th<span class="ot">)</span> <span class="ot">(</span><dfn>rename</dfn> ρ el<span class="ot">)</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><dfn>rename</dfn> ρ <span class="ot">(</span><span class="cn">fix</span> body<span class="ot">)</span> <span class="ot">=</span> <span class="cn">fix</span> <span class="ot">(</span><dfn>rename</dfn> <span class="ot">(</span><dfn>ext</dfn> ρ<span class="ot">)</span> body<span class="ot">)</span></span></code></pre></div>
+<p>Here, a variable renaming, <code>(∀ {ty} → ty ∈ Γ → ty ∈ Δ)</code>,
+simply takes an index into one context of a particular type and gives an
+index into a different context of the same type.</p>
+<p>We extend this from variable renaming to arbitrary context
+morphisms:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- extend a context morphism with a new bound variable.</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><dfn>exts</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ Δ<span class="ot">}</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">(∀</span> <span class="ot">{</span>ty<span class="ot">}</span> <span class="ot">→</span>  ty ∈ Γ <span class="ot">→</span> <dfn>Expr</dfn> Δ ty<span class="ot">)</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">(∀</span> <span class="ot">{</span>ty tyB<span class="ot">}</span> <span class="ot">→</span> ty ∈ <span class="ot">(</span>Γ <dfn>,</dfn> tyB<span class="ot">)</span> <span class="ot">→</span> <dfn>Expr</dfn> <span class="ot">(</span>Δ <dfn>,</dfn> tyB<span class="ot">)</span> ty<span class="ot">)</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><dfn>exts</dfn> ρ <span class="cn">z</span>     <span class="ot">=</span> <span class="cn">var</span> <span class="cn">z</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><dfn>exts</dfn> ρ <span class="ot">(</span><span class="cn">s</span> x<span class="ot">)</span> <span class="ot">=</span> <dfn>rename</dfn> <span class="cn">s</span> <span class="ot">(</span>ρ x<span class="ot">)</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">-- Perform structural recursion, extending the context morphism at</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- binding sites and applying it to variables.</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><dfn>subst</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ Δ<span class="ot">}</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">(∀</span> <span class="ot">{</span>ty<span class="ot">}</span> <span class="ot">→</span> ty ∈ Γ <span class="ot">→</span> <dfn>Expr</dfn> Δ ty<span class="ot">)</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">(∀</span> <span class="ot">{</span>ty<span class="ot">}</span> <span class="ot">→</span> <dfn>Expr</dfn> Γ ty <span class="ot">→</span> <dfn>Expr</dfn> Δ ty<span class="ot">)</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><dfn>subst</dfn> ρ <span class="ot">(</span><span class="cn">var</span> x<span class="ot">)</span> <span class="ot">=</span> ρ x</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><dfn>subst</dfn> ρ <span class="ot">(</span><span class="cn">app</span> rator rand<span class="ot">)</span> <span class="ot">=</span> <span class="cn">app</span> <span class="ot">(</span><dfn>subst</dfn> ρ rator<span class="ot">)</span> <span class="ot">(</span><dfn>subst</dfn> ρ rand<span class="ot">)</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><dfn>subst</dfn> ρ <span class="ot">(</span><span class="cn">lam</span> body<span class="ot">)</span> <span class="ot">=</span> <span class="cn">lam</span> <span class="ot">(</span><dfn>subst</dfn> <span class="ot">(</span><dfn>exts</dfn> ρ<span class="ot">)</span> body<span class="ot">)</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><dfn>subst</dfn> ρ <span class="cn">tt</span> <span class="ot">=</span> <span class="cn">tt</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><dfn>subst</dfn> ρ <span class="cn">ff</span> <span class="ot">=</span> <span class="cn">ff</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><dfn>subst</dfn> ρ <span class="ot">(</span><span class="cn">bool</span> b th el<span class="ot">)</span> <span class="ot">=</span> <span class="cn">bool</span> <span class="ot">(</span><dfn>subst</dfn> ρ b<span class="ot">)</span> <span class="ot">(</span><dfn>subst</dfn> ρ th<span class="ot">)</span> <span class="ot">(</span><dfn>subst</dfn> ρ el<span class="ot">)</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><dfn>subst</dfn> ρ <span class="ot">(</span><span class="cn">fix</span> body<span class="ot">)</span> <span class="ot">=</span> <span class="cn">fix</span> <span class="ot">(</span><dfn>subst</dfn> <span class="ot">(</span><dfn>exts</dfn> ρ<span class="ot">)</span> body<span class="ot">)</span></span></code></pre></div>
+<p>This gives parallel substitution across an entire context
+<code>Γ</code> to another context <code>Δ</code>. Intuitively we take an
+open term with variables of type <code>Γ</code> and replace them with
+terms of type <code>Δ</code>. To make this clearer let us give an
+example:</p>
+<pre><code>-- Our example context has three 𝔹 variables. 
+con₁ : Con
+con₁ = ∙ , 𝔹 , 𝔹 , 𝔹
+
+-- Our open term is then, roughly, &quot;if x then y else z&quot; where
+-- x : 𝔹, y : 𝔹 and z : 𝔹
+term₁ : Expr con₁ 𝔹
+term₁ = bool (var z) (var (s z)) (var (s (s z)))
+
+-- For those variables we can then substitute closed terms:
+sub₁ : ∀ {ty} → ty ∈ con₁ → Expr ∙ ty
+sub₁ z = tt
+sub₁ (s z) = ff
+sub₁ (s (s z)) = tt
+
+-- Our parallel substitution then works as expected:
+subst-term₁ : subst sub₁ term₁ ≡ bool tt ff tt
+subst-term₁ = refl</code></pre>
+<p>From parallel substitution, it is easy for us to define ordinary
+substitution of a single binding variable. We define the context
+morphism that decrements all variables in <span
+class="math inline">\(\Gamma\)</span> and returns the substituting term
+for the initial variable:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><dfn>sub</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>ty tyB<span class="ot">}</span> <span class="ot">→</span> <dfn>Expr</dfn> Γ tyB <span class="ot">→</span> ty ∈ <span class="ot">(</span>Γ <dfn>,</dfn> tyB<span class="ot">)</span> <span class="ot">→</span> <dfn>Expr</dfn> Γ ty</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><dfn>sub</dfn> term <span class="cn">z</span>   <span class="ot">=</span> term</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><dfn>sub</dfn> <span class="ot">_</span> <span class="ot">(</span><span class="cn">s</span> pf<span class="ot">)</span> <span class="ot">=</span> <span class="cn">var</span> pf</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>[</dfn><span class="ot">_</span>] <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ ty tyB<span class="ot">}</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="ot">→</span> <dfn>Expr</dfn> <span class="ot">(</span>Γ <dfn>,</dfn> tyB<span class="ot">)</span> ty</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="ot">→</span> <dfn>Expr</dfn> Γ tyB</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="ot">→</span> <dfn>Expr</dfn> Γ ty</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>[</dfn><span class="ot">_</span>] <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>ty<span class="ot">}</span> <span class="ot">{</span>tyB<span class="ot">}</span> body term <span class="ot">=</span> <dfn>subst</dfn> <span class="ot">{</span>Γ <dfn>,</dfn> tyB<span class="ot">}</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">(</span><dfn>sub</dfn> term<span class="ot">)</span> body</span></code></pre></div>
+<p>Again, let’s give a simple example:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- This time our context has n : <span class="cn">𝔹</span> <span class="cn">⇒</span> <span class="cn">𝔹</span> and b : <span class="cn">𝔹</span></span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><dfn>con₂</dfn>  <span class="ot">:</span> <dfn>Con</dfn></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><dfn>con₂</dfn>  <span class="ot">=</span> <dfn>∙</dfn> <dfn>,</dfn> <span class="cn">𝔹</span> <span class="cn">⇒</span> <span class="cn">𝔹</span> <dfn>,</dfn> <span class="cn">𝔹</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- Our open term is n applied to b:</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><dfn>term₂</dfn>  <span class="ot">:</span> <dfn>Expr</dfn> <dfn>con₂</dfn> <span class="cn">𝔹</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><dfn>term₂</dfn>  <span class="ot">=</span> <span class="cn">app</span> <span class="ot">(</span><span class="cn">var</span> <span class="ot">(</span><span class="cn">s</span> <span class="cn">z</span><span class="ot">))</span> <span class="ot">(</span><span class="cn">var</span> <span class="cn">z</span><span class="ot">)</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- Once we substitute b ↦ <span class="cn">tt</span> we have the smaller typing</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">-- context: </span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">--   <dfn>∙</dfn> <dfn>,</dfn> <span class="cn">𝔹</span> <span class="cn">⇒</span> <span class="cn">𝔹</span> </span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">-- and so we decrement the n variable.</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><dfn>subst-term₂</dfn> <span class="ot">:</span> <dfn>term₂</dfn> <dfn>[</dfn> <span class="cn">tt</span> ] ≡ <span class="cn">app</span> <span class="ot">(</span><span class="cn">var</span> <span class="cn">z</span><span class="ot">)</span> <span class="cn">tt</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><dfn>subst-term₂</dfn> <span class="ot">=</span> refl</span></code></pre></div>
+<p>Next we can define the values of our language - that is, those terms
+which terminating programs return. Along with values we define the
+small-step operational semantics of the language, showing how reduction
+takes place:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <dfn>Value</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>ty<span class="ot">}</span> <span class="ot">→</span> <dfn>Expr</dfn> Γ ty <span class="ot">→</span> <span class="dt">Set</span> <span class="kw">where</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- lambdas are values</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  V-↦ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ <span class="ot">}</span> <span class="ot">{</span>ty tyB<span class="ot">}</span> <span class="ot">{</span>body <span class="ot">:</span> <dfn>Expr</dfn> <span class="ot">(</span>Γ <dfn>,</dfn> tyB<span class="ot">)</span> ty<span class="ot">}</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> <dfn>Value</dfn> <span class="ot">(</span><span class="cn">lam</span> body<span class="ot">)</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- <span class="cn">tt</span> is a value</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="cn">V-tt</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">→</span> <dfn>Value</dfn> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span><span class="cn">𝔹</span><span class="ot">}</span> <span class="cn">tt</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">-- <span class="cn">ff</span> is a value</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="cn">V-ff</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">→</span> <dfn>Value</dfn> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span><span class="cn">𝔹</span><span class="ot">}</span> <span class="cn">ff</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="ot">_</span>↓<span class="ot">_</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>ty<span class="ot">}</span> <span class="ot">→</span> <dfn>Expr</dfn> Γ ty <span class="ot">-&gt;</span> <dfn>Expr</dfn> Γ ty <span class="ot">-&gt;</span> <span class="dt">Set</span> <span class="kw">where</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">-- reduce on the left in an application.</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  l-↓ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ ty tyB<span class="ot">}</span> <span class="ot">{</span>L L&#39; <span class="ot">:</span> <dfn>Expr</dfn> Γ <span class="ot">(</span>ty <span class="cn">⇒</span> tyB<span class="ot">)}</span> <span class="ot">{</span>R <span class="ot">:</span> <dfn>Expr</dfn> Γ ty<span class="ot">}</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="ot">-&gt;</span> L ↓ L&#39;</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="ot">-&gt;</span> <span class="cn">app</span> L R ↓ <span class="cn">app</span> L&#39; R</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">-- reduce on the right so long as we have already reduced the left</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">-- argument to a value.</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  r-↓ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ ty tyB<span class="ot">}</span> <span class="ot">{</span>VL <span class="ot">:</span> <dfn>Expr</dfn> Γ <span class="ot">(</span>ty <span class="cn">⇒</span> tyB<span class="ot">)}</span> <span class="ot">{</span> R R&#39; <span class="ot">:</span> <dfn>Expr</dfn> Γ ty<span class="ot">}</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="ot">-&gt;</span> <span class="ot">(</span><dfn>Value</dfn> VL<span class="ot">)</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="ot">-&gt;</span> R ↓ R&#39;</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="ot">-&gt;</span> <span class="cn">app</span> VL R ↓ <span class="cn">app</span> VL R&#39;</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co">-- Perform beta-reduction.</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>  β-↓ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>ty tyB<span class="ot">}</span> <span class="ot">{</span>N <span class="ot">:</span> <dfn>Expr</dfn> <span class="ot">(</span>Γ <dfn>,</dfn> tyB<span class="ot">)</span> ty<span class="ot">}</span> <span class="ot">{</span>V <span class="ot">:</span> <dfn>Expr</dfn> Γ tyB<span class="ot">}</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    <span class="ot">-&gt;</span> <span class="ot">(</span><span class="cn">app</span> <span class="ot">(</span><span class="cn">lam</span> N<span class="ot">)</span> V<span class="ot">)</span> ↓ <span class="ot">(</span>N <dfn>[</dfn> V ]<span class="ot">)</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="co">-- reduce boolean in a conditional.</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  if-↓ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>ty<span class="ot">}</span> <span class="ot">{</span>b b&#39; <span class="ot">:</span> <dfn>Expr</dfn> Γ <span class="cn">𝔹</span><span class="ot">}</span> <span class="ot">{</span>th el <span class="ot">:</span> <dfn>Expr</dfn> Γ ty<span class="ot">}</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    <span class="ot">-&gt;</span> b ↓ b&#39;</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="ot">-&gt;</span> <span class="ot">(</span><span class="cn">bool</span> b th el<span class="ot">)</span> ↓ <span class="ot">(</span><span class="cn">bool</span> b&#39; th el<span class="ot">)</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a><span class="co">-- reduce conditional to true branch.</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>  if-tt-↓ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>ty<span class="ot">}</span> <span class="ot">{</span>th el <span class="ot">:</span> <dfn>Expr</dfn> Γ ty<span class="ot">}</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>    <span class="ot">-&gt;</span> <span class="ot">(</span><span class="cn">bool</span> <span class="cn">tt</span> th el<span class="ot">)</span> ↓ th</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a><span class="co">-- reduce conditional to false branch.</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>  if-ff-↓ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>ty<span class="ot">}</span> <span class="ot">{</span>th el <span class="ot">:</span> <dfn>Expr</dfn> Γ ty<span class="ot">}</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>    <span class="ot">-&gt;</span> <span class="ot">(</span><span class="cn">bool</span> <span class="cn">ff</span> th el<span class="ot">)</span> ↓ el</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a><span class="co">-- recursively substitute <span class="cn">fix</span> expression.</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>  fix-↓ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">{</span>expr <span class="ot">:</span> <dfn>Expr</dfn> <span class="ot">(</span>Γ <dfn>,</dfn> ty<span class="ot">)</span> ty<span class="ot">}</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>    <span class="ot">-&gt;</span> <span class="cn">fix</span> expr ↓ <span class="ot">(</span>expr <dfn>[</dfn> <span class="cn">fix</span> expr ]<span class="ot">)</span></span></code></pre></div>
+<p>We use (something close to) a call-by-name semantics and so don’t
+necessarily reduce arguments to values before performing <span
+class="math inline">\(\beta\)</span>-reduction. We also fix a leftmost
+evaluation order for applications reducing the left argument to a value
+before the right argument. We extend this relation to its reflective,
+transitive closure - the stepping relation - that one expression
+reduces, in some number of steps, to another.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="ot">_</span>⇓<span class="ot">_</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">→</span> <dfn>Expr</dfn> Γ ty <span class="ot">→</span> <dfn>Expr</dfn> Γ ty <span class="ot">→</span> <span class="dt">Set</span> <span class="kw">where</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- reflexivity</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">_</span>∎ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">(</span>M <span class="ot">:</span> <dfn>Expr</dfn> Γ ty<span class="ot">)</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> M ⇓ M</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- transitivity</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">_</span><span class="cn">→⟨</span><span class="ot">_</span>⟩<span class="ot">_</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">(</span>L <span class="ot">:</span> <dfn>Expr</dfn> Γ ty<span class="ot">)</span> <span class="ot">{</span>M N <span class="ot">:</span> <dfn>Expr</dfn> Γ ty<span class="ot">}</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> L ↓ M</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> M ⇓ N</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> L ⇓ N</span></code></pre></div>
+<p>For later use we note, as one might expect, that values, as we have
+defined them, only reduce to themselves:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>⇓-val <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ a<span class="ot">}</span> <span class="ot">{</span>e e&#39; <span class="ot">:</span> <dfn>Expr</dfn> Γ a<span class="ot">}</span> <span class="ot">→</span> <dfn>Value</dfn> e <span class="ot">→</span> e ⇓ e&#39; <span class="ot">→</span> e&#39; ≡ e</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>⇓-val val   <span class="ot">(_</span> ∎<span class="ot">)</span> <span class="ot">=</span> refl</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- In the cases where we have a transitive step Agda will</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- produce an absurd pattern as none of the reduction</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- rules apply.</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>⇓-val V-↦  <span class="ot">(_</span> <span class="cn">→⟨</span> <span class="ot">()</span> ⟩ st<span class="ot">)</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>⇓-val <span class="cn">V-tt</span> <span class="ot">(_</span> <span class="cn">→⟨</span> <span class="ot">()</span> ⟩ st<span class="ot">)</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>⇓-val <span class="cn">V-ff</span> <span class="ot">(_</span> <span class="cn">→⟨</span> <span class="ot">()</span> ⟩ st<span class="ot">)</span></span></code></pre></div>
+<p>Now let us think about our <span
+class="math inline">\(\mathbf{HALT}\)</span> term from last time. We
+define the notion of halting by stating the existence of both a value
+and a series of reduction steps to that value. We encode that as
+follows:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <dfn>Halt</dfn> <span class="ot">{</span>Γ a<span class="ot">}</span> <span class="ot">(</span>e <span class="ot">:</span>  <dfn>Expr</dfn> Γ a<span class="ot">)</span> <span class="ot">:</span> <span class="dt">Set</span> <span class="kw">where</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="cn">halts</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>v <span class="ot">:</span> <dfn>Expr</dfn> Γ a<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span><dfn>Value</dfn> v<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>e ⇓ v<span class="ot">)</span> <span class="ot">→</span> <dfn>Halt</dfn> e</span></code></pre></div>
+<p>We are now in the position to postulate the existence of a
+<code>halt</code> function with the expected properties:</p>
+<pre><code>postulate
+  halt     : ∀ {Γ} {a} → Expr Γ (a ⇒ 𝔹)
+-- halt is a closed term
+  halt-sub :
+    ∀ {Γ Δ} {a}
+    → (ρ : ∀ {ty} → ty ∈ Γ → Expr Δ ty)
+    → subst {Γ} {Δ} ρ (halt {Γ} {a}) ≡ halt {Δ}
+  halt-ret :
+    ∀ {Γ} {ty}
+    (e : Expr Γ ty) → app halt e ⇓ tt ⊎ app halt e ⇓ ff
+  halt-tt  :
+    ∀ {Γ ty}
+    (e : Expr Γ ty) → app halt e ⇓ tt → Halt e
+  halt-ff :
+    ∀ {Γ ty}
+    (e : Expr Γ ty) → app halt e ⇓ ff → ¬ Halt e</code></pre>
+<p>We assume we have a function <code>halt</code> that takes an argument
+of any type (in the meta-language, agda, since our language doesn’t
+itself have polymorphism) and returns a bool. That this function applies
+to terms of any type is irrelevant to the argument we give here. This
+would work just as well were we to simply use <code>𝔹</code>.</p>
+<p>We also assume that it is decidable that halt always returns
+<code>tt</code> or <code>ff</code>. Furthermore, the terms
+<code>halt-tt</code> and <code>halt-ff</code> encode our assumptions
+regarding applying the <code>halt</code> function - if it returns
+<code>tt</code>, then the term is normalizing and conversely, if it
+returns <code>ff</code>, then it is non-normalizing.</p>
+<p>We can now define our three terms from last time:</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Since <span class="cn">fix</span> takes a binding term we write <span class="cn">fix</span> (<span class="cn">var</span> <span class="cn">z</span>)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- instead of the term <span class="cn">fix</span> (<span class="cn">lam</span> <span class="cn">z</span>) we used last time.</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><dfn>bot</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>ty Γ<span class="ot">}</span> <span class="ot">→</span> <dfn>Expr</dfn> Γ ty</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><dfn>bot</dfn> <span class="ot">=</span> <span class="cn">fix</span> <span class="ot">(</span><span class="cn">var</span> <span class="cn">z</span><span class="ot">)</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><dfn>problem</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">→</span> <dfn>Expr</dfn> <span class="ot">(</span>Γ <dfn>,</dfn> <span class="cn">𝔹</span><span class="ot">)</span> <span class="cn">𝔹</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><dfn>problem</dfn> <span class="ot">=</span> <span class="cn">bool</span> <span class="ot">(</span><span class="cn">app</span> halt <span class="ot">(</span><span class="cn">var</span> <span class="cn">z</span><span class="ot">))</span> <dfn>bot</dfn> <span class="cn">tt</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><dfn>fix-problem</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">→</span> <dfn>Expr</dfn> Γ <span class="cn">𝔹</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><dfn>fix-problem</dfn> <span class="ot">=</span> <span class="cn">fix</span> <dfn>problem</dfn></span></code></pre></div>
+<p>At this point we would like to use <code>halt-ret</code> on
+<code>fix-problem</code> but upon reflection we see that last time’s
+argument was a little loose. We showed that if
+<code>halt fix-problem</code> is <code>true</code> then
+<code>fix-problem</code> reduces to <code>bot</code> but this actually
+isn’t enough, by itself, to get a contradiction. What we need to know is
+that if a term reduces to <code>bot</code> then no other reduction
+sequence halts.</p>
+<p>Stated as a general lemma:</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><dfn>halt-⊥</dfn> <span class="ot">:</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">{</span>e1 e2 <span class="ot">:</span> <dfn>Expr</dfn> Γ ty<span class="ot">}</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> e1 ⇓ e2 <span class="ot">→</span> ¬ <span class="ot">(</span><dfn>Halt</dfn> e2<span class="ot">)</span> <span class="ot">→</span> ¬ <span class="ot">(</span><dfn>Halt</dfn> e1<span class="ot">)</span></span></code></pre></div>
+<p>In order to prove this, we would like to use the following: if
+<code>e1</code> steps to a value then there exists some reduction
+sequence where <code>e2</code> also steps to that same value. This
+follows from the more general property of confluence:</p>
+<p><strong>Definition [Confluence]</strong>: A reduction relation <span
+class="math inline">\(\rightarrow\)</span> on a set <span
+class="math inline">\(\mathcal{T}\)</span> is confluent if for any <span
+class="math inline">\(e1, e2, e3 \in \mathcal{T}\)</span> there exists
+an <span class="math inline">\(e4\)</span> such that the following
+diagram commutes: <span class="math display">\[
+    \require{AMScd}
+    \begin{CD}
+    e1     @&gt;&gt;&gt;  e2\\
+    @VVV        @VV*V\\
+    e3     @&gt;*&gt;&gt;  e4
+    \end{CD}
+\]</span> Here <span class="math inline">\(\xrightarrow{*}\)</span>
+denotes the reflective, transitive closure of <span
+class="math inline">\(\rightarrow\)</span>.</p>
+<p>It would be outside of the scope of this post to prove confluence but
+it is a well-known result (and one which I will blog about in the
+future) that the lambda calculus is confluent. As such, we allow
+ourselves to assume it as a postulate:</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">postulate</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  confluence</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>a<span class="ot">}</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> <span class="ot">{</span>e e1 e2 <span class="ot">:</span> <dfn>Expr</dfn> Γ a<span class="ot">}</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> e ⇓ e1 <span class="ot">→</span> e ⇓ e2</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> Σ[ e3 ∈ <dfn>Expr</dfn> Γ a ] <span class="ot">(</span>e1 ⇓ e3<span class="ot">)</span> × <span class="ot">(</span>e2 ⇓ e3<span class="ot">)</span></span></code></pre></div>
+<p>In the above we make use of Agda’s sigma syntax. A term of the form
+<code>Σ[ x ∈ A ] P</code> is a convenient syntax agda offers for the
+dependent sum, traditionally written something like <span
+class="math inline">\(\Sigma_{x \in A} P\)</span>. Using confluence, it
+is now easy to prove that if a term halts at a value then no matter
+which reduction steps we take to some other term we will still be able
+to reduce to the same value:</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>⇓-val-uniq</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">{</span>e e&#39; v <span class="ot">:</span> <dfn>Expr</dfn> Γ ty<span class="ot">}</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <dfn>Value</dfn> v <span class="ot">→</span> e ⇓ v <span class="ot">→</span> e ⇓ e&#39; <span class="ot">→</span> e&#39; ⇓ v</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>⇓-val-uniq pf e⇓v e⇓e&#39; <span class="kw">with</span> confluence e⇓v e⇓e&#39;</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="ot">...</span> <span class="ot">|</span> Sg e3 <span class="ot">(</span>Sg v⇓e3 e&#39;⇓e3<span class="ot">)</span> <span class="kw">with</span> ⇓-val pf v⇓e3</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="ot">...</span> <span class="ot">|</span> refl <span class="ot">=</span> e&#39;⇓e3</span></code></pre></div>
+<p>From this, we can conclude the “head-expansion” property we wanted of
+non-termination:</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><dfn>halt-⊥</dfn></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">{</span>e1 e2 <span class="ot">:</span> <dfn>Expr</dfn> Γ ty<span class="ot">}</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> e1 ⇓ e2 <span class="ot">→</span> ¬ <span class="ot">(</span><dfn>Halt</dfn> e2<span class="ot">)</span> <span class="ot">→</span> ¬ <span class="ot">(</span><dfn>Halt</dfn> e1<span class="ot">)</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><dfn>halt-⊥</dfn> e1⇓e2 e2-⊥ <span class="ot">(</span><span class="cn">halts</span> v-e1 st<span class="ot">)</span> <span class="kw">with</span> ⇓-val-uniq v-e1 st e1⇓e2</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="ot">...</span> <span class="ot">|</span> e2⇓v <span class="ot">=</span> e2-⊥ <span class="ot">(</span><span class="cn">halts</span> v-e1 e2⇓v<span class="ot">)</span></span></code></pre></div>
+<p>First, it is easy for us to show (recursively) that <code>bot</code>
+does not halt:</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><dfn>bot-non-term</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">→</span>  ¬ <span class="ot">(</span><dfn>Halt</dfn> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>ty<span class="ot">}</span> <dfn>bot</dfn><span class="ot">)</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><dfn>bot-non-term</dfn> <span class="ot">(</span><span class="cn">halts</span> v <span class="ot">(.(</span><span class="cn">fix</span> <span class="ot">(</span><span class="cn">var</span> <span class="cn">z</span><span class="ot">))</span> <span class="cn">→⟨</span> fix-↓ ⟩ st<span class="ot">))</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <dfn>bot-non-term</dfn> <span class="ot">(</span><span class="cn">halts</span> v st<span class="ot">)</span></span></code></pre></div>
+<p>We can then put together <code>halt-⊥</code> and
+<code>bot-non-term</code> to show that any term that steps to
+<code>bot</code> cannot terminate:</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>⇓-bot-⊥ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>e <span class="ot">:</span> <dfn>Expr</dfn> Γ ty<span class="ot">)</span> <span class="ot">→</span> e ⇓ <dfn>bot</dfn> <span class="ot">→</span> ¬ <dfn>Halt</dfn> e</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>⇓-bot-⊥ e st <span class="ot">=</span> <dfn>halt-⊥</dfn> st <dfn>bot-non-term</dfn></span></code></pre></div>
+<p>Now, we are better placed to show that if
+<code>halt fix-problem</code> reduces to <code>tt</code> then
+<code>fix-problem</code> reduces to <code>bot</code> and thus we get a
+contradiction. The final general result we will need is one that
+connects the big step operational semantics of Booleans to that of our
+conditional function, <code>bool</code>.</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- In both cases if there is no reduction then we directly step.</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- Otherwise we reduce the conditional and recurse on the result.</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>bool-stepper-tt</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>th el<span class="ot">}</span> <span class="ot">(</span>b <span class="ot">:</span> <dfn>Expr</dfn> Γ <span class="cn">𝔹</span><span class="ot">)</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> b ⇓ <span class="cn">tt</span> <span class="ot">→</span> <span class="ot">(</span><span class="cn">bool</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span><span class="cn">𝔹</span><span class="ot">}</span> b th el<span class="ot">)</span> ⇓ th</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>bool-stepper-tt <span class="ot">{_}</span> <span class="ot">{</span>th<span class="ot">}</span> <span class="ot">{</span>el<span class="ot">}</span> <span class="ot">.</span><span class="cn">tt</span> <span class="ot">(.</span><span class="cn">tt</span> ∎<span class="ot">)</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="cn">bool</span> <span class="cn">tt</span> th el <span class="cn">→⟨</span> if-tt-↓ ⟩ <span class="ot">(</span>th ∎<span class="ot">)</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>bool-stepper-tt <span class="ot">{_}</span> <span class="ot">{</span>th<span class="ot">}</span> <span class="ot">{</span>el<span class="ot">}</span> b <span class="ot">(_</span><span class="cn">→⟨</span><span class="ot">_</span>⟩<span class="ot">_</span> <span class="ot">.</span>b <span class="ot">{</span>M<span class="ot">}</span> x st<span class="ot">)</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="ot">_</span><span class="cn">→⟨</span><span class="ot">_</span>⟩<span class="ot">_</span> <span class="ot">(</span><span class="cn">bool</span> b th el<span class="ot">)</span> <span class="ot">(</span>if-↓ x<span class="ot">)</span> <span class="ot">(</span>bool-stepper-tt M st<span class="ot">)</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>bool-stepper-ff</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>th el<span class="ot">}</span> <span class="ot">(</span>b <span class="ot">:</span> <dfn>Expr</dfn> Γ <span class="cn">𝔹</span><span class="ot">)</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> b ⇓ <span class="cn">ff</span> <span class="ot">→</span> <span class="ot">(</span><span class="cn">bool</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span><span class="cn">𝔹</span><span class="ot">}</span> b th el<span class="ot">)</span> ⇓ el</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>bool-stepper-ff <span class="ot">{_}</span> <span class="ot">{</span>th<span class="ot">}</span> <span class="ot">{</span>el<span class="ot">}</span> <span class="ot">.</span><span class="cn">ff</span> <span class="ot">(.</span><span class="cn">ff</span> ∎<span class="ot">)</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="cn">bool</span> <span class="cn">ff</span> th el <span class="cn">→⟨</span> if-ff-↓ ⟩ <span class="ot">(</span>el ∎<span class="ot">)</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>bool-stepper-ff <span class="ot">{_}</span> <span class="ot">{</span>th<span class="ot">}</span> <span class="ot">{</span>el<span class="ot">}</span> b <span class="ot">(_</span><span class="cn">→⟨</span><span class="ot">_</span>⟩<span class="ot">_</span> <span class="ot">.</span>b <span class="ot">{</span>M<span class="ot">}</span> x st<span class="ot">)</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="ot">_</span><span class="cn">→⟨</span><span class="ot">_</span>⟩<span class="ot">_</span> <span class="ot">(</span><span class="cn">bool</span> b th el<span class="ot">)</span> <span class="ot">(</span>if-↓ x<span class="ot">)</span> <span class="ot">(</span>bool-stepper-ff M st<span class="ot">)</span></span></code></pre></div>
+<p>We are now in a position to show that
+<code>halt (fix-problem) ⇓ tt</code> gives rise to a contradiction which
+we do in a number of simple steps:</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- First, we show that there is only a single way to reduce</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- <dfn>fix-problem</dfn> since only the <span class="cn">fix</span> rule applies.</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- In order to reduce <dfn>fix-problem</dfn> to what we want</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- we have to know that:</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co">--</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co">--   <dfn>problem</dfn> <dfn>[</dfn> <dfn>fix-problem</dfn> ] ≡ <span class="cn">bool</span> (<span class="cn">app</span> halt <dfn>fix-problem</dfn>) <dfn>bot</dfn> <span class="cn">tt</span></span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co">--</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co">-- In order for this to be the case we need that:</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="co">--</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co">--     <span class="cn">app</span> (halt <dfn>[</dfn> <dfn>fix-problem</dfn> ]) (<dfn>sub</dfn> <dfn>fix-problem</dfn> <span class="cn">z</span>)</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co">--   ≡ <span class="cn">app</span> halt <dfn>fix-problem</dfn></span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="co">--</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="co">-- and so we need that halt is a closed term. That is precisely what</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="co">-- halt-sub gives us:</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>fp-step1</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>   <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>e <span class="ot">:</span> <dfn>Expr</dfn> Γ <span class="cn">𝔹</span><span class="ot">}</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><dfn>fix-problem</dfn> <span class="ot">{</span>Γ<span class="ot">})</span> ↓ e</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> e ≡ <span class="cn">bool</span> <span class="ot">(</span><span class="cn">app</span> halt <dfn>fix-problem</dfn><span class="ot">)</span> <dfn>bot</dfn> <span class="cn">tt</span></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>fp-step1 <span class="ot">{</span>Γ<span class="ot">}</span> fix-↓</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>  <span class="kw">rewrite</span> <span class="ot">(</span>halt-sub <span class="ot">{</span>Γ <dfn>,</dfn> <span class="cn">𝔹</span><span class="ot">}</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span><span class="cn">𝔹</span><span class="ot">}</span> <span class="ot">(</span><dfn>sub</dfn> <span class="ot">{</span>Γ<span class="ot">}</span> <dfn>fix-problem</dfn><span class="ot">))</span></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> refl</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a><span class="co">-- Here we have a small lemma that we can replace</span></span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a><span class="co">-- equal values in the stepping relation</span></span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>≡-↓</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>e e&#39; e&#39;&#39; <span class="ot">:</span> <dfn>Expr</dfn> Γ <span class="cn">𝔹</span><span class="ot">}</span></span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> e ↓ e&#39;</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> e&#39; ≡ e&#39;&#39;</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> e ↓ e&#39;&#39;</span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>≡-↓ e↓e&#39; refl <span class="ot">=</span> e↓e&#39;</span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a><span class="co">-- We then make use of this fact and step 1 to show</span></span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a><span class="co">-- that <dfn>fix-problem</dfn> steps as we expect:</span></span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>fp-step2</span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>   <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span></span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><dfn>fix-problem</dfn> <span class="ot">{</span>Γ<span class="ot">})</span> ↓ <span class="ot">(</span><span class="cn">bool</span> <span class="ot">(</span><span class="cn">app</span> halt <span class="ot">(</span><dfn>fix-problem</dfn><span class="ot">))</span> <dfn>bot</dfn> <span class="cn">tt</span><span class="ot">)</span></span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>fp-step2 <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">=</span></span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>  ≡-↓ <span class="ot">(</span>fix-↓ <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span><span class="cn">𝔹</span><span class="ot">}</span> <span class="ot">{</span><dfn>problem</dfn><span class="ot">})</span> <span class="ot">(</span>fp-step1 <span class="ot">(</span>fix-↓ <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span><span class="cn">𝔹</span><span class="ot">}</span> <span class="ot">{</span><dfn>problem</dfn><span class="ot">}))</span></span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a><span class="co">-- In the next two steps we then use our assumption and the</span></span>
+<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a><span class="co">-- big step lemma to derive a contradiction:</span></span>
+<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a>fp-step3</span>
+<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a>   <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span></span>
+<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><span class="cn">app</span> <span class="ot">(</span>halt <span class="ot">{</span>Γ<span class="ot">})</span> <dfn>fix-problem</dfn><span class="ot">)</span> ⇓ <span class="cn">tt</span></span>
+<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><span class="cn">bool</span> <span class="ot">(</span><span class="cn">app</span> <span class="ot">(</span>halt <span class="ot">{</span>Γ<span class="ot">})</span> <dfn>fix-problem</dfn><span class="ot">)</span> <dfn>bot</dfn> <span class="cn">tt</span><span class="ot">)</span> ⇓ <dfn>bot</dfn></span>
+<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a>fp-step3 ⇓-tt <span class="ot">=</span> bool-stepper-tt <span class="ot">_</span>  ⇓-tt</span>
+<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a>fp-step4</span>
+<span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a>   <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span></span>
+<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><span class="cn">app</span> <span class="ot">(</span>halt <span class="ot">{</span>Γ<span class="ot">})</span> <dfn>fix-problem</dfn><span class="ot">)</span> ⇓ <span class="cn">tt</span></span>
+<span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><dfn>fix-problem</dfn> <span class="ot">{</span>Γ<span class="ot">})</span> ⇓ <dfn>bot</dfn></span>
+<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a>fp-step4 <span class="ot">{</span>Γ<span class="ot">}</span> ⇓-tt <span class="ot">=</span> <dfn>fix-problem</dfn> <span class="cn">→⟨</span> fp-step2 ⟩ fp-step3 ⇓-tt</span></code></pre></div>
+<p>The other half of the argument, assuming
+<code>halt (fix-problem) ⇓ ff</code>, is quite a bit simpler. To prove
+halting, we only need to exhibit some particular sequence of
+reductions:</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>fp-step5</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>   <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><span class="cn">app</span> <span class="ot">(</span>halt <span class="ot">{</span>Γ<span class="ot">})</span> <dfn>fix-problem</dfn><span class="ot">)</span> ⇓ <span class="cn">ff</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><span class="cn">bool</span> <span class="ot">(</span><span class="cn">app</span> <span class="ot">(</span>halt <span class="ot">{</span>Γ<span class="ot">})</span> <dfn>fix-problem</dfn><span class="ot">)</span> <dfn>bot</dfn> <span class="cn">tt</span><span class="ot">)</span> ⇓ <span class="cn">tt</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>fp-step5 ⇓-ff <span class="ot">=</span> bool-stepper-ff <span class="ot">_</span> ⇓-ff</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co">-- We make use of our substition lemma (fp-step2) to</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co">-- show under this assumption that <dfn>fix-problem</dfn> big</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- steps to <span class="cn">tt</span>.</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>fp-step6</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>   <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><span class="cn">app</span> <span class="ot">(</span>halt <span class="ot">{</span>Γ<span class="ot">})</span> <dfn>fix-problem</dfn><span class="ot">)</span> ⇓ <span class="cn">ff</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <dfn>fix-problem</dfn> ⇓ <span class="cn">tt</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>fp-step6 ⇓-ff <span class="ot">=</span> <dfn>fix-problem</dfn> <span class="cn">→⟨</span> fp-step2 ⟩ fp-step5 ⇓-ff</span></code></pre></div>
+<p>Finally, let’s package up these results into their respective
+contradictions:</p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fix-problem-tt</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">(</span><span class="cn">app</span> <span class="ot">(</span>halt <span class="ot">{</span>Γ<span class="ot">})</span> <dfn>fix-problem</dfn><span class="ot">)</span> ⇓ <span class="cn">tt</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <dfn>Halt</dfn> <span class="ot">{</span>Γ<span class="ot">}</span> <dfn>fix-problem</dfn> <span class="ot">→</span> ⊥</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>fix-problem-tt ⇓-tt h <span class="ot">=</span> ⇓-bot-⊥ <span class="ot">_</span> <span class="ot">(</span>fp-step4 ⇓-tt<span class="ot">)</span> h</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>fix-problem-ff</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> <span class="ot">(</span><span class="cn">app</span> <span class="ot">(</span>halt <span class="ot">{</span>Γ<span class="ot">})</span> <dfn>fix-problem</dfn><span class="ot">)</span> ⇓ <span class="cn">ff</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> <span class="ot">(</span>¬ <dfn>Halt</dfn> <span class="ot">{</span>Γ<span class="ot">}</span> <dfn>fix-problem</dfn><span class="ot">)</span> <span class="ot">→</span> ⊥</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>fix-problem-ff ⇓-ff ¬h <span class="ot">=</span> ¬h <span class="ot">(</span><span class="cn">halts</span> <span class="cn">V-tt</span> <span class="ot">(</span>fp-step6 ⇓-ff<span class="ot">))</span></span></code></pre></div>
+<p>and put everything together:</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><dfn>halting</dfn> <span class="ot">:</span> ⊥</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><dfn>halting</dfn> <span class="kw">with</span> halt-ret <span class="ot">{</span>nil<span class="ot">}</span> <dfn>fix-problem</dfn></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><dfn>halting</dfn> <span class="ot">|</span> inj₁ ⇓tt  <span class="ot">=</span> fix-problem-tt ⇓tt <span class="ot">(</span>halt-tt <dfn>fix-problem</dfn> ⇓tt<span class="ot">)</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><dfn>halting</dfn> <span class="ot">|</span> inj₂ ⇓ff  <span class="ot">=</span> fix-problem-ff ⇓ff <span class="ot">(</span>halt-ff <dfn>fix-problem</dfn> ⇓ff<span class="ot">)</span></span></code></pre></div>
+<p>Hopefully this post has given an approachable account of formalising
+one of the central results in computability theory. We hope to have also
+demonstrated, from a programming language theory perspective, some of
+the advantages of the lambda calculus as a foundational theory of
+computation (over, for example, Turing machines). Thank you for reading!
+The full code for this proof is available <a
+href="https://github.com/Boarders/agda-halting">here</a>.</p>
+<p><i>With warmest thanks to Alixandra Prybyla and Sam Derbyshire for
+their valuable feedback.</i></p>
+
+        <br>
+        <br>
+
+        <!--Share buttons-->
+
+     </div>
+</article>
+
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>

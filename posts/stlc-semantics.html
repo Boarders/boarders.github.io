@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="Callan McGillx">
+    <meta name="author" content="Callan McGill">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Semantics of STLC in Agda">
+    <meta name="twitter:description" content="An excursion into the semantics of STLC formalized in agda">
+        <title>Semantics of STLC in Agda</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+<body>
+    <!DOCTYPE html>
+    <header>
+      <nav class="left-sidebar">
+    		<a class="beacon" href="/">
+              <div id="home-text"> HOME </div>
+        </a>
+    		<a class="beacon" href="/about.html">
+              <div id="about-text"> ABOUT </div>
+          </a>		
+        </nav>
+        <div class="right-sidebar">
+            <a class="ext-link" href="https://github.com/boarders">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+            <a class="ext-link" href="https://mathstodon.xyz/@boarders">
+            <img src="/images/mathstodon-logo.png" alt="Mathstodon Profile"/>
+        </a>
+		</div>
+        <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['\\(', '\\)']],
+            displayMath: [['\\[', '\\]']],
+            processEscapes: true,
+            processEnvironments: true
+          },
+          options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+          }
+        };
+        </script>
+        <script type="text/javascript" id="MathJax-script" async
+                src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+        </script>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                Semantics of STLC in Agda
+            </span>
+            <br>
+            <br>
+            <span class="byline">by Callan McGill</span>
+            <br>
+            <span class="date">Mar 20, 2026</span>
+            <br>
+            <br>
+            <div class="metadata"> </div>
+            </div>
+    </div>
+    <span class="quote"> "The sentence ‘snow is white’ is true if, and only if, snow is white."  - Alfred Tarski</span>
+    <div class="proof-development-link">
+        <a href="/agda/stlc-semantics/STLC.html">Proof Development</a>
+    </div>
+    </div>
+    <article class="post">
+        <div style="display:none">
+( )
+</div>
+<h2 id="motivation">Motivation</h2>
+<p>In the study of formal languages (or other types of syntactical
+gadgets) we face two fundamental questions:</p>
+<ol type="1">
+<li>What, if any, is the intended or conventional <em>meaning</em> of
+the language in question?</li>
+<li>What general class of mathematical or formal objects does the
+language seek to describe?</li>
+</ol>
+<p>Formal languages, in this sense, arguably first arose with Frege’s
+work and later that of Hilbert, Russell and Whitehead etc. Hilbert was
+the first to define a formal language legible as what we would today
+call first-order Peano arithmetic.</p>
+<p>For such a language, the intended model is, of course, the natural
+numbers; the language is precisely constructed to capture the essential
+logical principles for all arithmetical truths. The second question,
+that of the general class of models of first-order Peano arithmetic
+seems to have been a later historical consideration. It was perhaps
+thought, though unstated, that such a language is <em>categorical</em>,
+that is to say: the language has a unique model up to (model)
+isomorphism. Later work of Gödel, and especially Skolem, emphasized the
+folly of this idea, typifying expressive first-order theories of
+arithmetic as necessarily giving rise to a panoply of non-standard
+models of arithmetic.</p>
+<p>Whilst non-standard models in this case might strike us as especially
+peculiar – models, for instance, which have some non-standard number
+with Gödel number equal to a Gödel sentence of the system – they seem
+much tamer to contemplate when we change our perspective to a more
+modern algebraic one. For instance, let us imagine a formal language for
+an algebraic theory – let us say, the language of groups – with the
+intended models of the theory precisely capturing the correct algebraic
+structures – the class of all groups. An impressionistic version of such
+a formal language might be a kind of type theory with judgments of the
+following form:</p>
+<p><span class="math display">\[
+   \mathrm{x}\mathrel{:}\mathcal{G},
+\mathrm{y}\mathrel{:}\mathcal{G}\vdash \mathrm{x}\cdot
+\mathrm{y}\mathrel{:}\mathcal{G}
+\]</span> <span class="math display">\[
+   \mathrm{x}\mathrel{:}\mathcal{G}\vdash \mathrm{x}^{-1}
+\mathrel{:}\mathcal{G}
+\]</span> <span class="math display">\[
+     \vdash e \mathrel{:}\mathcal{G}
+\]</span> Such a language would also need to have an equality judgment
+capturing the equational theory of groups:</p>
+<p><span class="math display">\[
+\frac{}{\mathrm{x}\mathrel{:}\mathcal{G}\vdash \mathrm{x}\cdot e \equiv
+\mathrm{x}}
+\]</span></p>
+<p><span class="math display">\[
+\frac{}{\mathrm{x}\mathrel{:}\mathcal{G}\vdash e \cdot \mathrm{x}\equiv
+\mathrm{x}}
+\]</span></p>
+<p><span class="math display">\[
+\frac{}{\mathrm{x}\mathrel{:}\mathcal{G}\vdash \mathrm{x}\cdot
+\mathrm{x}^{-1} \equiv e}
+\]</span></p>
+<p><span class="math display">\[
+\frac{}{\mathrm{x}\mathrel{:}\mathcal{G}\vdash \mathrm{x}^{-1} \cdot
+\mathrm{x}\equiv e}
+\]</span></p>
+<p><span class="math display">\[
+\frac{}{\mathrm{x}\mathrel{:}\mathcal{G},
+\mathrm{y}\mathrel{:}\mathcal{G}, \mathrm{z}\mathrel{:}\mathcal{G}\vdash
+(\mathrm{x}\cdot \mathrm{y}) \cdot \mathrm{z}\equiv \mathrm{x}\cdot
+(\mathrm{y}\cdot \mathrm{z})}
+\]</span></p>
+<p><span class="math display">\[
+\frac{\mathrm{x}\mathrel{:}\mathcal{G},
+\mathrm{y}\mathrel{:}\mathcal{G}\vdash \mathrm{x}\equiv \mathrm{y}\quad
+\mathrm{z}\mathrel{:}\mathcal{G}}{\mathrm{x}\mathrel{:}\mathcal{G},
+\mathrm{y}\mathrel{:}\mathcal{G}, \mathrm{z}\mathrel{:}\mathcal{G}\vdash
+\mathrm{x}\cdot \mathrm{z}\equiv \mathrm{y}\cdot \mathrm{z}}
+\]</span></p>
+<p><span class="math display">\[
+\frac{\mathrm{z}\mathrel{:}\mathcal{G}\quad
+\mathrm{x}\mathrel{:}\mathcal{G}, \mathrm{y}\mathrel{:}\mathcal{G}\vdash
+\mathrm{x}\equiv \mathrm{y}}{\mathrm{x}\mathrel{:}\mathcal{G},
+\mathrm{y}\mathrel{:}\mathcal{G}, \mathrm{z}\mathrel{:}\mathcal{G}\vdash
+\mathrm{z}\cdot \mathrm{x}\equiv \mathrm{z}\cdot \mathrm{y}}
+\]</span></p>
+<p><span class="math display">\[
+\frac{\mathrm{x}\mathrel{:}\mathcal{G},
+\mathrm{y}\mathrel{:}\mathcal{G}\vdash \mathrm{x}\equiv
+\mathrm{y}}{\mathrm{x}\mathrel{:}\mathcal{G},
+\mathrm{y}\mathrel{:}\mathcal{G}\vdash \mathrm{x}^{-1} \equiv
+\mathrm{y}^{-1}}
+\]</span></p>
+<p>Now, in order for us to interpret this theory we need not just to
+interpret the symbols of the theory, but to give a semantics of each
+judgment, and thus to give meaning first to contexts, and then to
+judgments. Here is an idea for how we might do so – given a judgment of
+this form: <span class="math display">\[
+   \mathrm{x}\mathrel{:}\mathcal{G},
+\mathrm{y}\mathrel{:}\mathcal{G}\vdash \mathrm{x}\cdot
+\mathrm{y}\mathrel{:}\mathcal{G}
+\]</span> which we are trying to interpret in some set <span
+class="math inline">\(\mathrm{X}\)</span>, we naively interpret this as
+some function: <span class="math display">\[
+  \mathrm{X}\times \mathrm{X}\rightarrow \mathrm{X}
+\]</span></p>
+<p>Similarly, given a term judgment like: <span class="math display">\[
+   \mathrm{x}\mathrel{:}\mathcal{G}, \mathrm{y}\mathrel{:}\mathcal{G},
+\mathrm{z}\mathrel{:}\mathcal{G}\vdash (\mathrm{x}\cdot \mathrm{y})
+\cdot \mathrm{z}\mathrel{:}\mathcal{G}
+\]</span></p>
+<p>we want to interpret this semantically as a function of the form:
+<span class="math display">\[
+  \mathrm{X}\times \mathrm{X}\times \mathrm{X}\rightarrow \mathrm{X}
+\]</span></p>
+<p>Not wishing to get too into the weeds on this particular example, we
+make two observations about where such thinking leads. Firstly, this is
+essentially how one might arrive at the notion of a <a
+href="https://ncatlab.org/nlab/show/Lawvere+theory">Lawvere Theory</a> –
+Lawvere’s abstraction of the notion of syntax and semantics. What this
+means in this case, roughly, is that given any word on <span
+class="math inline">\(\mathrm{n}\)</span> variables in the free group
+<span
+class="math inline">\(\mathcal{Fr}\langle\mathrm{x}\_1,\ldots,x\_n\rangle\)</span>,
+the semantics of our theory gives an interpretation of such a word as a
+morphism: <span class="math display">\[
+  \underbrace{\mathrm{X}\times \cdots \times \mathrm{X}}_{n} \rightarrow
+\mathrm{X}
+\]</span></p>
+<p>We can package this observation up algebraically by constructing a
+certain syntactic category <span
+class="math inline">\(\mathbb{T}_{\mathrm{Grp}}\)</span> with objects
+given by sets of variables, <span class="math inline">\(\Gamma =
+\{\mathrm{x}\_1, \ldots, \mathrm{x}\_\mathrm{n}\}\)</span>, and
+morphisms between contexts <span class="math inline">\(\{\mathrm{x}\_1,
+\ldots, \mathrm{x}\_\mathrm{n}\} \rightarrow \{\mathrm{y}\_1, \ldots,
+\mathrm{y}\_m\}\)</span> given by an m-tuple of words in the free group
+on <span class="math inline">\(\Gamma\)</span>: <span
+class="math inline">\(\mathrm{y}_\mathrm{j}=
+\mathrm{w}_\mathrm{j}\left[x\_1,\ldots,\mathrm{x}_{\mathrm{n}}\right]\)</span>.
+This category has products given by the disjoint union of contexts.
+Condensing the above then, a model of our theory (in <span
+class="math inline">\(\mathcal{Set}\)</span>) is nothing but a
+product-preserving functor from this <em>syntactic category</em>: <span
+class="math display">\[
+  \mathrm{M} : \underbrace{\mathbb{T}_{\mathrm{Grp}} \rightarrow
+\mathcal{Set}}_{\mathrm{product\ preserving}}
+\]</span></p>
+<p>Secondly, we note that, in a certain sense, our theory gives rise to
+a <em>canonical model</em> where we take as our set of elements in
+context <span class="math inline">\(\Gamma = \{\mathrm{x}\_1, \ldots,
+\mathrm{x}\_\mathrm{n}\}\)</span>, precisely the equivalence class of
+judgments for the theory and, we take for morphisms, equivalence classes
+of substitutions. We won’t spell out this example here as we do
+something similar for simply typed lambda calculus, but we will keep in
+mind the following takeaways: - A semantics of a type theory might be
+thought of as a certain kind of algebraic theory - This semantics comes
+with a canonical syntactical model of the theory which should, in some
+sense, be the free theory. - Our semantics should be <em>sound</em> for
+the type theory – anything we prove in the type theory should be true
+for all algebraic models. - Ideally, our semantics should also be
+<em>complete</em> for the theory – If we can prove some judgment is true
+for all models, then it should be true for the theory. More is true: if
+something is true across all models, then it is true of the canonical
+model, and thus syntactically true. Thus, we see that providing a
+canonical model is fundamentally connected to the idea of
+completeness.</p>
+<h2 id="semantics-of-simply-typed-lambda-calculus">Semantics of Simply
+Typed Lambda Calculus</h2>
+<p>It is an oft-repeated (perhaps more than understood) fact that the
+simply typed lambda calculus (STLC) is a kind of “internal language” or
+“syntax” for the theory of Cartesian Closed Categories (CCC’s). As such,
+in the paradigm we have been sketching, we can think of Cartesian closed
+categories as semantic models of the theory of the type theory described
+by STLC. What does this intuitively mean? Consider a prototypical term
+formation judgment in STLC:</p>
+<p><span class="math display">\[
+\begin{array}{@{}c@{\quad}l@{}}
+\vcenter{\hbox{$
+  \dfrac{x_{\mathrm{i}} : a_{\mathrm{i}} \in \Gamma}{\Gamma \vdash
+\mathrm{var}(x_{\mathrm{i}}) : a_{\mathrm{i}}}
+$}}
+&amp; \text{(Var)}
+\end{array}
+\]</span></p>
+<p>Semantically, this is pleasantly simple: assuming we have a natural
+interpretation for each of the simple types, then if we are given some
+context <span class="math inline">\(\Gamma = \mathrm{x}\_1
+\mathrel{:}\mathrm{a}_1, \cdots,
+\mathrm{x}\_\mathrm{n}\mathrel{:}\mathrm{a}_\mathrm{n}\)</span>, we
+interpret this as a product (in some ambient category <span
+class="math inline">\(\mathcal{C}\)</span>): <span
+class="math inline">\(\text{⟦}a_1\text{⟧} \;\times\; \cdots \;\times\;
+\text{⟦}a_{\mathrm{n}} \text{⟧}\)</span>. This term is interpreted as
+nothing other than a projection from an iterated product: <span
+class="math display">\[
+\text{⟦}\mathrm{var}(x_{\mathrm{i}})\text{⟧}
+\mathrel{\mathop{:}}=\operatorname{proj}_{\mathrm{i}} :
+\text{⟦}\mathrm{a}_1\text{⟧} \;\times\; \cdots \;\times\;
+\text{⟦}\mathrm{a}_{\mathrm{n}}\text{⟧} \rightarrow
+\text{⟦}\mathrm{a}_{\mathrm{i}}\text{⟧}
+\]</span></p>
+<p>Similarly, suppose we have the following application typing
+judgment:</p>
+<p><span class="math display">\[
+\mathrm{f}: \mathrm{a}\Rightarrow b,  \mathrm{x}: \mathrm{a}\vdash
+\mathrm{f}\cdot \mathrm{x}
+\]</span></p>
+<p>This should correspond to taking a function object i.e. an abstract
+collection where each of the (generalized) elements correspond to a
+function (in <span class="math inline">\(\mathcal{C}\)</span>), and an
+element of the domain of the function and “evaluating” the function on
+that argument:</p>
+<p><span class="math display">\[
+\text{⟦}\mathrm{f}\cdot \mathrm{x}\text{⟧}
+\mathrel{\mathop{:}}=\operatorname{eval}: (\text{⟦}\mathrm{f}\text{⟧} :
+\text{⟦}\mathrm{b}\text{⟧}^{\text{⟦}a\text{⟧}}) \;\times\;
+(\text{⟦}x\text{⟧} : \text{⟦}a\text{⟧}) \rightarrow
+\text{⟦}\mathrm{b}\text{⟧}
+\]</span></p>
+<p>The evaluation map is precisely one of the defining features of an <a
+href="https://ncatlab.org/nlab/show/exponential+object#definition">exponential
+object</a> which is one of the defining structures in a Cartesian closed
+category. More generally then, we will see how each of the terms in STLC
+precisely corresponds to a feature in a CCC. In the above terminology
+then, we can think of the STLC as a syntax for the algebraic theory of
+CCC’s. Moreover, from the STLC we should be able to construct a
+syntactical category which is a <em>canonical</em> model for the type
+theory. Let us see then how we can begin to develop such a semantics in
+<code>agda</code>.</p>
+<h2 id="agda-development">Agda Development</h2>
+<h3 id="contexts-renamings-and-substitution">Contexts, Renamings and
+Substitution</h3>
+<p>We use intrinsically well-scoped, well-typed syntax throughout,
+defining single-variable substitution as a special case of parallel
+substitution. In order to get off the ground, we first define a
+subcategory of substitutions called renamings. A renaming from one
+context <span class="math inline">\(\Gamma\)</span> to another <span
+class="math inline">\(\Delta\)</span> gives us a way of taking any typed
+variable <span
+class="math inline">\((\mathrm{x}\mathrel{:}\mathrm{t})  \in
+\Gamma\)</span> and giving back a variable in <span
+class="math inline">\(\Delta\)</span> of the same type. Here is the
+syntax we will use for types, terms, and contexts:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pattern</span> <span class="ot">_</span><span class="cn">▸</span><span class="ot">_</span> as a <span class="ot">=</span> a ∷ as</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">pattern</span> <span class="cn">∅</span> <span class="ot">=</span> []</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- `typed` de bruijn indices</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">infix</span> <span class="dv">4</span> <span class="ot">_</span>∈<span class="ot">_</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="ot">_</span>∈<span class="ot">_</span> <span class="ot">{</span>A <span class="ot">:</span> <span class="dt">Type</span><span class="ot">}</span> <span class="ot">:</span> <span class="ot">(</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> List A <span class="ot">-&gt;</span> <span class="dt">Type</span> <span class="kw">where</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="cn">Z</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ <span class="ot">:</span> List A<span class="ot">}{</span>n <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">-&gt;</span> n ∈ Γ <span class="cn">▸</span> n</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="cn">S</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ n m<span class="ot">}</span> <span class="ot">-&gt;</span> n ∈ Γ <span class="ot">-&gt;</span> n ∈ Γ <span class="cn">▸</span> m</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- We add two primitive types to our theory:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">--  - <span class="cn">𝟙</span> corresponding to the terminal object</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">--  - <span class="cn">𝕆</span> corresponding to any object</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">--    [suggestively named as it could be empty]</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <dfn>Ty</dfn> <span class="ot">:</span> <span class="dt">Type</span> <span class="kw">where</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="cn">𝕆</span> <span class="ot">:</span> <dfn>Ty</dfn></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="cn">𝟙</span> <span class="ot">:</span> <dfn>Ty</dfn></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="ot">_</span><span class="cn">⇒</span><span class="ot">_</span> <span class="ot">:</span> <dfn>Ty</dfn> <span class="ot">→</span> <dfn>Ty</dfn> <span class="ot">→</span> <dfn>Ty</dfn></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="cn">Ctxt</span> <span class="ot">:</span> <span class="dt">Set</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="cn">Ctxt</span> <span class="ot">=</span> List <dfn>Ty</dfn></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">-- Intrinsically well-typed well-scoped terms</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <dfn>Tm</dfn> <span class="ot">:</span> <span class="cn">Ctxt</span> <span class="ot">→</span> <dfn>Ty</dfn> <span class="ot">→</span> <span class="dt">Type</span> <span class="kw">where</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="cn">var</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">→</span> ty ∈ Γ <span class="ot">→</span> <dfn>Tm</dfn> Γ ty</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="ot">_</span><span class="cn">∙</span><span class="ot">_</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ dom cod<span class="ot">}</span> <span class="ot">→</span> <dfn>Tm</dfn> Γ <span class="ot">(</span>dom <span class="cn">⇒</span> cod<span class="ot">)</span> <span class="ot">→</span> <dfn>Tm</dfn> Γ dom <span class="ot">→</span> <dfn>Tm</dfn> Γ cod</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="cn">fun</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ dom cod<span class="ot">}</span> <span class="ot">→</span> <dfn>Tm</dfn> <span class="ot">(</span>Γ <span class="cn">▸</span> dom<span class="ot">)</span> cod <span class="ot">→</span> <dfn>Tm</dfn> Γ <span class="ot">(</span>dom <span class="cn">⇒</span> cod<span class="ot">)</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="cn">tt</span>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">→</span> <dfn>Tm</dfn> Γ <span class="cn">𝟙</span></span></code></pre></div>
+<p>From here, there are two ways one can define renamings, the first,
+which we will not use, is as an inductive type:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <dfn>IndRen</dfn> <span class="ot">(</span>Δ <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">)</span> <span class="ot">:</span> <span class="ot">(</span>Γ <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">)</span> <span class="ot">→</span> <span class="dt">Set</span> <span class="kw">where</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="cn">ε</span>   <span class="ot">:</span> <dfn>IndRen</dfn> Δ <span class="cn">∅</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">_</span><span class="cn">,</span><span class="ot">_</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ a<span class="ot">}</span> <span class="ot">(</span>ρ <span class="ot">:</span> <dfn>IndRen</dfn> Δ Γ<span class="ot">)</span> <span class="ot">(</span>x <span class="ot">:</span> a ∈ Δ<span class="ot">)</span> <span class="ot">→</span> <dfn>IndRen</dfn> Δ <span class="ot">(</span>Γ <span class="cn">▸</span> a<span class="ot">)</span></span></code></pre></div>
+<p>This approach is nice, and comes with a reasonable built-in notion of
+equality of renamings. A second approach, and the one we follow in this
+development, is the more naive definition in terms of functions:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><dfn>Ren</dfn> <span class="ot">:</span> <span class="cn">Ctxt</span> <span class="ot">→</span> <span class="cn">Ctxt</span> <span class="ot">→</span> <span class="dt">Set</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><dfn>Ren</dfn> Γ Δ <span class="ot">=</span> <span class="ot">∀</span> <span class="ot">{</span>ty<span class="ot">}</span> <span class="ot">→</span> ty ∈ Δ <span class="ot">→</span> ty ∈ Γ</span></code></pre></div>
+<p>This says exactly that if we are given any variable in
+<code>Δ</code>, we get a corresponding variable (of the same type) in
+<code>Γ</code>. In order for this definition to have a reasonable notion
+of equality, we will assume function extensionality throughout and so
+postulate the following two extensionality variants from the
+<code>agda</code> std-lib:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">postulate</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <dfn>fun-ext</dfn> <span class="ot">:</span> Extensionality ℓzero ℓzero</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <dfn>fun-ext-imp</dfn> <span class="ot">:</span> ExtensionalityImplicit ℓzero ℓzero</span></code></pre></div>
+<p>We then have the following notion of renaming equivalence:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>≡Ren</dfn><span class="ot">_</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ Δ<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>ρ σ <span class="ot">:</span> <dfn>Ren</dfn> Γ Δ<span class="ot">)</span> <span class="ot">→</span> <span class="dt">Type</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>≡Ren</dfn><span class="ot">_</span> <span class="ot">{</span>Δ <span class="ot">=</span> Δ<span class="ot">}</span> ρ σ <span class="ot">=</span> <span class="ot">∀</span> <span class="ot">{</span>ty<span class="ot">}</span> <span class="ot">→</span> <span class="ot">∀</span> <span class="ot">(</span>v <span class="ot">:</span> ty ∈ Δ<span class="ot">)</span> <span class="ot">→</span> ρ v ≡ σ v</span></code></pre></div>
+<p>For our purposes, perhaps the most salient observation about
+renamings is that the collection of all contexts with renamings<a
+href="#fn1" class="footnote-ref" id="fnref1"
+role="doc-noteref"><sup>1</sup></a> between them, which we denote
+<code>Ren</code>, forms a category with the following identity and
+composition:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><dfn>id-Ren</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">→</span> <dfn>Ren</dfn> Γ Γ</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><dfn>id-Ren</dfn> <span class="ot">=</span> <span class="ot">λ</span> v <span class="ot">→</span> v</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>∘R</dfn><span class="ot">_</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Ξ Δ Γ<span class="ot">}</span> <span class="ot">→</span> <dfn>Ren</dfn> Γ Δ <span class="ot">→</span> <dfn>Ren</dfn> Ξ Γ <span class="ot">→</span> <dfn>Ren</dfn> Ξ Δ</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>∘R</dfn><span class="ot">_</span> ρ σ <span class="ot">=</span> <span class="ot">λ</span> v <span class="ot">→</span> σ <span class="ot">(</span>ρ v<span class="ot">)</span></span></code></pre></div>
+<p>We then note that we can perform an operation of weakening (called
+<code>ext</code>) on renamings, that they are a congruence with respect
+to weakening, and that weakening distributes over composition:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- weaken a renaming by adding the same type to each context</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><dfn>ext</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ Δ ty<span class="ot">}</span> <span class="ot">→</span> <dfn>Ren</dfn> Γ Δ <span class="ot">→</span> <dfn>Ren</dfn> <span class="ot">(</span>Γ <span class="cn">▸</span> ty<span class="ot">)</span> <span class="ot">(</span>Δ <span class="cn">▸</span> ty<span class="ot">)</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><dfn>ext</dfn> ρ <span class="cn">Z</span> <span class="ot">=</span> <span class="cn">Z</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><dfn>ext</dfn> ρ <span class="ot">(</span><span class="cn">S</span> pf<span class="ot">)</span> <span class="ot">=</span> <span class="cn">S</span> <span class="ot">(</span>ρ pf<span class="ot">)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">-- weakening preserves equality of renamings:</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><dfn>ext-≡</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ Δ ty<span class="ot">}</span> <span class="ot">→</span> <span class="ot">{</span>ρ σ <span class="ot">:</span> <dfn>Ren</dfn> Δ Γ<span class="ot">}</span> <span class="ot">→</span> ρ <dfn>≡Ren</dfn> σ <span class="ot">→</span> <dfn>ext</dfn> <span class="ot">{</span>ty <span class="ot">=</span> ty<span class="ot">}</span> ρ <dfn>≡Ren</dfn> <dfn>ext</dfn> σ</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><dfn>ext-≡</dfn> eq <span class="cn">Z</span> <span class="ot">=</span> refl</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><dfn>ext-≡</dfn> eq <span class="ot">(</span><span class="cn">S</span> v<span class="ot">)</span> <span class="ot">=</span> cong <span class="cn">S</span> <span class="ot">(</span>eq v<span class="ot">)</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><dfn>ext-∘R</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Ξ Γ Δ ty<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>σ <span class="ot">:</span> <dfn>Ren</dfn> Δ Γ<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>τ <span class="ot">:</span> <dfn>Ren</dfn> Ξ Δ<span class="ot">)</span>  <span class="ot">→</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <dfn>ext</dfn> <span class="ot">{</span>ty <span class="ot">=</span> ty<span class="ot">}</span> <span class="ot">(</span>σ <dfn>∘R</dfn> τ<span class="ot">)</span> <dfn>≡Ren</dfn> <span class="ot">(</span><dfn>ext</dfn> σ <dfn>∘R</dfn> <dfn>ext</dfn> τ<span class="ot">)</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><dfn>ext-∘R</dfn> σ τ <span class="cn">Z</span> <span class="ot">=</span> refl</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><dfn>ext-∘R</dfn> σ τ <span class="ot">(</span><span class="cn">S</span> v<span class="ot">)</span> <span class="ot">=</span> refl</span></code></pre></div>
+<p>We then have that renaming acts to perform parallel renaming of
+variables on terms, as we would hope:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><dfn>rename</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ Δ t<span class="ot">}</span> <span class="ot">→</span> <dfn>Tm</dfn> Γ t <span class="ot">→</span> <dfn>Ren</dfn> Δ Γ <span class="ot">→</span> <dfn>Tm</dfn> Δ t</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><dfn>rename</dfn> <span class="ot">(</span><span class="cn">var</span> v<span class="ot">)</span> ρ <span class="ot">=</span> <span class="cn">var</span> <span class="ot">(</span>ρ v<span class="ot">)</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><dfn>rename</dfn> <span class="ot">(</span>rator <span class="cn">∙</span> rand<span class="ot">)</span> ρ <span class="ot">=</span> <span class="ot">(</span><dfn>rename</dfn> rator ρ<span class="ot">)</span> <span class="cn">∙</span> <span class="ot">(</span><dfn>rename</dfn> rand ρ<span class="ot">)</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><dfn>rename</dfn> <span class="ot">(</span><span class="cn">fun</span> body<span class="ot">)</span> ρ <span class="ot">=</span> <span class="cn">fun</span> <span class="ot">(</span><dfn>rename</dfn> body <span class="ot">(</span><dfn>ext</dfn> ρ<span class="ot">))</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><dfn>rename</dfn> <span class="cn">tt</span> ρ <span class="ot">=</span> <span class="cn">tt</span></span></code></pre></div>
+<p>Given the above, that renamings are the morphisms in a category
+<code>Ren</code>, and that these morphisms act <em>contravariantly</em>
+on terms (of a fixed type), we might suspect that we should think of
+<code>Tm _  t</code> as a <a
+href="https://ncatlab.org/nlab/show/presheaf">presheaf</a> on
+<code>Ren</code>. Before we show that this is indeed the case, we must
+first develop some of the basic equational theory, in our set-up,
+proving that renaming preserves Ren-equality:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><dfn>rename-≡</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ Δ t<span class="ot">}</span> <span class="ot">→</span> <span class="ot">{</span>ρ σ <span class="ot">:</span> <dfn>Ren</dfn> Δ Γ<span class="ot">}</span> <span class="ot">→</span> ρ <dfn>≡Ren</dfn> σ <span class="ot">→</span> <span class="ot">(</span>tm <span class="ot">:</span> <dfn>Tm</dfn> Γ t<span class="ot">)</span> <span class="ot">→</span> <dfn>rename</dfn> tm ρ ≡ <dfn>rename</dfn> tm σ</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><dfn>rename-≡</dfn> eq <span class="ot">(</span><span class="cn">var</span> v<span class="ot">)</span> <span class="ot">=</span> cong <span class="ot">(λ</span> v <span class="ot">→</span> <span class="cn">var</span> v <span class="ot">)</span> <span class="ot">(</span>eq v<span class="ot">)</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><dfn>rename-≡</dfn> eq <span class="ot">(</span>rator <span class="cn">∙</span> rand<span class="ot">)</span> <span class="ot">=</span> cong₂ <span class="ot">(λ</span> rator rand <span class="ot">→</span> rator <span class="cn">∙</span> rand <span class="ot">)</span> <span class="ot">(</span><dfn>rename-≡</dfn> eq rator<span class="ot">)</span> <span class="ot">(</span><dfn>rename-≡</dfn> eq rand<span class="ot">)</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><dfn>rename-≡</dfn> eq <span class="ot">(</span><span class="cn">fun</span> body<span class="ot">)</span> <span class="ot">=</span> cong <span class="cn">fun</span> <span class="ot">(</span><dfn>rename-≡</dfn> <span class="ot">(</span><dfn>ext-≡</dfn> eq<span class="ot">)</span> body<span class="ot">)</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><dfn>rename-≡</dfn> eq <span class="cn">tt</span> <span class="ot">=</span> refl</span></code></pre></div>
+<p>We can then show that the renaming action respects composition of
+renamings (functoriality):</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> ≡-Reasoning</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><dfn>rename-∘R</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span> Ξ Γ Δ ty<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>tm <span class="ot">:</span> <dfn>Tm</dfn> Γ ty<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>σ <span class="ot">:</span> <dfn>Ren</dfn> Δ Γ<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>τ <span class="ot">:</span> <dfn>Ren</dfn> Ξ Δ<span class="ot">)</span>  <span class="ot">→</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">(</span><dfn>rename</dfn> tm <span class="ot">(</span>σ <dfn>∘R</dfn> τ<span class="ot">))</span> ≡ <dfn>rename</dfn> <span class="ot">(</span><dfn>rename</dfn> tm σ<span class="ot">)</span> τ</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><dfn>rename-∘R</dfn> <span class="ot">(</span><span class="cn">var</span> v<span class="ot">)</span> σ τ <span class="ot">=</span> refl</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><dfn>rename-∘R</dfn> <span class="ot">(</span>rator <span class="cn">∙</span> rand<span class="ot">)</span> σ τ</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">rewrite</span> <dfn>rename-∘R</dfn> rator σ τ</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">rewrite</span> <dfn>rename-∘R</dfn> rand σ τ</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> refl</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><dfn>rename-∘R</dfn> <span class="ot">{</span>ty <span class="ot">=</span> ty<span class="ot">}</span> <span class="ot">(</span><span class="cn">fun</span> body<span class="ot">)</span> σ τ <span class="ot">=</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  begin</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="ot">(</span><span class="cn">fun</span> <span class="ot">(</span><dfn>rename</dfn> body <span class="ot">(</span><dfn>ext</dfn> <span class="ot">(</span>σ <dfn>∘R</dfn> τ<span class="ot">))))</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>      <span class="co">-- Use <dfn>ext-∘R</dfn> to distribute <dfn>ext</dfn> over composition</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>      ≡⟨ cong <span class="cn">fun</span> <span class="ot">(</span><dfn>rename-≡</dfn> <span class="ot">(</span><dfn>ext-∘R</dfn> σ τ<span class="ot">)</span> <span class="ot">_)</span> ⟩</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="ot">(</span><span class="cn">fun</span> <span class="ot">(</span><dfn>rename</dfn> body <span class="ot">((</span><dfn>ext</dfn> σ<span class="ot">)</span> <dfn>∘R</dfn> <span class="ot">(</span><dfn>ext</dfn> τ<span class="ot">))))</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>      <span class="co">-- Apply <dfn>rename-∘R</dfn> inductively to the body</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>      ≡⟨ cong <span class="cn">fun</span> <span class="ot">(</span><dfn>rename-∘R</dfn> body <span class="ot">(</span><dfn>ext</dfn> σ<span class="ot">)</span> <span class="ot">(</span><dfn>ext</dfn> τ<span class="ot">))</span> ⟩</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="ot">(</span><span class="cn">fun</span> <span class="ot">(</span><dfn>rename</dfn> <span class="ot">(</span><dfn>rename</dfn> body <span class="ot">(</span><dfn>ext</dfn> σ<span class="ot">))</span> <span class="ot">(</span><dfn>ext</dfn> τ<span class="ot">)))</span> ∎</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><dfn>rename-∘R</dfn> <span class="cn">tt</span> σ τ <span class="ot">=</span> refl</span></code></pre></div>
+<p>Similarly, after we observe that weakening of the identity is
+Ren-equivalent to the identity, we can show that renaming also preserves
+the identity up to propositional equality of terms:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><dfn>ext-id</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>ty Γ<span class="ot">}</span> <span class="ot">→</span> <dfn>ext</dfn> <span class="ot">{</span>Γ <span class="ot">=</span> Γ<span class="ot">}</span> <span class="ot">{</span>ty <span class="ot">=</span> ty<span class="ot">}</span> <dfn>id-Ren</dfn> <dfn>≡Ren</dfn> <dfn>id-Ren</dfn></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><dfn>ext-id</dfn> <span class="cn">Z</span> <span class="ot">=</span> refl</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><dfn>ext-id</dfn> <span class="ot">(</span><span class="cn">S</span> v<span class="ot">)</span> <span class="ot">=</span> refl</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><dfn>id-Ren-≡</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ t<span class="ot">}</span> <span class="ot">→</span> <span class="ot">∀</span> <span class="ot">(</span>tm <span class="ot">:</span> <dfn>Tm</dfn> Γ t<span class="ot">)</span> <span class="ot">→</span> <dfn>rename</dfn> tm <dfn>id-Ren</dfn> ≡ tm</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><dfn>id-Ren-≡</dfn> <span class="ot">(</span><span class="cn">var</span> v<span class="ot">)</span> <span class="ot">=</span> refl</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><dfn>id-Ren-≡</dfn> <span class="ot">(</span>rator <span class="cn">∙</span> rand<span class="ot">)</span> <span class="ot">=</span> cong₂ <span class="ot">(λ</span> f x <span class="ot">→</span> f <span class="cn">∙</span> x<span class="ot">)</span> <span class="ot">(</span><dfn>id-Ren-≡</dfn> rator<span class="ot">)</span> <span class="ot">(</span><dfn>id-Ren-≡</dfn> rand<span class="ot">)</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><dfn>id-Ren-≡</dfn> <span class="ot">(</span><span class="cn">fun</span> body<span class="ot">)</span> <span class="ot">=</span> cong <span class="ot">(λ</span> a <span class="ot">→</span> <span class="cn">fun</span> a<span class="ot">)</span> <dfn>eq-lem</dfn></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>   <span class="kw">where</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>     <dfn>eq-lem</dfn> <span class="ot">:</span> <span class="ot">_</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>     <dfn>eq-lem</dfn> <span class="ot">=</span> begin</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>       <dfn>rename</dfn> body <span class="ot">(</span><dfn>ext</dfn> <dfn>id-Ren</dfn><span class="ot">)</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>         <span class="co">-- <dfn>ext</dfn> <dfn>id-Ren</dfn> = <dfn>id-Ren</dfn></span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>         ≡⟨ <dfn>rename-≡</dfn> <dfn>ext-id</dfn> body ⟩</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>       <dfn>rename</dfn> body <dfn>id-Ren</dfn></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>         <span class="co">-- Apply <dfn>id-Ren-≡</dfn> inductively</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>         ≡⟨ <dfn>id-Ren-≡</dfn> body ⟩</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>       body ∎</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><dfn>id-Ren-≡</dfn> <span class="cn">tt</span> <span class="ot">=</span> refl</span></code></pre></div>
+<p>Together, <code>rename-∘R</code> and <code>id-Ren-≡</code> give us
+the data of a presheaf: <code>Tm _ t</code> is contravariant and
+functorial in the renaming action.</p>
+<p>Finally, we use renamings to define term weakening, by noting that
+the de Bruijn increment operator – <code>S</code> – defines a weakening
+from <code>Γ</code> to <code>Γ ▸ ty</code>:</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>wk-Tm tm <span class="ot">=</span> <dfn>rename</dfn> tm <span class="cn">S</span></span></code></pre></div>
+<p>With renamings in hand, we can develop the full theory of
+substitutions. Just as a renaming takes a (typed) variable from context
+<code>\Gamma</code> and gives a (typed) variable in a context
+<code>Δ</code>, a substitution takes a (typed) variable from
+<code>Γ</code> and gives back a term in context <code>Δ</code>:</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><dfn>Sub</dfn> <span class="ot">:</span> <span class="cn">Ctxt</span> <span class="ot">→</span> <span class="cn">Ctxt</span> <span class="ot">→</span> <span class="dt">Type</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><dfn>Sub</dfn> Δ Γ <span class="ot">=</span> <span class="ot">∀</span> <span class="ot">{</span>ty<span class="ot">}</span> <span class="ot">→</span> ty ∈ Γ <span class="ot">→</span> <dfn>Tm</dfn> Δ ty</span></code></pre></div>
+<p>In order to properly describe the equational theory of such
+substitutions, we would first need to have the correct equational theory
+of terms (which would require already having defined substitution of
+terms), and so, for now, we have a notion of “raw equality” of
+substitutions:</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>≣Sub</dfn><span class="ot">_</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Δ Γ<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>ρ σ <span class="ot">:</span> <dfn>Sub</dfn> Δ Γ<span class="ot">)</span> <span class="ot">→</span> <span class="dt">Type</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>≣Sub</dfn><span class="ot">_</span> <span class="ot">{</span>Γ <span class="ot">=</span> Γ<span class="ot">}</span> ρ σ <span class="ot">=</span>  <span class="ot">∀</span> <span class="ot">{</span>ty<span class="ot">}</span> <span class="ot">→</span> <span class="ot">∀</span> <span class="ot">(</span>v <span class="ot">:</span> ty ∈ Γ<span class="ot">)</span> <span class="ot">→</span> ρ v ≡ σ v</span></code></pre></div>
+<p>Just as <code>Ren</code> formed a category with objects given by
+contexts, we have a category <code>Sub</code> where the morphisms are
+now substitutions with the following identity and composition:</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><dfn>Sub-id</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">→</span> <dfn>Sub</dfn> Γ Γ</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><dfn>Sub-id</dfn> v <span class="ot">=</span> <span class="cn">var</span> v</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>∘𝕊</dfn><span class="ot">_</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Ξ Δ Γ<span class="ot">}</span> <span class="ot">→</span> <dfn>Sub</dfn> Γ Δ <span class="ot">→</span> <dfn>Sub</dfn> Ξ Γ <span class="ot">→</span> <dfn>Sub</dfn> Ξ Δ</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>∘𝕊</dfn><span class="ot">_</span> ρ σ v <span class="ot">=</span> <dfn>subst</dfn> σ <span class="ot">(</span>ρ v<span class="ot">)</span></span></code></pre></div>
+<p>We again have a notion of weakening for a substitution:</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><dfn>ext</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ Δ ty<span class="ot">}</span> <span class="ot">→</span> <dfn>Sub</dfn> Γ Δ <span class="ot">→</span> <dfn>Sub</dfn> <span class="ot">(</span>Γ <span class="cn">▸</span> ty<span class="ot">)</span> <span class="ot">(</span>Δ <span class="cn">▸</span> ty<span class="ot">)</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><dfn>ext</dfn> σ <span class="cn">Z</span> <span class="ot">=</span> <span class="cn">var</span> <span class="cn">Z</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- Here we perform substitution under a binder and so also need to weaken</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- the term we give back</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><dfn>ext</dfn> σ <span class="ot">(</span><span class="cn">S</span> pf<span class="ot">)</span> <span class="ot">=</span> <dfn>Ren</dfn><span class="ot">.</span>wk-Tm <span class="ot">(</span>σ pf<span class="ot">)</span></span></code></pre></div>
+<p>and we again have a contravariant action of substitutions on
+terms:</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><dfn>subst</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ Δ t<span class="ot">}</span> <span class="ot">→</span> <dfn>Sub</dfn> Δ Γ <span class="ot">→</span> <dfn>Tm</dfn> Γ t <span class="ot">→</span> <dfn>Tm</dfn> Δ t</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><dfn>subst</dfn> σ <span class="ot">(</span><span class="cn">var</span> v<span class="ot">)</span> <span class="ot">=</span> σ v</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><dfn>subst</dfn> σ <span class="ot">(</span>rator <span class="cn">∙</span> rand<span class="ot">)</span> <span class="ot">=</span> <span class="ot">(</span><dfn>subst</dfn> σ rator<span class="ot">)</span> <span class="cn">∙</span> <span class="ot">(</span><dfn>subst</dfn> σ rand<span class="ot">)</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><dfn>subst</dfn> σ <span class="ot">(</span><span class="cn">fun</span> body<span class="ot">)</span> <span class="ot">=</span> <span class="cn">fun</span> <span class="ot">(</span><dfn>subst</dfn> <span class="ot">(</span><dfn>ext</dfn> σ<span class="ot">)</span> body<span class="ot">)</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><dfn>subst</dfn> σ <span class="cn">tt</span> <span class="ot">=</span> <span class="cn">tt</span></span></code></pre></div>
+<p>As before, we have that this action is functorial (preserves identity
+and composition up to propositional equality):</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>Sub-id-≣ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ t<span class="ot">}</span> <span class="ot">→</span> <span class="ot">∀</span> <span class="ot">(</span>tm <span class="ot">:</span> <dfn>Tm</dfn> Γ t<span class="ot">)</span> <span class="ot">→</span> <dfn>subst</dfn> <dfn>Sub-id</dfn> tm ≡ tm</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><dfn>∘Sub-≡</dfn> <span class="ot">:</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">∀</span> <span class="ot">{</span>Γ Δ Θ ty<span class="ot">}</span> <span class="ot">(</span>tm <span class="ot">:</span> <dfn>Tm</dfn> Δ ty<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="ot">(</span>ρ <span class="ot">:</span> <dfn>Sub</dfn> Γ Δ<span class="ot">)</span> <span class="ot">(</span>ρ&#39; <span class="ot">:</span> <dfn>Sub</dfn> Θ Γ<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <dfn>subst</dfn> ρ&#39; <span class="ot">(</span><dfn>subst</dfn> ρ tm<span class="ot">)</span> ≡ <dfn>subst</dfn> <span class="ot">(</span>ρ <dfn>∘𝕊</dfn> ρ&#39;<span class="ot">)</span> tm</span></code></pre></div>
+<p>We leave the laborious details, regarding the mechanics of
+substitution, of these lemmas to the proof development for those
+interested<a href="#fn2" class="footnote-ref" id="fnref2"
+role="doc-noteref"><sup>2</sup></a>.</p>
+<p>Finally, we have what we need to define single variable substitution
+which we will need for the equational theory:</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- substitution of a single variable</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><dfn>sub/</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">→</span> <dfn>Tm</dfn> Γ ty <span class="ot">→</span> <dfn>Sub</dfn> Γ <span class="ot">(</span>Γ <span class="cn">▸</span> ty<span class="ot">)</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><dfn>sub/</dfn> arg <span class="cn">Z</span> <span class="ot">=</span> arg</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><dfn>sub/</dfn> <span class="ot">_</span>   <span class="ot">(</span><span class="cn">S</span> v<span class="ot">)</span> <span class="ot">=</span> <span class="cn">var</span> v</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co">-- substitute for the `topmost` variable in a term</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>/[</dfn><span class="ot">_</span>] <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ ty₁ ty₂<span class="ot">}</span> <span class="ot">→</span> <dfn>Tm</dfn> <span class="ot">(</span>Γ <span class="cn">▸</span> ty₁<span class="ot">)</span> ty₂ <span class="ot">→</span> <dfn>Tm</dfn> Γ ty₁ <span class="ot">→</span> <dfn>Tm</dfn> Γ ty₂</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>/[</dfn><span class="ot">_</span>] <span class="ot">{</span>Γ <span class="ot">=</span> Γ<span class="ot">}</span> <span class="ot">{</span>ty₁ <span class="ot">=</span> ty₁<span class="ot">}</span> sub-tm arg <span class="ot">=</span> <dfn>subst</dfn> <span class="ot">(</span><dfn>sub/</dfn> arg<span class="ot">)</span> sub-tm</span></code></pre></div>
+<h3 id="equational-theory-of-stlc">Equational Theory of STLC</h3>
+<p>With substitution in hand, we can define an inductive type to capture
+the judgments in the equational theory of terms as follows:</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="ot">_</span>≡Tm<span class="ot">_</span> <span class="ot">:</span> <span class="ot">{</span>Γ <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">}</span> <span class="ot">{</span>t <span class="ot">:</span> <dfn>Ty</dfn><span class="ot">}</span> <span class="ot">→</span> <dfn>Tm</dfn> Γ t <span class="ot">→</span> <dfn>Tm</dfn> Γ t <span class="ot">→</span> <span class="dt">Type</span> <span class="kw">where</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="cn">reflexivity</span> <span class="ot">:</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">(</span>tm <span class="ot">:</span> <dfn>Tm</dfn> Γ ty<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>      tm ≡Tm tm</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="cn">symmetry</span> <span class="ot">:</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">{</span>t1 t2 <span class="ot">:</span> <dfn>Tm</dfn> Γ ty<span class="ot">}</span> <span class="ot">→</span> t1 ≡Tm t2 <span class="ot">→</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>      t2 ≡Tm t1</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="cn">transitivity</span> <span class="ot">:</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">{</span>t1 t2 t3 <span class="ot">:</span> <dfn>Tm</dfn> Γ ty<span class="ot">}</span> <span class="ot">→</span> t1 ≡Tm t2 <span class="ot">→</span> t2 ≡Tm t3 <span class="ot">→</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>      t1 ≡Tm t3</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="cn">β-red</span> <span class="ot">:</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="ot">∀</span> <span class="ot">{</span>dom cod Γ<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>body <span class="ot">:</span> <dfn>Tm</dfn> <span class="ot">(</span>Γ <span class="cn">▸</span> dom<span class="ot">)</span> cod<span class="ot">)(</span>arg <span class="ot">:</span> <dfn>Tm</dfn> Γ dom<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>      <span class="ot">((</span><span class="cn">fun</span> body<span class="ot">)</span> <span class="cn">∙</span> arg<span class="ot">)</span> ≡Tm <span class="ot">(</span>body <dfn>/[</dfn> arg ]<span class="ot">)</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="cn">η-fn</span> <span class="ot">:</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    <span class="ot">∀{</span>dom cod Γ<span class="ot">}(</span>fn-tm <span class="ot">:</span> <dfn>Tm</dfn> Γ <span class="ot">(</span>dom <span class="cn">⇒</span> cod<span class="ot">))</span> <span class="ot">→</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>      <span class="ot">(</span><span class="cn">fun</span> <span class="ot">((</span><dfn>Ren</dfn><span class="ot">.</span>wk-Tm fn-tm<span class="ot">)</span> <span class="cn">∙</span> <span class="ot">(</span><span class="cn">var</span> <span class="cn">Z</span><span class="ot">)))</span> ≡Tm fn-tm</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="cn">var-cong</span> <span class="ot">:</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>    <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">{</span>v v&#39; <span class="ot">:</span> ty ∈ Γ<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>    v ≡ v&#39; <span class="ot">→</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>    <span class="cn">var</span> v ≡Tm <span class="cn">var</span> v&#39;</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>  <span class="cn">∙-cong</span> <span class="ot">:</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>    <span class="ot">∀{</span>dom cod Γ<span class="ot">}(</span>fn₁ fn₂ <span class="ot">:</span> <dfn>Tm</dfn> Γ <span class="ot">(</span>dom <span class="cn">⇒</span> cod<span class="ot">))</span> <span class="ot">(</span>arg₁ arg₂ <span class="ot">:</span> <dfn>Tm</dfn> Γ dom<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>      fn₁ ≡Tm fn₂ <span class="ot">→</span> arg₁ ≡Tm arg₂ <span class="ot">→</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>      fn₁ <span class="cn">∙</span> arg₁ ≡Tm fn₂ <span class="cn">∙</span> arg₂</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>  <span class="cn">fun-cong</span> <span class="ot">:</span></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>    <span class="ot">∀{</span>dom cod Γ<span class="ot">}(</span>bd₁ bd₂ <span class="ot">:</span> <dfn>Tm</dfn> <span class="ot">(</span>Γ <span class="cn">▸</span> dom<span class="ot">)</span> cod<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>      bd₁ ≡Tm bd₂ <span class="ot">→</span> <span class="ot">(</span><span class="cn">fun</span> bd₁<span class="ot">)</span> ≡Tm <span class="ot">(</span><span class="cn">fun</span> bd₂<span class="ot">)</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>  <span class="cn">𝟙-η</span> <span class="ot">:</span> <span class="ot">{</span>Γ <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>tm-𝟙 <span class="ot">:</span> <dfn>Tm</dfn> Γ <span class="cn">𝟙</span><span class="ot">)</span> <span class="ot">→</span> tm-𝟙 ≡Tm <span class="cn">tt</span></span></code></pre></div>
+<p>We note the following: - We make equality automatically an
+equivalence relation, corresponding to the usual rules:</p>
+<p><span class="math display">\[
+\dfrac{}{\Gamma \vdash \mathrm{t}\equiv \mathrm{t}\mathrel{:}\mathrm{a}}
+\quad \text{(Refl)}
+\qquad
+\dfrac{\Gamma \vdash \mathrm{t}_1 \equiv \mathrm{t}_2
+\mathrel{:}\mathrm{a}}{\Gamma \vdash \mathrm{t}_2 \equiv \mathrm{t}_1
+\mathrel{:}\mathrm{a}} \quad \text{(Sym)}
+\]</span> <span class="math display">\[
+\dfrac{\Gamma \vdash \mathrm{t}_1 \equiv \mathrm{t}_2
+\mathrel{:}\mathrm{a}\quad \Gamma \vdash \mathrm{t}_2 \equiv
+\mathrm{t}_3 \mathrel{:}\mathrm{a}}{\Gamma \vdash \mathrm{t}_1 \equiv
+\mathrm{t}_3 \mathrel{:}\mathrm{a}} \quad \text{(Trans)}
+\]</span></p>
+<ul>
+<li>The β-rule – <code>β-red</code> corresponds exactly to the usual
+rule of applying a lambda term to an argument reducing via
+substitution:</li>
+</ul>
+<p><span class="math display">\[
+\dfrac{\Gamma,\, \mathrm{x}\mathrel{:}\mathrm{a}\vdash
+\mathrm{t}\mathrel{:}\mathrm{b}\quad \Gamma \vdash s
+\mathrel{:}\mathrm{a}}
+      {\Gamma \vdash (\lambda\, \mathrm{x}\mathrel{:}\mathrm{a}.\;
+\mathrm{t})\; s \equiv \mathrm{t}[s/\mathrm{x}] \mathrel{:}\mathrm{b}}
+\quad \text{(β)}
+\]</span></p>
+<ul>
+<li>Similarly, the η rule, <code>η-fn</code>, is the standard rule that
+gives us a way of writing any term of a function type as a lambda
+term:</li>
+</ul>
+<p><span class="math display">\[
+\dfrac{\Gamma \vdash \mathrm{f}\mathrel{:}\mathrm{a}\Rightarrow
+\mathrm{b}}
+      {\Gamma \vdash \lambda\, \mathrm{x}.\; \mathrm{f}\;
+\mathrm{x}\equiv \mathrm{f}\mathrel{:}\mathrm{a}\Rightarrow \mathrm{b}}
+\quad \text{(η-fn)}
+\qquad
+\dfrac{\Gamma \vdash \mathrm{t}\mathrel{:}\mathbf{1}}
+      {\Gamma \vdash \mathrm{t}\equiv \mathtt{tt} \mathrel{:}\mathbf{1}}
+\quad \text{(η-\(\mathbf{1}\))}
+\]</span></p>
+<ul>
+<li>Lastly, we want the equality relation to be a congruence with
+respect to the term formation rules:</li>
+</ul>
+<p><span class="math display">\[
+\dfrac{\Gamma \vdash \mathrm{f}_1 \equiv \mathrm{f}_2
+\mathrel{:}\mathrm{a}\Rightarrow \mathrm{b}\quad \Gamma \vdash s_1
+\equiv s_2 \mathrel{:}\mathrm{a}}
+      {\Gamma \vdash \mathrm{f}_1\; s_1 \equiv \mathrm{f}_2\; s_2
+\mathrel{:}\mathrm{b}}
+\quad \text{(Cong-App)}
+\]</span> <span class="math display">\[
+\dfrac{\Gamma,\, \mathrm{x}\mathrel{:}\mathrm{a}\vdash \mathrm{t}_1
+\equiv \mathrm{t}_2 \mathrel{:}\mathrm{b}}
+      {\Gamma \vdash \lambda\, \mathrm{x}\mathrel{:}\mathrm{a}.\;
+\mathrm{t}_1 \equiv \lambda\, \mathrm{x}\mathrel{:}\mathrm{a}.\;
+\mathrm{t}_2 \mathrel{:}\mathrm{a}\Rightarrow \mathrm{b}}
+\quad \text{(Cong-Lam)}
+\]</span></p>
+<p>Using the notion of equivalence relation (and setoid – a type
+carrying some chosen equivalence relation) from the standard library, we
+can then register that equality gives an equivalence relation (with
+associated setoid):</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><dfn>≡Tm-Equality</dfn> <span class="ot">:</span> <span class="ot">{</span>Γ <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">}{</span>ty <span class="ot">:</span> <dfn>Ty</dfn><span class="ot">}</span> <span class="ot">→</span> IsEquivalence <span class="ot">{</span>A <span class="ot">=</span> <dfn>Tm</dfn> Γ ty<span class="ot">}</span> <span class="ot">_</span>≡Tm<span class="ot">_</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><dfn>≡Tm-Equality</dfn> <span class="ot">=</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">record</span> <span class="ot">{</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    refl <span class="ot">=</span> <span class="ot">λ</span> <span class="ot">{</span>x<span class="ot">}</span> <span class="ot">→</span> <span class="cn">reflexivity</span> x <span class="ot">;</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    sym <span class="ot">=</span> <span class="cn">symmetry</span> <span class="ot">;</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    trans <span class="ot">=</span> <span class="ot">λ</span> eq₁ eq₂ <span class="ot">→</span> <span class="cn">transitivity</span> eq₁ eq₂</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="ot">}</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><dfn>≡Tm-setoid</dfn> <span class="ot">:</span> <span class="ot">(</span>Γ <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">)</span> <span class="ot">(</span>ty <span class="ot">:</span> <dfn>Ty</dfn><span class="ot">)</span> <span class="ot">→</span> Setoid ℓzero ℓzero</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><dfn>≡Tm-setoid</dfn> Γ ty <span class="ot">=</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">record</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>    <span class="ot">{</span> Carrier       <span class="ot">=</span> <dfn>Tm</dfn> Γ ty</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>    <span class="ot">;</span> <span class="ot">_</span>≈<span class="ot">_</span>           <span class="ot">=</span> <span class="ot">_</span>≡Tm<span class="ot">_</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    <span class="ot">;</span> isEquivalence <span class="ot">=</span> <dfn>≡Tm-Equality</dfn></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>    <span class="ot">}</span></span></code></pre></div>
+<p>This also, finally, gives us a proper equational theory of
+substitutions:</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>≡Sub</dfn><span class="ot">_</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Δ Γ<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>ρ σ <span class="ot">:</span> <dfn>Sub</dfn> Δ Γ<span class="ot">)</span> <span class="ot">→</span> <span class="dt">Type</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>≡Sub</dfn><span class="ot">_</span> <span class="ot">{</span>Γ <span class="ot">=</span> Γ<span class="ot">}</span> ρ σ <span class="ot">=</span>  <span class="ot">∀</span> <span class="ot">{</span>ty<span class="ot">}</span> <span class="ot">→</span> <span class="ot">∀</span> <span class="ot">(</span>v <span class="ot">:</span> ty ∈ Γ<span class="ot">)</span> <span class="ot">→</span> ρ v ≡Tm σ v</span></code></pre></div>
+<h3 id="a-set-theoretic-model">A Set-Theoretic Model</h3>
+<p>We finally then have enough of the basic theory developed to
+construct a particular model of the theory. As mentioned in the
+introduction, our model will take each term judgment <span
+class="math inline">\(\Gamma \vdash \mathtt{tm}
+\mathrel{:}\mathrm{t}\)</span> to be interpreted as a function from the
+interpretation of the context <span
+class="math inline">\(\text{⟦}\Gamma\text{⟧}\)</span> to the
+interpretation of the type <span
+class="math inline">\(\text{⟦}\mathrm{t}\text{⟧}\)</span>. As before,
+each context is semantically just the product of the interpretation of
+each type. We interpret variables as projections, <code>tt</code> as the
+unique term in <code>⊤</code>, function terms as terms in a
+set-theoretic function type, and function application as the composition
+of function evaluation, and the fork of the semantics of each component
+of application:</p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>⟦<span class="ot">_</span>⟧𝕋 <span class="ot">:</span> <dfn>Ty</dfn> <span class="ot">→</span> <span class="dt">Set</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>⟦ <span class="cn">𝕆</span> ⟧𝕋 <span class="ot">=</span> ⊥</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>⟦ <span class="cn">𝟙</span> ⟧𝕋 <span class="ot">=</span> ⊤</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>⟦ dom <span class="cn">⇒</span> cod ⟧𝕋 <span class="ot">=</span> ⟦ dom ⟧𝕋  <span class="ot">→</span> ⟦ cod ⟧𝕋</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>⟦<span class="ot">_</span>⟧ℂ <span class="ot">:</span> <span class="cn">Ctxt</span> <span class="ot">→</span> <span class="dt">Set</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>⟦ [] ⟧ℂ <span class="ot">=</span> ⊤</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>⟦ <span class="ot">(</span>Γ <span class="cn">▸</span> t<span class="ot">)</span> ⟧ℂ <span class="ot">=</span> ⟦ Γ ⟧ℂ × ⟦ t ⟧𝕋</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>⟦var⟧ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>ty Γ<span class="ot">}</span> <span class="ot">→</span> ty ∈ Γ <span class="ot">→</span> <span class="ot">(</span>⟦ Γ ⟧ℂ <span class="ot">→</span> ⟦ ty ⟧𝕋<span class="ot">)</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>⟦var⟧ <span class="cn">Z</span> Γ <span class="ot">=</span> proj₂ Γ</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>⟦var⟧ <span class="ot">(</span><span class="cn">S</span> pf<span class="ot">)</span> Γ <span class="ot">=</span> ⟦var⟧ pf <span class="ot">(</span>proj₁ Γ<span class="ot">)</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="co">-- We define and use an explicit <dfn>eval</dfn> function</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="co">-- to more cleanly generalize to a CCC</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><dfn>eval</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a b <span class="ot">:</span> <span class="dt">Type</span><span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>a <span class="ot">→</span> b<span class="ot">)</span> × a <span class="ot">→</span> b</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><dfn>eval</dfn> <span class="ot">(</span>f <span class="cn">,</span> a <span class="ot">)</span> <span class="ot">=</span> f a</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>⟦<span class="ot">_</span>⟧ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ t<span class="ot">}</span> <span class="ot">→</span> <dfn>Tm</dfn> Γ t <span class="ot">→</span> <span class="ot">(</span>⟦ Γ ⟧ℂ <span class="ot">→</span> ⟦ t ⟧𝕋<span class="ot">)</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>⟦ <span class="cn">var</span> v ⟧ <span class="ot">=</span> ⟦var⟧ v</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>⟦ rator <span class="cn">∙</span> rand ⟧ <span class="ot">=</span> <span class="ot">λ</span> ρ <span class="ot">→</span> <dfn>eval</dfn> <span class="ot">(</span>⟦ rator ⟧ ρ <span class="cn">,</span> ⟦ rand ⟧ ρ<span class="ot">)</span></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>⟦ <span class="cn">fun</span> f ⟧ <span class="ot">=</span> <span class="ot">λ</span> ρ a <span class="ot">→</span> ⟦ f ⟧ <span class="ot">(</span>ρ <span class="cn">,</span> a<span class="ot">)</span></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>⟦ <span class="cn">tt</span> ⟧ <span class="ot">=</span> <span class="ot">λ</span> <span class="ot">_</span> <span class="ot">→</span> <span class="cn">tt</span></span></code></pre></div>
+<p>There is a sense in which this model allows us to show the
+consistency of our raw theory:</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><dfn>consistent</dfn> <span class="ot">:</span> <dfn>Tm</dfn> <span class="cn">∅</span> <span class="cn">𝕆</span> <span class="ot">→</span> ⊥</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><dfn>consistent</dfn> t <span class="ot">=</span> ⟦ t ⟧ <span class="cn">tt</span></span></code></pre></div>
+<p>However, this is a somewhat empty sort of consistency. In this model
+we map <span class="math inline">\(\mathcal{O}\)</span> to <span
+class="math inline">\(\bot\)</span>, and this shows that we can’t
+directly construct a term in the possibly empty type, as we would then
+be able to directly construct a term of type <span
+class="math inline">\(\bot\)</span>. In order for this to
+<em>really</em> capture the consistency of STLC, we require not just a
+way to interpret term judgments, but that our interpretation also
+respects the equational judgments. That our semantics respects the
+equations or the proof theory of our system is usually known as
+<em>soundness</em>. As we will do this in greater generality, and the
+proof involves developing various of the kinds of finicky manipulations
+associated with substitutions that typify this kind of result, we only
+note the importance of the substitution lemma which we state without
+proof<a href="#fn3" class="footnote-ref" id="fnref3"
+role="doc-noteref"><sup>3</sup></a>:</p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- the semantics of a substituted term is a composition</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- of a composition followed by the semantics of the</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- term morphism:</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co">--</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- So we can think semantically about a substitution as:</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co">-- ⟦ Δ ⟧ -- σ --&gt; ⟦ Γ ⟧ -- ⟦ tm ⟧ --&gt; ⟦ t ⟧</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><dfn>sub-lem</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ Δ t<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>σ <span class="ot">:</span> <dfn>Sub</dfn> Δ Γ<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>tm <span class="ot">:</span> <dfn>Tm</dfn> Γ t<span class="ot">)</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">(∀</span> <span class="ot">(</span>δ <span class="ot">:</span> ⟦ Δ ⟧ℂ<span class="ot">)</span> <span class="ot">→</span> ⟦ <dfn>subst</dfn> σ tm  ⟧ δ ≡ <span class="ot">(</span>⟦ tm ⟧ <span class="ot">(</span>⟦ σ ⟧𝕊 δ<span class="ot">)))</span></span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Our set-theoretical model respects our equality judgment</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">:</span> <span class="ot">{</span>Γ <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">}</span> <span class="ot">{</span>t <span class="ot">:</span> <dfn>Ty</dfn><span class="ot">}</span> <span class="ot">→</span> <span class="ot">{</span>lhs rhs <span class="ot">:</span> <dfn>Tm</dfn> Γ t<span class="ot">}</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">(</span>lhs ≡Tm rhs<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>⟦ lhs ⟧<span class="ot">)</span> ≡ <span class="ot">(</span>⟦ rhs ⟧<span class="ot">)</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">reflexivity</span> tm<span class="ot">)</span> <span class="ot">=</span> refl</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">symmetry</span> eq<span class="ot">)</span> <span class="kw">with</span> ⟦⟧-Soundness eq</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="ot">...</span> <span class="ot">|</span> rhs≡lhs <span class="ot">=</span> sym rhs≡lhs</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">transitivity</span> eq1 eq2<span class="ot">)</span> <span class="kw">with</span> ⟦⟧-Soundness eq1 <span class="cn">,</span> ⟦⟧-Soundness eq2</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="ot">...</span> <span class="ot">|</span> t1≡t2 <span class="cn">,</span> t2≡t3 <span class="ot">=</span> trans t1≡t2 t2≡t3</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">β-red</span> body arg<span class="ot">)</span> <span class="ot">=</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>   begin</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>     <span class="ot">(λ</span> ρ <span class="ot">→</span> <dfn>eval</dfn> <span class="ot">((λ</span> a <span class="ot">→</span> ⟦ body ⟧ <span class="ot">(</span>ρ <span class="cn">,</span> a<span class="ot">))</span> <span class="cn">,</span> ⟦ arg ⟧ ρ<span class="ot">))</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>       ≡⟨ refl ⟩</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>     <span class="ot">(λ</span> ρ <span class="ot">→</span> ⟦ body ⟧ <span class="ot">(</span>ρ <span class="cn">,</span> ⟦ arg ⟧ ρ<span class="ot">))</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>       <span class="co">-- cong tetris using that ⟦ <dfn>Sub</dfn>.<dfn>Sub-id</dfn> ⟧𝕊 ρ ≡ ρ</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>       ≡⟨ <dfn>fun-ext</dfn> <span class="ot">(λ</span> ρ <span class="ot">→</span> cong <span class="ot">(λ</span> f <span class="ot">→</span> ⟦ body ⟧ <span class="ot">(</span>f <span class="cn">,</span> ⟦ arg ⟧ ρ<span class="ot">))</span> <span class="ot">(</span>sym <span class="ot">(</span>⟦⟧-Sub-id ρ<span class="ot">))</span> <span class="ot">)</span> ⟩</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>     <span class="ot">(λ</span> ρ <span class="ot">→</span> ⟦ body ⟧ <span class="ot">(</span>⟦ <dfn>Sub</dfn><span class="ot">.</span><dfn>Sub-id</dfn> ⟧𝕊 ρ <span class="cn">,</span> ⟦ arg ⟧ ρ<span class="ot">))</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>       ≡⟨ refl ⟩</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>     <span class="ot">(λ</span> ρ <span class="ot">→</span> ⟦ body ⟧ <span class="ot">(</span>⟦ <dfn>Sub</dfn><span class="ot">.</span><dfn>sub/</dfn> arg ⟧𝕊 ρ<span class="ot">))</span></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>       ≡⟨ sym <span class="ot">(</span><dfn>fun-ext</dfn> <span class="ot">(λ</span> δ <span class="ot">→</span> <dfn>sub-lem</dfn> <span class="ot">(</span><dfn>Sub</dfn><span class="ot">.</span><dfn>sub/</dfn> arg<span class="ot">)</span> body δ<span class="ot">))</span> ⟩</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>     ⟦ body <dfn>Sub</dfn><span class="ot">.</span><dfn>/[</dfn> arg ] ⟧ ∎</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">η-fn</span> fn-tm<span class="ot">)</span></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>   <span class="ot">=</span></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>   begin</span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>     <span class="ot">(λ</span> ρ a <span class="ot">→</span> <dfn>eval</dfn> <span class="ot">(</span>⟦ <dfn>Ren</dfn><span class="ot">.</span>wk-Tm fn-tm ⟧ <span class="ot">(</span>ρ <span class="cn">,</span> a<span class="ot">)</span> <span class="cn">,</span> a<span class="ot">))</span></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>     <span class="co">-- using ⟦ <dfn>Ren</dfn>.wk-Tm fn-tm ⟧ ≡ ⟦ tm ⟧ ∘ proj₁</span></span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>       ≡⟨ <dfn>fun-ext</dfn> <span class="ot">(λ</span> ρ <span class="ot">→</span></span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>            <dfn>fun-ext</dfn> <span class="ot">(λ</span> a <span class="ot">→</span></span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>              cong₂ <span class="ot">(λ</span> f a <span class="ot">→</span> <dfn>eval</dfn> <span class="ot">(</span>f <span class="cn">,</span> a<span class="ot">))</span></span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>              <span class="ot">(</span>cong <span class="ot">(λ</span> fn <span class="ot">→</span> fn <span class="ot">(</span>ρ <span class="cn">,</span> a<span class="ot">))</span> <span class="ot">(</span>⟦⟧-Wk-Tm fn-tm<span class="ot">))</span> refl<span class="ot">))</span> ⟩</span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>     ⟦ fn-tm ⟧ ∎</span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">𝟙-η</span> tm-𝟙<span class="ot">)</span></span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a>   <span class="ot">=</span> refl</span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">var-cong</span> v≡v&#39;<span class="ot">)</span> <span class="ot">=</span> cong ⟦var⟧ v≡v&#39;</span>
+<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">∙-cong</span> fn₁ fn₂ arg₁ arg₂ eq₁ eq₂<span class="ot">)</span></span>
+<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a>   <span class="kw">with</span> ⟦⟧-Soundness eq₁ <span class="cn">,</span> ⟦⟧-Soundness eq₂</span>
+<span id="cb28-36"><a href="#cb28-36" aria-hidden="true" tabindex="-1"></a><span class="ot">...</span> <span class="ot">|</span>  ⟦eq₁⟧ <span class="cn">,</span> ⟦eq₂⟧ <span class="ot">=</span></span>
+<span id="cb28-37"><a href="#cb28-37" aria-hidden="true" tabindex="-1"></a>    begin</span>
+<span id="cb28-38"><a href="#cb28-38" aria-hidden="true" tabindex="-1"></a>      <span class="ot">(λ</span> ρ <span class="ot">→</span> <dfn>eval</dfn> <span class="ot">(</span>⟦ fn₁ ⟧ ρ <span class="cn">,</span> ⟦ arg₁ ⟧ ρ<span class="ot">))</span></span>
+<span id="cb28-39"><a href="#cb28-39" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- We use <dfn>fun-ext</dfn> and then inductively use equalities on each component</span></span>
+<span id="cb28-40"><a href="#cb28-40" aria-hidden="true" tabindex="-1"></a>        ≡⟨ <dfn>fun-ext</dfn> <span class="ot">(λ</span> ρ <span class="ot">→</span></span>
+<span id="cb28-41"><a href="#cb28-41" aria-hidden="true" tabindex="-1"></a>          cong <dfn>eval</dfn> <span class="ot">(</span>≡-× <span class="ot">(</span>cong <span class="ot">(λ</span> f <span class="ot">→</span> f ρ<span class="ot">)</span> ⟦eq₁⟧<span class="ot">)</span> <span class="ot">(</span>cong <span class="ot">(λ</span> a <span class="ot">→</span> a ρ<span class="ot">)</span> ⟦eq₂⟧<span class="ot">)))</span> ⟩</span>
+<span id="cb28-42"><a href="#cb28-42" aria-hidden="true" tabindex="-1"></a>      <span class="ot">(λ</span> ρ <span class="ot">→</span> <dfn>eval</dfn> <span class="ot">(</span>⟦ fn₂ ⟧ ρ <span class="cn">,</span> ⟦ arg₂ ⟧ ρ<span class="ot">))</span> ∎</span>
+<span id="cb28-43"><a href="#cb28-43" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">fun-cong</span> bd₁ bd₂ eq<span class="ot">)</span></span>
+<span id="cb28-44"><a href="#cb28-44" aria-hidden="true" tabindex="-1"></a>  <span class="kw">with</span> ⟦⟧-Soundness eq</span>
+<span id="cb28-45"><a href="#cb28-45" aria-hidden="true" tabindex="-1"></a><span class="ot">...</span> <span class="ot">|</span> ⟦eq⟧ <span class="ot">=</span></span>
+<span id="cb28-46"><a href="#cb28-46" aria-hidden="true" tabindex="-1"></a>  begin</span>
+<span id="cb28-47"><a href="#cb28-47" aria-hidden="true" tabindex="-1"></a>      <span class="ot">(λ</span> ρ a <span class="ot">→</span> ⟦ bd₁ ⟧ <span class="ot">(</span>ρ <span class="cn">,</span> a<span class="ot">))</span></span>
+<span id="cb28-48"><a href="#cb28-48" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- We use <dfn>fun-ext</dfn> and then inductively use the equality on the body</span></span>
+<span id="cb28-49"><a href="#cb28-49" aria-hidden="true" tabindex="-1"></a>        ≡⟨ <dfn>fun-ext</dfn> <span class="ot">(λ</span> ρ <span class="ot">→</span> <dfn>fun-ext</dfn> <span class="ot">(λ</span> a <span class="ot">→</span> cong <span class="ot">(λ</span> f <span class="ot">→</span> f <span class="ot">(</span>ρ <span class="cn">,</span> a<span class="ot">))</span> ⟦eq⟧<span class="ot">))</span>   ⟩</span>
+<span id="cb28-50"><a href="#cb28-50" aria-hidden="true" tabindex="-1"></a>      <span class="ot">(λ</span> ρ a <span class="ot">→</span> ⟦ bd₂ ⟧ <span class="ot">(</span>ρ <span class="cn">,</span> a<span class="ot">))</span> ∎</span></code></pre></div>
+<h3 id="models-in-cartesian-closed-categories">Models in Cartesian
+Closed Categories</h3>
+<p>We have then a particular model using the ambient type theory (which
+we think of, for the purposes here, as <code>Set</code>). More
+generally, as we mentioned, this relies on nothing more than
+capabilities offered by any CCC. Let us then generalize the above model
+in this setting. For that purpose, we will use the rather excellent <a
+href="https://github.com/agda/agda-categories">agda-categories
+library</a>. We start with these imports we need from the library<a
+href="#fn4" class="footnote-ref" id="fnref4"
+role="doc-noteref"><sup>4</sup></a>:</p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Categories<span class="ot">.</span>Category <span class="kw">using</span> <span class="ot">(</span>Category<span class="ot">)</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Categories<span class="ot">.</span>Category<span class="ot">.</span>BinaryProducts <span class="kw">using</span> <span class="ot">(</span>BinaryProducts<span class="ot">)</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Categories<span class="ot">.</span>Object<span class="ot">.</span>Product<span class="ot">.</span>Core <span class="kw">using</span> <span class="ot">(</span>Product<span class="ot">)</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Categories<span class="ot">.</span>Object<span class="ot">.</span>Exponential</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Categories<span class="ot">.</span>Object<span class="ot">.</span>Terminal</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Categories<span class="ot">.</span>Category<span class="ot">.</span>CartesianClosed</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Categories<span class="ot">.</span>Category<span class="ot">.</span>Cartesian</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Categories<span class="ot">.</span>Object<span class="ot">.</span>Product<span class="ot">.</span>Morphisms 𝒞 <span class="kw">using</span> <span class="ot">(</span>[<span class="ot">_</span><span class="cn">⇒</span><span class="ot">_</span>]<span class="ot">_</span>×id<span class="ot">)</span></span></code></pre></div>
+<p>We assume throughout that we have a given Cartesian closed category
+with object <span class="math inline">\(\mathcal{O}\)</span> and so our
+development is a parameterized module fixing a particular Cartesian
+closed category along with an object of the category:</p>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> CCCSemantics</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">{</span>o ℓ e<span class="ot">}</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">(</span>𝒞 <span class="ot">:</span> Category o ℓ e<span class="ot">)</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">(</span>CC-𝒞 <span class="ot">:</span> CartesianClosed 𝒞<span class="ot">)</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="ot">(</span>𝒪 <span class="ot">:</span> Category<span class="ot">.</span>Obj 𝒞<span class="ot">)</span></span></code></pre></div>
+<p>We then introduce these various shortenings for the various bits of
+categorical structure that <span
+class="math inline">\(\mathcal{C}\)</span> has:</p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> 𝒞 <span class="ot">=</span> Category 𝒞</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> CC-𝒞 <span class="ot">=</span> CartesianClosed CC-𝒞</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> Cart <span class="ot">=</span> Cartesian CC-𝒞<span class="ot">.</span>cartesian</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> 𝒞-× <span class="ot">=</span> BinaryProducts Cart<span class="ot">.</span>products</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> 𝒞-Pr <span class="ot">(</span>A B <span class="ot">:</span> 𝒞<span class="ot">.</span>Obj<span class="ot">)</span> <span class="ot">=</span> Product <span class="ot">(</span>𝒞-×<span class="ot">.</span>product <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">})</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> 𝒞-𝟙 <span class="ot">=</span> Terminal Cart<span class="ot">.</span>terminal</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> exp <span class="ot">(</span>A B <span class="ot">:</span> 𝒞<span class="ot">.</span>Obj<span class="ot">)</span> <span class="ot">=</span>  Exponential <span class="ot">(</span>CC-𝒞<span class="ot">.</span>exp <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">})</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> Exp <span class="ot">=</span> CC-𝒞<span class="ot">.</span>exp</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Categories<span class="ot">.</span>Object<span class="ot">.</span>Product<span class="ot">.</span>Morphisms 𝒞 <span class="kw">using</span> <span class="ot">(</span>[<span class="ot">_</span><span class="cn">⇒</span><span class="ot">_</span>]<span class="ot">_</span>×id<span class="ot">)</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><dfn>CC-Pr</dfn> <span class="ot">:</span> <span class="ot">{</span>A B <span class="ot">:</span> 𝒞<span class="ot">.</span>Obj<span class="ot">}</span> <span class="ot">→</span> Product 𝒞 A B</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><dfn>CC-Pr</dfn> <span class="ot">=</span> 𝒞-×<span class="ot">.</span>product</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a><dfn>Exp-Pr</dfn> <span class="ot">:</span> <span class="ot">{</span>A B <span class="ot">:</span> 𝒞<span class="ot">.</span>Obj<span class="ot">}</span> <span class="ot">→</span> Product 𝒞 <span class="ot">(</span>CC-𝒞<span class="ot">.</span>exp<span class="ot">.</span>B^A <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">})</span> A</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a><dfn>Exp-Pr</dfn> <span class="ot">=</span> Exp<span class="ot">.</span>product</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>𝒞⇒</dfn><span class="ot">_</span> <span class="ot">:</span> <span class="ot">(</span>A <span class="ot">:</span> 𝒞<span class="ot">.</span>Obj<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>B <span class="ot">:</span> 𝒞<span class="ot">.</span>Obj<span class="ot">)</span> <span class="ot">→</span> 𝒞<span class="ot">.</span>Obj</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a><span class="ot">_</span><dfn>𝒞⇒</dfn><span class="ot">_</span> A B <span class="ot">=</span> E<span class="ot">.</span>B^A</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>  <span class="kw">module</span> E <span class="ot">=</span> exp A B</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a><dfn>𝒞Hom</dfn> <span class="ot">:</span> Rel 𝒞<span class="ot">.</span>Obj ℓ</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a><dfn>𝒞Hom</dfn> <span class="ot">=</span> 𝒞<span class="ot">._</span><span class="cn">⇒</span><span class="ot">_</span></span></code></pre></div>
+<p>We can then start to give our generalization of the set-theoretic
+semantics. Firstly, types are interpreted inductively on their structure
+as we would expect:</p>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>⟦<span class="ot">_</span>⟧𝕋 <span class="ot">:</span> <dfn>Ty</dfn> <span class="ot">→</span> 𝒞<span class="ot">.</span>Obj</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>⟦ <span class="cn">𝕆</span> ⟧𝕋 <span class="ot">=</span> 𝒪</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- <span class="cn">𝟙</span> is interpreted as the terminal object</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>⟦ <span class="cn">𝟙</span> ⟧𝕋 <span class="ot">=</span> 𝒞-𝟙<span class="ot">.</span>⊤</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- Function types are interpreted as function objects</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>⟦ dom 𝕋⇒ cod ⟧𝕋 <span class="ot">=</span> ⟦ dom ⟧𝕋 <dfn>𝒞⇒</dfn> ⟦ cod ⟧𝕋</span></code></pre></div>
+<p>Similarly, contexts are again interpreted as products, where an
+n-arity product: <span class="math inline">\(\mathrm{X}_1 \times \cdots
+\times \mathrm{X}_{\mathrm{n}}\)</span> is defined to be the
+left-parenthesized iterated binary product <span
+class="math inline">\(\mathrm{X}_1 \times \cdots \times
+\mathrm{X}_{\mathrm{n}} := (\cdots(\mathrm{X}_1 \times \mathrm{X}_2)
+\times \mathrm{X}_3)\times \ldots \times \mathrm{X}_{\mathrm{n}- 1}
+)\times \mathrm{X}_{\mathrm{n}}\)</span></p>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>⟦<span class="ot">_</span>⟧ℂ <span class="ot">:</span> <span class="cn">Ctxt</span> <span class="ot">→</span> 𝒞<span class="ot">.</span>Obj</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>⟦ [] ⟧ℂ <span class="ot">=</span> 𝒞-𝟙<span class="ot">.</span>⊤</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>⟦ <span class="ot">(</span>Γ <span class="cn">▸</span> t<span class="ot">)</span> ⟧ℂ <span class="ot">=</span> ⟦ Γ ⟧ℂ × ⟦ t ⟧𝕋</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> 𝒞-×</span></code></pre></div>
+<p>Variables are then once again iterated projections, only this time
+the projection morphisms are generalized to those that exist in any CCC.
+As before, we define this inductively based on the debruijn index, using
+the current top type if the variable is <code>Z</code>, and otherwise
+compose with <span class="math inline">\(\pi_1\)</span> and recurse:</p>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>⟦var⟧ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>ty Γ<span class="ot">}</span> <span class="ot">→</span> ty ∈ Γ <span class="ot">→</span> <span class="ot">(</span><dfn>𝒞Hom</dfn> ⟦ Γ ⟧ℂ ⟦ ty ⟧𝕋<span class="ot">)</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>⟦var⟧ <span class="cn">Z</span> <span class="ot">=</span> 𝒞-×<span class="ot">.</span>π₂</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>⟦var⟧ <span class="ot">(</span><span class="cn">S</span> pf<span class="ot">)</span> <span class="ot">=</span> ⟦var⟧ pf 𝒞<span class="ot">.</span>∘ 𝒞-×<span class="ot">.</span>π₁</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> 𝒞</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> 𝒞-×</span></code></pre></div>
+<p>We then get to our generalization of the interpretation of terms we
+hinted at in the beginning:</p>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>⟦<span class="ot">_</span>⟧ <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ t<span class="ot">}</span> <span class="ot">→</span> <dfn>Tm</dfn> Γ t <span class="ot">→</span> <span class="ot">(</span><dfn>𝒞Hom</dfn> ⟦ Γ ⟧ℂ ⟦ t ⟧𝕋<span class="ot">)</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>⟦ <span class="cn">var</span> v ⟧ <span class="ot">=</span> ⟦var⟧ v</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>⟦ <span class="ot">_</span><span class="cn">∙</span><span class="ot">_</span> <span class="ot">{</span>dom <span class="ot">=</span> d<span class="ot">}</span> <span class="ot">{</span>cod <span class="ot">=</span> c<span class="ot">}</span> rator rand ⟧ <span class="ot">=</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  E<span class="ot">.</span><dfn>eval</dfn> 𝒞<span class="ot">.</span>∘ E<span class="ot">.</span>product<span class="ot">.</span>⟨  ⟦ rator ⟧ <span class="cn">,</span>  ⟦ rand ⟧ ⟩</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> 𝒞</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">module</span> E <span class="ot">=</span> exp ⟦ d ⟧𝕋 ⟦ c ⟧𝕋</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>⟦ <span class="cn">fun</span> <span class="ot">{</span>dom <span class="ot">=</span> d<span class="ot">}</span> <span class="ot">{</span>cod <span class="ot">=</span> c<span class="ot">}</span> body ⟧ <span class="ot">=</span> E<span class="ot">.</span><dfn>λg</dfn> 𝒞-×<span class="ot">.</span>product ⟦ body ⟧</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">module</span> E <span class="ot">=</span> exp ⟦ d ⟧𝕋 ⟦ c ⟧𝕋</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>⟦ <span class="cn">tt</span> ⟧ <span class="ot">=</span> 𝒞-𝟙<span class="ot">.</span>!</span></code></pre></div>
+<p>We note several things: - In the semantics for function application
+we take a composition of the fork
+<code>⟨  ⟦ rator ⟧ ,  ⟦ rand ⟧ ⟩</code> with the function
+<code>E.eval</code>, this is the universal function that any function
+object in a CCC has with type signature:</p>
+<div class="sourceCode" id="cb36"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><dfn>eval</dfn> <span class="ot">:</span> B^A×A <span class="cn">⇒</span> B</span></code></pre></div>
+<ul>
+<li>Similarly, functions are interpreted using the function <span
+class="math inline">\(\lambda\mathrm{g}\)</span>. This is one of the
+fields an Exponential object (as defined in
+<code>agda-categories</code>) has, and has type:</li>
+</ul>
+<div class="sourceCode" id="cb37"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><dfn>λg</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">(</span>X×A <span class="ot">:</span> Product X A<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>Product<span class="ot">.</span>A×B X×A <span class="cn">⇒</span> B<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>X <span class="cn">⇒</span> B^A<span class="ot">)</span></span></code></pre></div>
+<p>In more conventional notation this is a function <span
+class="math inline">\(\operatorname{Hom}(\mathrm{X}\times \mathcal{A},
+B) \rightarrow \operatorname{Hom}(X, B^A)\)</span>. This is the usual
+operation of currying, or said another way, this is the universal arrow
+distinguishing the function object, wherein we can also recover the
+original arrow by pairing with this arrow and using <code>eval</code>. -
+The arrow <code>𝒞-𝟙.!</code> is just the universal arrow to the terminal
+object.</p>
+<p>We again have a substitution lemma, saying just the same as before.
+We give the proof, to give the flavour that proving things in a CCC is
+just the same sort of equational reasoning we would do when reasoning
+about the set theoretical model:</p>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><dfn>sub-lem</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ Δ t<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>σ <span class="ot">:</span> <dfn>Sub</dfn> Δ Γ<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>tm <span class="ot">:</span> <dfn>Tm</dfn> Γ t<span class="ot">)</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>      <span class="ot">→</span> ⟦ <dfn>subst</dfn> σ tm  ⟧ 𝒞<span class="ot">.</span>≈ <span class="ot">(</span>⟦ tm ⟧ 𝒞<span class="ot">.</span>∘ ⟦ σ ⟧𝕊<span class="ot">)</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><dfn>sub-lem</dfn> σ <span class="ot">(</span><span class="cn">var</span> v<span class="ot">)</span> <span class="ot">=</span> ⟦var⟧-Sub σ v</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><dfn>sub-lem</dfn> σ <span class="ot">(</span>rator <span class="cn">∙</span> rand<span class="ot">)</span> <span class="ot">=</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>      begin</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>        CC-𝒞<span class="ot">.</span>exp<span class="ot">.</span><dfn>eval</dfn> 𝒞<span class="ot">.</span>∘ Pr<span class="ot">.</span>⟨ ⟦ <dfn>subst</dfn> σ rator ⟧ <span class="cn">,</span> ⟦ <dfn>subst</dfn> σ rand ⟧ ⟩</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>          <span class="co">-- Use <dfn>lemma</dfn> to factor out ⟦ σ ⟧𝕊 from product</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>          ≈⟨ ∘-resp-≈ Equiv<span class="ot">.</span>refl <dfn>lemma</dfn> ⟩</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>        CC-𝒞<span class="ot">.</span>exp<span class="ot">.</span><dfn>eval</dfn> 𝒞<span class="ot">.</span>∘ <span class="ot">(</span>Pr<span class="ot">.</span>⟨ ⟦ rator ⟧ <span class="cn">,</span> ⟦ rand ⟧ ⟩ 𝒞<span class="ot">.</span>∘ ⟦ σ ⟧𝕊<span class="ot">)</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>          <span class="co">-- Reassociate</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>          ≈⟨ sym-assoc ⟩</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>        <span class="ot">(</span>CC-𝒞<span class="ot">.</span>exp<span class="ot">.</span><dfn>eval</dfn> 𝒞<span class="ot">.</span>∘ Pr<span class="ot">.</span>⟨ ⟦ rator ⟧ <span class="cn">,</span> ⟦ rand ⟧ ⟩<span class="ot">)</span> 𝒞<span class="ot">.</span>∘ ⟦ σ ⟧𝕊 ∎</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>      <span class="kw">where</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">module</span> Pr <span class="ot">=</span> CC-𝒞<span class="ot">.</span>exp<span class="ot">.</span>product</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>        <span class="kw">open</span> Categories<span class="ot">.</span>Category<span class="ot">.</span>Category<span class="ot">.</span>HomReasoning 𝒞</span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>        <dfn>lemma</dfn> <span class="ot">:</span></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>          <span class="ot">(</span>Pr<span class="ot">.</span>⟨ ⟦ <dfn>subst</dfn> σ rator ⟧ <span class="cn">,</span> ⟦ <dfn>subst</dfn> σ rand ⟧ ⟩<span class="ot">)</span></span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>            𝒞<span class="ot">.</span>≈</span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>          <span class="ot">(</span>Pr<span class="ot">.</span>⟨ ⟦ rator ⟧ <span class="cn">,</span> ⟦ rand ⟧ ⟩ 𝒞<span class="ot">.</span>∘ ⟦ σ ⟧𝕊<span class="ot">)</span></span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>        <dfn>lemma</dfn> <span class="ot">=</span></span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>          begin</span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>            <span class="ot">(</span>Pr<span class="ot">.</span>⟨ ⟦ <dfn>subst</dfn> σ rator ⟧ <span class="cn">,</span> ⟦ <dfn>subst</dfn> σ rand ⟧ ⟩<span class="ot">)</span></span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>              <span class="co">-- Apply <dfn>sub-lem</dfn> inductively to both components</span></span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a>              ≈⟨ Pr<span class="ot">.</span>⟨⟩-cong₂ <span class="ot">(</span><dfn>sub-lem</dfn> σ rator<span class="ot">)</span> <span class="ot">(</span><dfn>sub-lem</dfn> σ rand<span class="ot">)</span> ⟩</span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a>            <span class="ot">(</span>Pr<span class="ot">.</span>⟨ ⟦ rator ⟧ 𝒞<span class="ot">.</span>∘ ⟦ σ ⟧𝕊 <span class="cn">,</span> ⟦ rand ⟧ 𝒞<span class="ot">.</span>∘ ⟦ σ ⟧𝕊 ⟩<span class="ot">)</span></span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true" tabindex="-1"></a>              <span class="co">-- Factor out common ⟦ σ ⟧𝕊 from product</span></span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true" tabindex="-1"></a>              ≈⟨ Equiv<span class="ot">.</span>sym Pr<span class="ot">.</span>∘-distribʳ-⟨⟩ ⟩</span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true" tabindex="-1"></a>            <span class="ot">(</span>Pr<span class="ot">.</span>⟨ ⟦ rator ⟧ <span class="cn">,</span> ⟦ rand ⟧ ⟩ 𝒞<span class="ot">.</span>∘ ⟦ σ ⟧𝕊<span class="ot">)</span> ∎</span>
+<span id="cb38-30"><a href="#cb38-30" aria-hidden="true" tabindex="-1"></a><dfn>sub-lem</dfn> σ <span class="ot">(</span><span class="cn">fun</span> <span class="ot">{</span>dom <span class="ot">=</span> d<span class="ot">}</span> tm<span class="ot">)</span> <span class="ot">=</span></span>
+<span id="cb38-31"><a href="#cb38-31" aria-hidden="true" tabindex="-1"></a>      begin</span>
+<span id="cb38-32"><a href="#cb38-32" aria-hidden="true" tabindex="-1"></a>        Exp<span class="ot">.</span><dfn>λg</dfn> <dfn>CC-Pr</dfn> ⟦ <dfn>subst</dfn> <span class="ot">(</span><dfn>Sub</dfn><span class="ot">.</span><dfn>ext</dfn> σ<span class="ot">)</span> tm ⟧</span>
+<span id="cb38-33"><a href="#cb38-33" aria-hidden="true" tabindex="-1"></a>          ≈⟨ Exp<span class="ot">.</span>λ-cong <dfn>CC-Pr</dfn> <span class="ot">(</span><dfn>sub-lem</dfn> <span class="ot">(</span><dfn>Sub</dfn><span class="ot">.</span><dfn>ext</dfn> σ<span class="ot">)</span> tm<span class="ot">)</span> ⟩</span>
+<span id="cb38-34"><a href="#cb38-34" aria-hidden="true" tabindex="-1"></a>          <span class="co">-- inductively rewrite <dfn>subst</dfn> (<dfn>Sub</dfn>.<dfn>ext</dfn> σ) tm</span></span>
+<span id="cb38-35"><a href="#cb38-35" aria-hidden="true" tabindex="-1"></a>        CC-𝒞<span class="ot">.</span>exp<span class="ot">.</span><dfn>λg</dfn> <dfn>CC-Pr</dfn> <span class="ot">(</span>⟦ tm ⟧ 𝒞<span class="ot">.</span>∘ ⟦ <dfn>Sub</dfn><span class="ot">.</span><dfn>ext</dfn> <span class="ot">{</span>ty <span class="ot">=</span> d<span class="ot">}</span> σ ⟧𝕊<span class="ot">)</span></span>
+<span id="cb38-36"><a href="#cb38-36" aria-hidden="true" tabindex="-1"></a>          ≈⟨ Exp<span class="ot">.</span>λ-cong <dfn>CC-Pr</dfn> <span class="ot">(</span>∘-resp-≈ Equiv<span class="ot">.</span>refl <span class="ot">(</span>⟦sub⟧-Wk σ<span class="ot">))</span> ⟩</span>
+<span id="cb38-37"><a href="#cb38-37" aria-hidden="true" tabindex="-1"></a>          <span class="co">-- use ⟦sub⟧-Wk to rewrite ⟦ <dfn>Sub</dfn>.<dfn>ext</dfn> σ ⟧𝕊</span></span>
+<span id="cb38-38"><a href="#cb38-38" aria-hidden="true" tabindex="-1"></a>        Exp<span class="ot">.</span><dfn>λg</dfn> <dfn>CC-Pr</dfn> <span class="ot">(</span>⟦ tm ⟧ 𝒞<span class="ot">.</span>∘ [ <dfn>CC-Pr</dfn> <span class="cn">⇒</span> <dfn>CC-Pr</dfn> ] ⟦ σ ⟧𝕊 ×id<span class="ot">)</span></span>
+<span id="cb38-39"><a href="#cb38-39" aria-hidden="true" tabindex="-1"></a>          ≈⟨ Equiv<span class="ot">.</span>sym <span class="ot">(</span>CC-𝒞<span class="ot">.</span>exp<span class="ot">.</span><dfn>subst</dfn> <dfn>CC-Pr</dfn> <dfn>CC-Pr</dfn><span class="ot">)</span> ⟩</span>
+<span id="cb38-40"><a href="#cb38-40" aria-hidden="true" tabindex="-1"></a>          <span class="co">-- factor out component in <dfn>λg</dfn></span></span>
+<span id="cb38-41"><a href="#cb38-41" aria-hidden="true" tabindex="-1"></a>        Exp<span class="ot">.</span><dfn>λg</dfn> <dfn>CC-Pr</dfn> ⟦ tm ⟧ 𝒞<span class="ot">.</span>∘ ⟦ σ ⟧𝕊 ∎</span>
+<span id="cb38-42"><a href="#cb38-42" aria-hidden="true" tabindex="-1"></a>      <span class="kw">where</span></span>
+<span id="cb38-43"><a href="#cb38-43" aria-hidden="true" tabindex="-1"></a>        <span class="kw">open</span> Categories<span class="ot">.</span>Category<span class="ot">.</span>Category<span class="ot">.</span>HomReasoning 𝒞</span>
+<span id="cb38-44"><a href="#cb38-44" aria-hidden="true" tabindex="-1"></a>    <dfn>sub-lem</dfn> <span class="ot">{</span>Γ <span class="ot">=</span> Γ<span class="ot">}</span> <span class="ot">{</span>Δ <span class="ot">=</span> Δ<span class="ot">}</span> σ <span class="cn">tt</span> <span class="ot">=</span></span>
+<span id="cb38-45"><a href="#cb38-45" aria-hidden="true" tabindex="-1"></a>      𝒞-𝟙<span class="ot">.</span>!-unique <span class="ot">(</span>𝒞<span class="ot">._</span>∘<span class="ot">_</span> <span class="ot">{</span>B <span class="ot">=</span> ⟦ Γ ⟧ℂ<span class="ot">}</span> <span class="ot">(</span>⟦<span class="ot">_</span>⟧ <span class="ot">{</span>Γ <span class="ot">=</span> Γ<span class="ot">}</span> <span class="cn">tt</span><span class="ot">)</span> ⟦ σ ⟧𝕊<span class="ot">)</span></span></code></pre></div>
+<p>We rely on two lemmas, the first is just the specialized version for
+the variable case<a href="#fn5" class="footnote-ref" id="fnref5"
+role="doc-noteref"><sup>5</sup></a>:</p>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>⟦var⟧-Sub <span class="ot">:</span>  <span class="ot">∀</span> <span class="ot">{</span>Γ Ξ ty<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>τ <span class="ot">:</span> <dfn>Sub</dfn> Ξ Γ<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">(</span>v <span class="ot">:</span> ty ∈ Γ<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  ⟦ τ v ⟧ 𝒞<span class="ot">.</span>≈ <span class="ot">(</span>⟦var⟧ v 𝒞<span class="ot">.</span>∘ ⟦ τ ⟧𝕊<span class="ot">)</span></span></code></pre></div>
+<p>The second is a weakening lemma <a href="#fn6" class="footnote-ref"
+id="fnref6" role="doc-noteref"><sup>6</sup></a>:</p>
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>⟦sub⟧-Wk <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ Δ <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">}{</span>ty <span class="ot">:</span> <dfn>Ty</dfn><span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>σ <span class="ot">:</span> <dfn>Sub</dfn> Δ Γ<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  ⟦ <dfn>Sub</dfn><span class="ot">.</span><dfn>ext</dfn> <span class="ot">{</span>ty <span class="ot">=</span> ty<span class="ot">}</span> σ ⟧𝕊 𝒞<span class="ot">.</span>≈ <span class="ot">(</span>[ <dfn>CC-Pr</dfn> <span class="cn">⇒</span> <dfn>CC-Pr</dfn> ] ⟦ σ ⟧𝕊 ×id<span class="ot">)</span></span></code></pre></div>
+<p>This says that a weakened extension <span
+class="math inline">\(\sigma\)</span> acts on a product as the product
+map <span class="math inline">\(⟦ \sigma ⟧ \times  ⟦ id ⟧\)</span>, in
+other words, it semantically doesn’t affect the topmost weakened
+variable, and acts the same as <span
+class="math inline">\(\sigma\)</span> on all other variables.</p>
+<p>This is again the key lemma we need to prove soundness. Here is the
+shape of the proof:</p>
+<div class="sourceCode" id="cb41"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">:</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>      <span class="ot">{</span>Γ <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">}</span> <span class="ot">{</span>t <span class="ot">:</span> <dfn>Ty</dfn><span class="ot">}</span> <span class="ot">→</span> <span class="ot">{</span>lhs rhs <span class="ot">:</span> <dfn>Tm</dfn> Γ t<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>      <span class="ot">(</span>lhs ≡Tm rhs<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>⟦ lhs ⟧<span class="ot">)</span> 𝒞<span class="ot">.</span>≈ <span class="ot">(</span>⟦ rhs ⟧<span class="ot">)</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">reflexivity</span> tm<span class="ot">)</span> <span class="ot">=</span> Equiv<span class="ot">.</span>refl</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">symmetry</span> eq<span class="ot">)</span> <span class="ot">=</span> Equiv<span class="ot">.</span>sym <span class="ot">(</span>⟦⟧-Soundness eq<span class="ot">)</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">transitivity</span> eq₁ eq₂<span class="ot">)</span> <span class="ot">=</span> Equiv<span class="ot">.</span>trans <span class="ot">(</span>⟦⟧-Soundness eq₁<span class="ot">)</span> <span class="ot">(</span>⟦⟧-Soundness eq₂<span class="ot">)</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">β-red</span> body arg<span class="ot">)</span> <span class="ot">=</span> Equiv<span class="ot">.</span>sym <span class="ot">(</span><dfn>β-lemma</dfn> body arg<span class="ot">)</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">η-fn</span> fn-tm<span class="ot">)</span> <span class="ot">=</span> η-lemma fn-tm</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">𝟙-η</span> tm-𝟙<span class="ot">)</span> <span class="ot">=</span> Equiv<span class="ot">.</span>sym <span class="ot">(</span>𝒞-𝟙<span class="ot">.</span>!-unique ⟦ tm-𝟙 ⟧<span class="ot">)</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">var-cong</span> <span class="ot">{</span>v <span class="ot">=</span> v<span class="ot">}</span> <span class="ot">{</span>v&#39; <span class="ot">=</span> v&#39;<span class="ot">}</span> v≡v&#39;<span class="ot">)</span> <span class="ot">=</span> var-lemma v v&#39; v≡v&#39;</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">∙-cong</span> fn₁ fn₂ arg₁ arg₂ eq₁ eq₂<span class="ot">)</span> <span class="ot">=</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>  begin</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>    CC-𝒞<span class="ot">.</span>exp<span class="ot">.</span><dfn>eval</dfn> 𝒞<span class="ot">.</span>∘ CC-𝒞<span class="ot">.</span>exp<span class="ot">.</span>product<span class="ot">.</span>⟨ ⟦ fn₁ ⟧ <span class="cn">,</span> ⟦ arg₁ ⟧ ⟩</span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>      <span class="co">-- Apply ⟦⟧-Soundness inductively to both components</span></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>      ≈⟨ ∘-resp-≈</span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>               Equiv<span class="ot">.</span>refl</span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>               <span class="ot">(</span>Exp<span class="ot">.</span>product<span class="ot">.</span>⟨⟩-cong₂ <span class="ot">(</span>⟦⟧-Soundness eq₁<span class="ot">)</span> <span class="ot">(</span>⟦⟧-Soundness eq₂<span class="ot">))</span></span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>       ⟩</span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>    CC-𝒞<span class="ot">.</span>exp<span class="ot">.</span><dfn>eval</dfn> 𝒞<span class="ot">.</span>∘ CC-𝒞<span class="ot">.</span>exp<span class="ot">.</span>product<span class="ot">.</span>⟨ ⟦ fn₂ ⟧ <span class="cn">,</span> ⟦ arg₂ ⟧ ⟩ ∎</span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>      <span class="kw">where</span></span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>        <span class="kw">open</span> Categories<span class="ot">.</span>Category<span class="ot">.</span>Category<span class="ot">.</span>HomReasoning 𝒞</span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>⟦⟧-Soundness <span class="ot">(</span><span class="cn">fun-cong</span> bd₁ bd₂ eq<span class="ot">)</span> <span class="ot">=</span> Exp<span class="ot">.</span>λ-cong 𝒞-×<span class="ot">.</span>product <span class="ot">(</span>⟦⟧-Soundness eq<span class="ot">)</span></span></code></pre></div>
+<p>Here we dispatch each non-trivial case to some specialized lemma. For
+instance here is how the proof for <code>β-red</code> looks:</p>
+<div class="sourceCode" id="cb42"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><dfn>β-lemma</dfn> <span class="ot">:</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">{</span>Γ <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">}</span> <span class="ot">{</span>d c <span class="ot">:</span> <dfn>Ty</dfn><span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>body <span class="ot">:</span> <dfn>Tm</dfn> <span class="ot">(</span>Γ <span class="cn">▸</span> d<span class="ot">)</span> c<span class="ot">)</span> <span class="ot">(</span>arg <span class="ot">:</span> <dfn>Tm</dfn> Γ d<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  ⟦ body <dfn>/[</dfn> arg ] ⟧ 𝒞<span class="ot">.</span>≈</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  Exp<span class="ot">.</span><dfn>eval</dfn> 𝒞<span class="ot">.</span>∘ Exp<span class="ot">.</span>product<span class="ot">.</span>⟨ Exp<span class="ot">.</span><dfn>λg</dfn> 𝒞-×<span class="ot">.</span>product ⟦ body ⟧ <span class="cn">,</span> ⟦ arg ⟧ ⟩</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><dfn>β-lemma</dfn> <span class="ot">{</span>Γ<span class="ot">}{</span>d<span class="ot">}{</span>c<span class="ot">}</span> body arg <span class="ot">=</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  begin</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>     ⟦ body <dfn>/[</dfn> arg ] ⟧</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>         <span class="co">-- def of /[_]</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>         ≈⟨ Equiv<span class="ot">.</span>refl ⟩</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>     ⟦ <dfn>Sub</dfn><span class="ot">.</span><dfn>subst</dfn> <span class="ot">(</span><dfn>sub/</dfn> arg<span class="ot">)</span> body ⟧</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>         <span class="co">-- rewrite using substitution <dfn>lemma</dfn></span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>         ≈⟨ <dfn>sub-lem</dfn> <span class="ot">(</span><dfn>sub/</dfn> arg<span class="ot">)</span> body ⟩</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>     ⟦ body ⟧ 𝒞<span class="ot">.</span>∘ ⟦ <dfn>sub/</dfn> arg ⟧𝕊</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>         <span class="co">-- definition of <dfn>sub/</dfn></span></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>         ≈⟨ Equiv<span class="ot">.</span>refl ⟩</span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>         <span class="co">-- definition of <dfn>sub/</dfn></span></span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>     ⟦ body ⟧ 𝒞<span class="ot">.</span>∘ ⟨ ⟦ <span class="ot">(</span><span class="cn">var</span> <span class="ot">{</span>Γ <span class="ot">=</span> Γ<span class="ot">})</span> ⟧𝕊 <span class="cn">,</span> ⟦ arg ⟧ ⟩</span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>         <span class="co">-- definition of <dfn>Sub-id</dfn></span></span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>         ≈⟨ Equiv<span class="ot">.</span>refl ⟩</span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>     ⟦ body ⟧ 𝒞<span class="ot">.</span>∘ ⟨ ⟦ <span class="ot">(</span><dfn>Sub-id</dfn> <span class="ot">{</span>Γ <span class="ot">=</span> Γ<span class="ot">})</span> ⟧𝕊 <span class="cn">,</span> ⟦ arg ⟧ ⟩</span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>         <span class="co">-- rewrite ⟦ <dfn>Sub-id</dfn> ⟧ as 𝒞.id</span></span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a>         ≈⟨ ∘-resp-≈ Equiv<span class="ot">.</span>refl <span class="ot">(</span>⟨⟩-congʳ <span class="ot">(</span>⟦⟧-Sub-id <span class="ot">{</span>Γ <span class="ot">=</span> Γ<span class="ot">}))</span> ⟩</span>
+<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a>     ⟦ body ⟧ 𝒞<span class="ot">.</span>∘ ⟨ 𝒞<span class="ot">.</span>id <span class="cn">,</span> ⟦ arg ⟧ ⟩</span>
+<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a>         <span class="co">-- inverse β for function objects:</span></span>
+<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a>         <span class="co">--   rewrite ⟦ body ⟧ to Exp.<dfn>eval</dfn> ∘ λ ⟦ body ⟧ × id</span></span>
+<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a>         <span class="co">-- In more detail, we have:</span></span>
+<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>         <span class="co">--   g : A × B → C ≈</span></span>
+<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a>         <span class="co">--     A × B -- ĝ × id --&gt; C^B × B -- <dfn>eval</dfn> --&gt; C</span></span>
+<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a>         ≈⟨ ∘-resp-≈ <span class="ot">(</span>Equiv<span class="ot">.</span>sym <span class="ot">(</span>Exp<span class="ot">.</span>β 𝒞-×<span class="ot">.</span>product<span class="ot">))</span> Equiv<span class="ot">.</span>refl ⟩</span>
+<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a>     <span class="ot">(</span>Exp<span class="ot">.</span><dfn>eval</dfn> 𝒞<span class="ot">.</span>∘ <span class="ot">(</span>[ 𝒞-×<span class="ot">.</span>product <span class="cn">⇒</span> Prod ] Exp<span class="ot">.</span><dfn>λg</dfn> 𝒞-×<span class="ot">.</span>product ⟦ body ⟧ ×id<span class="ot">))</span> 𝒞<span class="ot">.</span>∘ ⟨ 𝒞<span class="ot">.</span>id <span class="cn">,</span> ⟦ arg ⟧ ⟩</span>
+<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a>         <span class="co">-- reassociate</span></span>
+<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a>         ≈⟨ assoc ⟩</span>
+<span id="cb42-33"><a href="#cb42-33" aria-hidden="true" tabindex="-1"></a>     Exp<span class="ot">.</span><dfn>eval</dfn> 𝒞<span class="ot">.</span>∘ <span class="ot">((</span>[ 𝒞-×<span class="ot">.</span>product <span class="cn">⇒</span> Prod ] Exp<span class="ot">.</span><dfn>λg</dfn> 𝒞-×<span class="ot">.</span>product ⟦ body ⟧ ×id<span class="ot">)</span> 𝒞<span class="ot">.</span>∘ ⟨ 𝒞<span class="ot">.</span>id <span class="cn">,</span> ⟦ arg ⟧ ⟩<span class="ot">)</span></span>
+<span id="cb42-34"><a href="#cb42-34" aria-hidden="true" tabindex="-1"></a>         <span class="co">-- definition of [_]_×id in terms of [_]_×_</span></span>
+<span id="cb42-35"><a href="#cb42-35" aria-hidden="true" tabindex="-1"></a>         ≈⟨ Equiv<span class="ot">.</span>refl ⟩</span>
+<span id="cb42-36"><a href="#cb42-36" aria-hidden="true" tabindex="-1"></a>     Exp<span class="ot">.</span><dfn>eval</dfn> 𝒞<span class="ot">.</span>∘ <span class="ot">((</span>𝒫𝓇<span class="ot">.</span>[ 𝒞-×<span class="ot">.</span>product <span class="cn">⇒</span> Prod ] <span class="ot">(</span>Exp<span class="ot">.</span><dfn>λg</dfn> 𝒞-×<span class="ot">.</span>product ⟦ body ⟧<span class="ot">)</span> × 𝒞<span class="ot">.</span>id<span class="ot">)</span> 𝒞<span class="ot">.</span>∘ ⟨ 𝒞<span class="ot">.</span>id <span class="cn">,</span> ⟦ arg ⟧ ⟩<span class="ot">)</span></span>
+<span id="cb42-37"><a href="#cb42-37" aria-hidden="true" tabindex="-1"></a>         <span class="co">-- rewrite using ×∘⟨⟩ i.e.</span></span>
+<span id="cb42-38"><a href="#cb42-38" aria-hidden="true" tabindex="-1"></a>         <span class="co">-- f×g∘⟨h₁,h₂⟩ ≈ ⟨f ∘ h₁, g ∘ h₂⟩</span></span>
+<span id="cb42-39"><a href="#cb42-39" aria-hidden="true" tabindex="-1"></a>         ≈⟨ ∘-resp-≈ Equiv<span class="ot">.</span>refl [ 𝒞-×<span class="ot">.</span>product <span class="cn">⇒</span> Prod ]×∘⟨⟩ ⟩</span>
+<span id="cb42-40"><a href="#cb42-40" aria-hidden="true" tabindex="-1"></a>     Exp<span class="ot">.</span><dfn>eval</dfn> 𝒞<span class="ot">.</span>∘ Exp<span class="ot">.</span>product<span class="ot">.</span>⟨ <span class="ot">(</span>Exp<span class="ot">.</span><dfn>λg</dfn> 𝒞-×<span class="ot">.</span>product ⟦ body ⟧<span class="ot">)</span> 𝒞<span class="ot">.</span>∘ 𝒞<span class="ot">.</span>id <span class="cn">,</span> 𝒞<span class="ot">.</span>id 𝒞<span class="ot">.</span>∘ ⟦ arg ⟧ ⟩</span>
+<span id="cb42-41"><a href="#cb42-41" aria-hidden="true" tabindex="-1"></a>         <span class="co">-- Remove composition with 𝒞.id</span></span>
+<span id="cb42-42"><a href="#cb42-42" aria-hidden="true" tabindex="-1"></a>         ≈⟨ ∘-resp-≈ Equiv<span class="ot">.</span>refl <span class="ot">(</span>Exp<span class="ot">.</span>product<span class="ot">.</span>⟨⟩-cong₂ identityʳ identityˡ<span class="ot">)</span> ⟩</span>
+<span id="cb42-43"><a href="#cb42-43" aria-hidden="true" tabindex="-1"></a>      Exp<span class="ot">.</span><dfn>eval</dfn> 𝒞<span class="ot">.</span>∘ Exp<span class="ot">.</span>product<span class="ot">.</span>⟨ Exp<span class="ot">.</span><dfn>λg</dfn> 𝒞-×<span class="ot">.</span>product ⟦ body ⟧ <span class="cn">,</span> ⟦ arg ⟧ ⟩ ∎</span>
+<span id="cb42-44"><a href="#cb42-44" aria-hidden="true" tabindex="-1"></a>     <span class="kw">where</span></span>
+<span id="cb42-45"><a href="#cb42-45" aria-hidden="true" tabindex="-1"></a>          <span class="kw">open</span> <span class="kw">import</span> Categories<span class="ot">.</span>Object<span class="ot">.</span>Product<span class="ot">.</span>Morphisms 𝒞 as 𝒫𝓇</span>
+<span id="cb42-46"><a href="#cb42-46" aria-hidden="true" tabindex="-1"></a>            <span class="kw">using</span> <span class="ot">(</span>[<span class="ot">_</span><span class="cn">⇒</span><span class="ot">_</span>]<span class="ot">_</span>×<span class="ot">_;</span> [<span class="ot">_</span><span class="cn">⇒</span><span class="ot">_</span>]×∘⟨⟩<span class="ot">)</span></span>
+<span id="cb42-47"><a href="#cb42-47" aria-hidden="true" tabindex="-1"></a>          Prod <span class="ot">=</span> Exp<span class="ot">.</span>product</span>
+<span id="cb42-48"><a href="#cb42-48" aria-hidden="true" tabindex="-1"></a>          <span class="kw">open</span> Categories<span class="ot">.</span>Category<span class="ot">.</span>Category<span class="ot">.</span>HomReasoning 𝒞</span></code></pre></div>
+<p>The main thing to appreciate about this proof is that we are just
+doing equational reasoning in a Cartesian closed category. Although it
+may be the case that the details are quite gnarly and unnecessarily
+low-level for how we usually reason about morphisms in a CCC, none of
+this is anything out of the ordinary. It is also worth saying that the
+heart of the proof – which <code>agda-categories</code> calls
+<code>Exp.β</code> – explicitly says how the semantic <span
+class="math inline">\(\beta\)</span> reduction works, which is nothing
+other than the universal property of an exponential object. Precisely
+the same holds true of the η-law<a href="#fn7" class="footnote-ref"
+id="fnref7" role="doc-noteref"><sup>7</sup></a> where we use the
+uniqueness of the associated curried function to show the semantic <span
+class="math inline">\(\eta\)</span> law holds.</p>
+<h3 id="the-syntactic-category">The Syntactic Category</h3>
+<p>Finally, we don’t give the full development of the syntactic category
+– we don’t prove that this category is indeed Cartesian closed – but
+just some flavour of how the category looks. Before we get to the full
+syntactic category, we give the category of renamings that was mentioned
+previously:</p>
+<div class="sourceCode" id="cb43"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>  <dfn>Ren-Cat</dfn> <span class="ot">:</span> Category ℓzero ℓzero ℓzero</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <dfn>Ren-Cat</dfn> <span class="ot">=</span> <span class="kw">record</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    <span class="ot">{</span> Obj <span class="ot">=</span> <span class="cn">Ctxt</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">;</span> <span class="ot">_</span><span class="cn">⇒</span><span class="ot">_</span> <span class="ot">=</span> <dfn>Ren</dfn></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    <span class="ot">;</span> <span class="ot">_</span>≈<span class="ot">_</span> <span class="ot">=</span> <span class="ot">_</span><dfn>≡Ren</dfn><span class="ot">_</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    <span class="ot">;</span> id <span class="ot">=</span> <dfn>id-Ren</dfn></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    <span class="ot">;</span> <span class="ot">_</span>∘<span class="ot">_</span> <span class="ot">=</span> <span class="ot">_</span><dfn>∘R</dfn><span class="ot">_</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>    <span class="ot">;</span> assoc <span class="ot">=</span> <span class="ot">λ</span> <span class="ot">_</span> <span class="ot">→</span> refl</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>    <span class="ot">;</span> sym-assoc <span class="ot">=</span> <span class="ot">λ</span> <span class="ot">_</span> <span class="ot">→</span> refl</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>    <span class="ot">;</span> identityˡ <span class="ot">=</span> <span class="ot">λ</span> <span class="ot">_</span> <span class="ot">→</span> refl</span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>    <span class="ot">;</span> identityʳ <span class="ot">=</span> <span class="ot">λ</span> <span class="ot">_</span> <span class="ot">→</span> refl</span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>    <span class="ot">;</span> identity² <span class="ot">=</span> <span class="ot">λ</span> <span class="ot">_</span> <span class="ot">→</span> refl</span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>    <span class="ot">;</span> equiv <span class="ot">=</span> <span class="ot">λ</span> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">→</span> <dfn>≡Ren-equiv</dfn> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>    <span class="ot">;</span> ∘-resp-≈ <span class="ot">=</span> <dfn>∘R-resp-≈</dfn></span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>    <span class="ot">}</span></span></code></pre></div>
+<p>In <code>agda-categories</code> we define a category by giving the
+objects, the morphisms and an equivalence relation on the collection of
+morphisms. We then have the various category laws<a href="#fn8"
+class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>,
+along with a proof that the relation is a congruence with respect to
+composition. For renamings we have to prove that equality of renamings
+is an equivalence relation:</p>
+<div class="sourceCode" id="cb44"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><dfn>≡Ren-equiv</dfn> <span class="ot">:</span> <span class="ot">{</span>Γ Δ <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">}</span> <span class="ot">→</span> IsEquivalence <span class="ot">(_</span><dfn>≡Ren</dfn><span class="ot">_</span> <span class="ot">{</span>Γ <span class="ot">=</span> Γ<span class="ot">}</span> <span class="ot">{</span>Δ <span class="ot">=</span> Δ<span class="ot">})</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><dfn>≡Ren-equiv</dfn> <span class="ot">=</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a> <span class="kw">record</span> <span class="ot">{</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>   refl <span class="ot">=</span> <span class="ot">λ</span> <span class="ot">_</span> <span class="ot">→</span> refl <span class="ot">;</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>   sym <span class="ot">=</span> sym-R <span class="ot">;</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>   trans <span class="ot">=</span> <span class="ot">λ</span> <span class="ot">{</span>r₁<span class="ot">}</span> <span class="ot">{</span>r₂<span class="ot">}</span> <span class="ot">{</span>r₃<span class="ot">}</span> eq₁ eq₂ v <span class="ot">→</span> trans <span class="ot">(</span>eq₁ v<span class="ot">)</span> <span class="ot">(</span>eq₂ v<span class="ot">)</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>   <span class="ot">}</span></span></code></pre></div>
+<p>We then also need to show that this relation is a congruence for
+composition of renamings:</p>
+<div class="sourceCode" id="cb45"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><dfn>∘R-resp-≈</dfn> <span class="ot">:</span> <span class="ot">{</span>A B C <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">}</span> <span class="ot">{</span>f h <span class="ot">:</span> <dfn>Ren</dfn> B C<span class="ot">}</span> <span class="ot">{</span>g i <span class="ot">:</span> <dfn>Ren</dfn> A B<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>   f <dfn>≡Ren</dfn> h <span class="ot">→</span> g <dfn>≡Ren</dfn> i <span class="ot">→</span> <span class="ot">(</span>f <dfn>∘R</dfn> g<span class="ot">)</span> <dfn>≡Ren</dfn> <span class="ot">(</span>h <dfn>∘R</dfn> i<span class="ot">)</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><dfn>∘R-resp-≈</dfn> <span class="ot">{</span>f <span class="ot">=</span> f<span class="ot">}{</span>h <span class="ot">=</span> h<span class="ot">}{</span>g <span class="ot">=</span> g<span class="ot">}{</span>i <span class="ot">=</span> i<span class="ot">}</span> f≡Rh g≡Ri v <span class="ot">=</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a> begin</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>   <span class="ot">(</span>f <dfn>∘R</dfn> g<span class="ot">)</span> v</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>     <span class="co">-- Rewrite f to h using f≡Rh</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>     ≡⟨ cong g <span class="ot">(</span>f≡Rh v<span class="ot">)</span> ⟩</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>   <span class="ot">(</span>h <dfn>∘R</dfn> g<span class="ot">)</span> v</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>     <span class="co">-- Rewrite g to i using g≡Ri</span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>     ≡⟨ g≡Ri <span class="ot">(</span>h v<span class="ot">)</span> ⟩</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>   <span class="ot">(</span>h <dfn>∘R</dfn> i<span class="ot">)</span> v ∎</span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a> <span class="kw">where</span></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a> <span class="kw">open</span> ≡-Reasoning</span></code></pre></div>
+<p>Since equality of renamings only involves point-wise propositional
+equality of functions, this proof is just the same as showing that if we
+compose propositionally equal functions, then they are equal
+pointwise.</p>
+<p>The full syntactic category corresponds to the free cartesian closed
+category (in our case on a single object <span
+class="math inline">\(\mathcal{O})\)</span>, but also has a concrete
+description as what we called <code>Sub</code>, where the objects of the
+category are the contexts, and the morphisms are equivalence classes of
+substitutions. Here is how that looks:</p>
+<div class="sourceCode" id="cb46"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><dfn>Sub-Cat</dfn> <span class="ot">:</span> Category ℓzero ℓzero ℓzero</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><dfn>Sub-Cat</dfn> <span class="ot">=</span> <span class="kw">record</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">{</span> Obj <span class="ot">=</span> <span class="cn">Ctxt</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">;</span> <span class="ot">_</span><span class="cn">⇒</span><span class="ot">_</span> <span class="ot">=</span> <dfn>Sub</dfn></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="ot">;</span> <span class="ot">_</span>≈<span class="ot">_</span> <span class="ot">=</span> <span class="ot">_</span><dfn>≡Sub</dfn><span class="ot">_</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">;</span> id <span class="ot">=</span> <dfn>Sub-id</dfn></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="ot">;</span> <span class="ot">_</span>∘<span class="ot">_</span> <span class="ot">=</span> <span class="ot">_</span><dfn>∘𝕊</dfn><span class="ot">_</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  <span class="ot">;</span> assoc <span class="ot">=</span> <span class="ot">λ</span> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">{</span>C<span class="ot">}</span> <span class="ot">{</span>D<span class="ot">}</span> <span class="ot">{</span>f<span class="ot">}</span> <span class="ot">{</span>g<span class="ot">}</span> <span class="ot">{</span>h<span class="ot">}</span> <span class="ot">→</span> <dfn>assoc-proof</dfn> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">{</span>C<span class="ot">}</span> <span class="ot">{</span>D<span class="ot">}</span> <span class="ot">{</span>f<span class="ot">}</span> <span class="ot">{</span>g<span class="ot">}</span> <span class="ot">{</span>h<span class="ot">}</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  <span class="ot">;</span> sym-assoc <span class="ot">=</span> <span class="ot">λ</span> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">{</span>C<span class="ot">}</span> <span class="ot">{</span>D<span class="ot">}</span> <span class="ot">{</span>f<span class="ot">}</span> <span class="ot">{</span>g<span class="ot">}</span> <span class="ot">{</span>h<span class="ot">}</span> <span class="ot">→</span> <dfn>sym-assoc-proof</dfn> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">{</span>C<span class="ot">}</span> <span class="ot">{</span>D<span class="ot">}</span> <span class="ot">{</span>f<span class="ot">}</span> <span class="ot">{</span>g<span class="ot">}</span> <span class="ot">{</span>h<span class="ot">}</span></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  <span class="ot">;</span> identityˡ <span class="ot">=</span> <span class="ot">λ</span> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">{</span>f<span class="ot">}</span> <span class="ot">→</span> <dfn>identityˡ-proof</dfn> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">{</span>f<span class="ot">}</span></span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>  <span class="ot">;</span> identityʳ <span class="ot">=</span> <span class="ot">λ</span> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">{</span>f<span class="ot">}</span> <span class="ot">→</span> <dfn>identityʳ-proof</dfn> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">{</span>f<span class="ot">}</span></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>  <span class="ot">;</span> identity² <span class="ot">=</span> <dfn>identity²-proof</dfn></span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>  <span class="ot">;</span> equiv <span class="ot">=</span> <dfn>≡Sub-equiv</dfn></span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>  <span class="ot">;</span> ∘-resp-≈ <span class="ot">=</span> <dfn>∘𝕊-resp-≈</dfn></span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>  <span class="ot">}</span></span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>  <dfn>assoc-proof</dfn> <span class="ot">:</span> <span class="ot">{</span>A B C D <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">}</span> <span class="ot">{</span>h <span class="ot">:</span> <dfn>Sub</dfn> A B<span class="ot">}</span> <span class="ot">{</span>g <span class="ot">:</span> <dfn>Sub</dfn> B C<span class="ot">}</span> <span class="ot">{</span>f <span class="ot">:</span> <dfn>Sub</dfn> C D<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>                <span class="ot">((</span>f <dfn>∘𝕊</dfn> g<span class="ot">)</span> <dfn>∘𝕊</dfn> h<span class="ot">)</span> <dfn>≡Sub</dfn> <span class="ot">(</span>f <dfn>∘𝕊</dfn> <span class="ot">(</span>g <dfn>∘𝕊</dfn> h<span class="ot">))</span></span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a>  <dfn>assoc-proof</dfn> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">{</span>C<span class="ot">}</span> <span class="ot">{</span>D<span class="ot">}</span> <span class="ot">{</span>h<span class="ot">}</span> <span class="ot">{</span>g<span class="ot">}</span> <span class="ot">{</span>f<span class="ot">}</span> v <span class="ot">=</span></span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>    begin</span>
+<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>      <span class="ot">((</span>f <dfn>∘𝕊</dfn> g<span class="ot">)</span> <dfn>∘𝕊</dfn> h<span class="ot">)</span> v</span>
+<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- Associativity of _∘𝕊_</span></span>
+<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a>        ≈⟨ ∘Sub-≡Tm <span class="ot">(</span>f v<span class="ot">)</span> g h ⟩</span>
+<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a>      <span class="ot">(</span>f <dfn>∘𝕊</dfn> <span class="ot">(</span>g <dfn>∘𝕊</dfn> h<span class="ot">))</span> v ∎</span>
+<span id="cb46-25"><a href="#cb46-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span> <span class="kw">open</span> Reasoning <span class="ot">(</span><dfn>≡Tm-setoid</dfn> A <span class="ot">(</span>type-of v<span class="ot">))</span></span>
+<span id="cb46-26"><a href="#cb46-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-27"><a href="#cb46-27" aria-hidden="true" tabindex="-1"></a>  <dfn>sym-assoc-proof</dfn> <span class="ot">:</span> <span class="ot">{</span>A B C D <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">}</span> <span class="ot">{</span>h <span class="ot">:</span> <dfn>Sub</dfn> A B<span class="ot">}</span> <span class="ot">{</span>g <span class="ot">:</span> <dfn>Sub</dfn> B C<span class="ot">}</span> <span class="ot">{</span>f <span class="ot">:</span> <dfn>Sub</dfn> C D<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb46-28"><a href="#cb46-28" aria-hidden="true" tabindex="-1"></a>                    <span class="ot">(</span>f <dfn>∘𝕊</dfn> <span class="ot">(</span>g <dfn>∘𝕊</dfn> h<span class="ot">))</span> <dfn>≡Sub</dfn> <span class="ot">((</span>f <dfn>∘𝕊</dfn> g<span class="ot">)</span> <dfn>∘𝕊</dfn> h<span class="ot">)</span></span>
+<span id="cb46-29"><a href="#cb46-29" aria-hidden="true" tabindex="-1"></a>  <dfn>sym-assoc-proof</dfn> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">{</span>C<span class="ot">}</span> <span class="ot">{</span>D<span class="ot">}</span> <span class="ot">{</span>h<span class="ot">}</span> <span class="ot">{</span>g<span class="ot">}</span> <span class="ot">{</span>f<span class="ot">}</span> v <span class="ot">=</span></span>
+<span id="cb46-30"><a href="#cb46-30" aria-hidden="true" tabindex="-1"></a>    begin</span>
+<span id="cb46-31"><a href="#cb46-31" aria-hidden="true" tabindex="-1"></a>      <span class="ot">(</span>f <dfn>∘𝕊</dfn> <span class="ot">(</span>g <dfn>∘𝕊</dfn> h<span class="ot">))</span> v</span>
+<span id="cb46-32"><a href="#cb46-32" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- Associativity⁻¹ of _∘𝕊_</span></span>
+<span id="cb46-33"><a href="#cb46-33" aria-hidden="true" tabindex="-1"></a>        ≈⟨ <span class="cn">symmetry</span> <span class="ot">(</span>∘Sub-≡Tm <span class="ot">(</span>f v<span class="ot">)</span> g h<span class="ot">)</span> ⟩</span>
+<span id="cb46-34"><a href="#cb46-34" aria-hidden="true" tabindex="-1"></a>      <span class="ot">((</span>f <dfn>∘𝕊</dfn> g<span class="ot">)</span> <dfn>∘𝕊</dfn> h<span class="ot">)</span> v ∎</span>
+<span id="cb46-35"><a href="#cb46-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span> <span class="kw">open</span> Reasoning <span class="ot">(</span><dfn>≡Tm-setoid</dfn> A <span class="ot">(</span>type-of v<span class="ot">))</span></span>
+<span id="cb46-36"><a href="#cb46-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-37"><a href="#cb46-37" aria-hidden="true" tabindex="-1"></a>  <dfn>identityˡ-proof</dfn> <span class="ot">:</span> <span class="ot">{</span>A B <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">}</span> <span class="ot">{</span>f <span class="ot">:</span> <dfn>Sub</dfn> A B<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb46-38"><a href="#cb46-38" aria-hidden="true" tabindex="-1"></a>                     <span class="ot">(</span><dfn>Sub-id</dfn> <dfn>∘𝕊</dfn> f<span class="ot">)</span> <dfn>≡Sub</dfn> f</span>
+<span id="cb46-39"><a href="#cb46-39" aria-hidden="true" tabindex="-1"></a>   <dfn>identityˡ-proof</dfn> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">{</span>f<span class="ot">}</span> v <span class="ot">=</span></span>
+<span id="cb46-40"><a href="#cb46-40" aria-hidden="true" tabindex="-1"></a>     begin</span>
+<span id="cb46-41"><a href="#cb46-41" aria-hidden="true" tabindex="-1"></a>       <span class="ot">(</span><dfn>Sub-id</dfn> <dfn>∘𝕊</dfn> f<span class="ot">)</span> v</span>
+<span id="cb46-42"><a href="#cb46-42" aria-hidden="true" tabindex="-1"></a>         <span class="co">-- Definition of <dfn>∘𝕊</dfn></span></span>
+<span id="cb46-43"><a href="#cb46-43" aria-hidden="true" tabindex="-1"></a>         ≈⟨ <span class="cn">reflexivity</span> <span class="ot">((</span><dfn>Sub-id</dfn> <dfn>∘𝕊</dfn> f<span class="ot">)</span> v<span class="ot">)</span> ⟩</span>
+<span id="cb46-44"><a href="#cb46-44" aria-hidden="true" tabindex="-1"></a>       <dfn>subst</dfn> f <span class="ot">(</span><span class="cn">var</span> v<span class="ot">)</span></span>
+<span id="cb46-45"><a href="#cb46-45" aria-hidden="true" tabindex="-1"></a>         <span class="co">-- Definition of <dfn>Sub-id</dfn></span></span>
+<span id="cb46-46"><a href="#cb46-46" aria-hidden="true" tabindex="-1"></a>         ≈⟨ <span class="cn">reflexivity</span> <span class="ot">(</span>f v<span class="ot">)</span> ⟩</span>
+<span id="cb46-47"><a href="#cb46-47" aria-hidden="true" tabindex="-1"></a>       f v ∎</span>
+<span id="cb46-48"><a href="#cb46-48" aria-hidden="true" tabindex="-1"></a>     <span class="kw">where</span> <span class="kw">open</span> Reasoning <span class="ot">(</span><dfn>≡Tm-setoid</dfn> A <span class="ot">(</span>type-of v<span class="ot">))</span></span>
+<span id="cb46-49"><a href="#cb46-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-50"><a href="#cb46-50" aria-hidden="true" tabindex="-1"></a>  <dfn>identityʳ-proof</dfn> <span class="ot">:</span> <span class="ot">{</span>A B <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">}</span> <span class="ot">{</span>f <span class="ot">:</span> <dfn>Sub</dfn> A B<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb46-51"><a href="#cb46-51" aria-hidden="true" tabindex="-1"></a>                     <span class="ot">(</span>f <dfn>∘𝕊</dfn> <dfn>Sub-id</dfn><span class="ot">)</span> <dfn>≡Sub</dfn> f</span>
+<span id="cb46-52"><a href="#cb46-52" aria-hidden="true" tabindex="-1"></a>  <dfn>identityʳ-proof</dfn> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">{</span>f<span class="ot">}</span> v <span class="ot">=</span></span>
+<span id="cb46-53"><a href="#cb46-53" aria-hidden="true" tabindex="-1"></a>    begin</span>
+<span id="cb46-54"><a href="#cb46-54" aria-hidden="true" tabindex="-1"></a>      <span class="ot">(</span>f <dfn>∘𝕊</dfn> <dfn>Sub-id</dfn><span class="ot">)</span> v</span>
+<span id="cb46-55"><a href="#cb46-55" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- Definition of <dfn>∘𝕊</dfn></span></span>
+<span id="cb46-56"><a href="#cb46-56" aria-hidden="true" tabindex="-1"></a>        ≈⟨ <span class="cn">reflexivity</span> <span class="ot">((</span>f <dfn>∘𝕊</dfn> <dfn>Sub-id</dfn><span class="ot">)</span> v<span class="ot">)</span> ⟩</span>
+<span id="cb46-57"><a href="#cb46-57" aria-hidden="true" tabindex="-1"></a>      <dfn>subst</dfn> <dfn>Sub-id</dfn> <span class="ot">(</span>f v<span class="ot">)</span></span>
+<span id="cb46-58"><a href="#cb46-58" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- <dfn>Sub-id</dfn> is identity for substitution</span></span>
+<span id="cb46-59"><a href="#cb46-59" aria-hidden="true" tabindex="-1"></a>        ≈⟨ subst-id <span class="ot">(</span>f v<span class="ot">)</span> ⟩</span>
+<span id="cb46-60"><a href="#cb46-60" aria-hidden="true" tabindex="-1"></a>      f v ∎</span>
+<span id="cb46-61"><a href="#cb46-61" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span> <span class="kw">open</span> Reasoning <span class="ot">(</span><dfn>≡Tm-setoid</dfn> A <span class="ot">(</span>type-of v<span class="ot">))</span></span>
+<span id="cb46-62"><a href="#cb46-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-63"><a href="#cb46-63" aria-hidden="true" tabindex="-1"></a>  <dfn>identity²-proof</dfn> <span class="ot">:</span> <span class="ot">{</span>A <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb46-64"><a href="#cb46-64" aria-hidden="true" tabindex="-1"></a>    <span class="ot">(</span><dfn>Sub-id</dfn> <dfn>∘𝕊</dfn> <dfn>Sub-id</dfn><span class="ot">)</span> <dfn>≡Sub</dfn> <dfn>Sub-id</dfn> <span class="ot">{</span>A<span class="ot">}</span></span>
+<span id="cb46-65"><a href="#cb46-65" aria-hidden="true" tabindex="-1"></a>  <dfn>identity²-proof</dfn> <span class="ot">{</span>A<span class="ot">}</span> v <span class="ot">=</span></span>
+<span id="cb46-66"><a href="#cb46-66" aria-hidden="true" tabindex="-1"></a>    begin</span>
+<span id="cb46-67"><a href="#cb46-67" aria-hidden="true" tabindex="-1"></a>      <span class="ot">(</span><dfn>Sub-id</dfn> <dfn>∘𝕊</dfn> <dfn>Sub-id</dfn><span class="ot">)</span> v</span>
+<span id="cb46-68"><a href="#cb46-68" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- Definition of <dfn>∘𝕊</dfn></span></span>
+<span id="cb46-69"><a href="#cb46-69" aria-hidden="true" tabindex="-1"></a>        ≈⟨ <span class="cn">reflexivity</span> <span class="ot">((</span><dfn>Sub-id</dfn> <dfn>∘𝕊</dfn> <dfn>Sub-id</dfn><span class="ot">)</span> v<span class="ot">)</span> ⟩</span>
+<span id="cb46-70"><a href="#cb46-70" aria-hidden="true" tabindex="-1"></a>      <dfn>subst</dfn> <dfn>Sub-id</dfn> <span class="ot">(</span><span class="cn">var</span> v<span class="ot">)</span></span>
+<span id="cb46-71"><a href="#cb46-71" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- Definition of <dfn>subst</dfn> for <span class="cn">var</span></span></span>
+<span id="cb46-72"><a href="#cb46-72" aria-hidden="true" tabindex="-1"></a>        ≈⟨ <span class="cn">reflexivity</span> <span class="ot">(</span><span class="cn">var</span> v<span class="ot">)</span> ⟩</span>
+<span id="cb46-73"><a href="#cb46-73" aria-hidden="true" tabindex="-1"></a>      <span class="cn">var</span> v</span>
+<span id="cb46-74"><a href="#cb46-74" aria-hidden="true" tabindex="-1"></a>        <span class="co">-- Definition of <dfn>Sub-id</dfn></span></span>
+<span id="cb46-75"><a href="#cb46-75" aria-hidden="true" tabindex="-1"></a>        ≈⟨ <span class="cn">reflexivity</span> <span class="ot">(</span><dfn>Sub-id</dfn> v<span class="ot">)</span> ⟩</span>
+<span id="cb46-76"><a href="#cb46-76" aria-hidden="true" tabindex="-1"></a>      <dfn>Sub-id</dfn> v ∎</span>
+<span id="cb46-77"><a href="#cb46-77" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span> <span class="kw">open</span> Reasoning <span class="ot">(</span><dfn>≡Tm-setoid</dfn> A <span class="ot">(</span>type-of v<span class="ot">))</span></span></code></pre></div>
+<p>As for <code>Ren</code>, the objects are contexts and the morphisms
+are substitutions. We then have to give an equivalence relation on
+morphisms. In our case, equivalence is equality of substitutions:</p>
+<div class="sourceCode" id="cb47"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><dfn>≡Sub-equiv</dfn> <span class="ot">:</span> <span class="ot">{</span>Γ Δ <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">}</span> <span class="ot">→</span> IsEquivalence <span class="ot">(_</span><dfn>≡Sub</dfn><span class="ot">_</span> <span class="ot">{</span>Δ <span class="ot">=</span> Δ<span class="ot">}</span> <span class="ot">{</span>Γ <span class="ot">=</span> Γ<span class="ot">})</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><dfn>≡Sub-equiv</dfn> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>Δ<span class="ot">}</span> <span class="ot">=</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">record</span> <span class="ot">{</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    refl <span class="ot">=</span> <span class="ot">λ</span> <span class="ot">_</span> <span class="ot">→</span> E<span class="ot">.</span>refl <dfn>≡Tm-Equality</dfn></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>    <span class="ot">;</span> sym <span class="ot">=</span> <span class="ot">λ</span> <span class="ot">{</span>r₁<span class="ot">}</span> <span class="ot">{</span>r₂<span class="ot">}</span> eq v <span class="ot">→</span> E<span class="ot">.</span>sym <dfn>≡Tm-Equality</dfn> <span class="ot">(</span>eq v<span class="ot">)</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>    <span class="ot">;</span> trans <span class="ot">=</span> <span class="ot">λ</span> <span class="ot">{</span>r₁<span class="ot">}</span> <span class="ot">{</span>r₂<span class="ot">}</span> <span class="ot">{</span>r₃<span class="ot">}</span> eq₁ eq₂ v <span class="ot">→</span> E<span class="ot">.</span>trans <dfn>≡Tm-Equality</dfn> <span class="ot">(</span>eq₁ v<span class="ot">)</span> <span class="ot">(</span>eq₂ v<span class="ot">)</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>    <span class="ot">}</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">module</span> E <span class="ot">=</span> IsEquivalence</span></code></pre></div>
+<p>Our proof that composition of substitutions is a congruence is
+structurally the same, relying on analogous equational properties of
+term equality, e.g. <a
+href="/agda/stlc-semantics/STLC.html#SyntacticCategories.subst-cong">subst-cong</a>:</p>
+<div class="sourceCode" id="cb48"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><dfn>∘𝕊-resp-≈</dfn> <span class="ot">:</span> <span class="ot">{</span>A B C <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">}</span> <span class="ot">{</span>f h <span class="ot">:</span> <dfn>Sub</dfn> B C<span class="ot">}</span> <span class="ot">{</span>g i <span class="ot">:</span> <dfn>Sub</dfn> A B<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  f <dfn>≡Sub</dfn> h <span class="ot">→</span> g <dfn>≡Sub</dfn> i <span class="ot">→</span> <span class="ot">(</span>f <dfn>∘𝕊</dfn> g<span class="ot">)</span> <dfn>≡Sub</dfn> <span class="ot">(</span>h <dfn>∘𝕊</dfn> i<span class="ot">)</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><dfn>∘𝕊-resp-≈</dfn> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">{</span>C<span class="ot">}</span> <span class="ot">{</span>f <span class="ot">=</span> f<span class="ot">}{</span>h <span class="ot">=</span> h<span class="ot">}{</span>g <span class="ot">=</span> g<span class="ot">}{</span>i <span class="ot">=</span> i<span class="ot">}</span> f≡𝕊h g≡𝕊i v <span class="ot">=</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  begin</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>    <span class="ot">(</span>f <dfn>∘𝕊</dfn> g<span class="ot">)</span> v</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>      <span class="co">-- Rewrite f to h using subst-cong</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>      ≈⟨ subst-cong g <span class="ot">(</span>f v<span class="ot">)</span> <span class="ot">(</span>h v<span class="ot">)</span> <span class="ot">(</span>f≡𝕊h v<span class="ot">)</span> ⟩</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>    <span class="ot">(</span>h <dfn>∘𝕊</dfn> g<span class="ot">)</span> v</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>      <span class="co">-- Rewrite g to i using subst-≣𝕊</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>      ≈⟨ subst-≣𝕊 <span class="ot">(</span>h v<span class="ot">)</span> g≡𝕊i ⟩</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>    <span class="ot">(</span>h <dfn>∘𝕊</dfn> i<span class="ot">)</span> v ∎</span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">open</span> Reasoning <span class="ot">(</span><dfn>≡Tm-setoid</dfn> A <span class="ot">(</span>type-of v<span class="ot">))</span></span></code></pre></div>
+<p>From here we would want to show that this category is Cartesian
+closed, and this would be the path towards showing CCCs are complete
+with respect to the equational theory of STLC. What would this
+categorical structure look like? The product of contexts <span
+class="math inline">\(\Gamma\)</span> and <span
+class="math inline">\(\Delta\)</span> is their concatenation <span
+class="math inline">\(\Gamma, \Delta\)</span> (this is similar to the
+Lawvere category of an algebraic theory). The unit for this category is
+given by the empty context <span
+class="math inline">\(\emptyset\)</span>. A function object must be an
+adjoint to the product, and so would satisfy: <span
+class="math display">\[
+\mathrm{Sub}(X, \Delta^\Gamma) \cong \mathrm{Sub}(X \times \Gamma,
+\Delta)
+\]</span></p>
+<p>Suppose <span class="math inline">\(\mathrm{X}= \mathrm{x}\_1, \ldots
+, \mathrm{x}_{\mathrm{n}}\)</span>, <span class="math inline">\(\Gamma =
+\mathrm{y}\_1, \ldots, \mathrm{y}_{\mathrm{m}}\)</span>, and <span
+class="math inline">\(\Delta = \mathrm{d}_1, \ldots,
+\mathrm{d}_{\mathrm{k}}\)</span>. This means that a substitution from
+<span class="math inline">\(\mathrm{X}\)</span> into context <span
+class="math inline">\(\Delta^\Gamma\)</span> should be given by a
+sequence of terms <span
+class="math inline">\(\mathrm{t}_{\mathrm{i}}\)</span> of type <span
+class="math inline">\(\mathrm{d}_{\mathrm{i}}\)</span>, for each <span
+class="math inline">\(\mathrm{i}\)</span>, in context <span
+class="math inline">\(\mathrm{X}, \Gamma\)</span>. By repeated lambda
+abstraction (the inverse of what logicians call the Deduction theorem),
+we can think of giving terms of the form <span
+class="math inline">\(\mathrm{X}, \Gamma \vdash \mathrm{t}_{\mathrm{i}}
+: \mathrm{d}_{\mathrm{i}}\)</span>, as equivalently giving terms <span
+class="math inline">\(\mathrm{X}\vdash \tilde{\mathrm{t}_{\mathrm{i}}} :
+\Gamma \Rightarrow \mathrm{d}_{\mathrm{i}}\)</span>. Here <span
+class="math inline">\(\Gamma \Rightarrow \mathrm{d}\)</span> is notation
+for:</p>
+<p><span class="math display">\[
+\Gamma \Rightarrow \mathrm{d}:= \mathrm{y}_1 \Rightarrow (\mathrm{y}_2
+\Rightarrow \ldots \Rightarrow (\mathrm{y}_{\mathrm{m}} \Rightarrow
+\mathrm{d})\ldots)
+\]</span></p>
+<p>We can thus <em>define</em> the exponential as the pointwise
+exponential: <span class="math display">\[
+\Delta^\Gamma := \Gamma \Rightarrow \mathrm{d}_1, \ldots, \Gamma
+\Rightarrow \mathrm{d}_{\mathrm{k}}
+\]</span></p>
+<p>In other words, a substitution <span
+class="math inline">\(\mathrm{X}\rightarrow \Delta^\Gamma\)</span> is
+nothing other than a sequence of curried terms for each type in <span
+class="math inline">\(\Delta\)</span>. In order to complete the
+development, we would need to show this has an <code>evaluation</code>
+morphism, which would be a substitution of the form: <span
+class="math display">\[
+\Delta^\Gamma \times \Gamma \rightarrow \Delta
+\]</span></p>
+<p>If we mediate on this then we see the evaluation map will apply each
+variable in <span class="math inline">\(\Delta^\Gamma\)</span> to each
+of the variables in <span class="math inline">\(\Gamma\)</span> giving
+back a term of type <span class="math inline">\(\mathrm{d}_{\mathrm{i}}
+\in \Delta\)</span>.</p>
+<p>That is a sketch of the Cartesian closed structure, but we leave its
+full development to a future version of this post. Once we prove that it
+is a CCC, then this would give us completeness: since the syntactic
+category is itself a CCC model, any equality that holds in all CCC
+models must already hold in the equational theory. We also note that
+while we have established the necessary components for
+<code>Tm _ t</code> being a presheaf on <code>Ren-Cat</code> –
+<code>rename-∘R</code> and <code>id-Ren-≡</code> provide the
+functoriality and identity – we have not packaged this up formally as a
+presheaf on the above <code>Ren-Cat</code>, nor have we shown the
+analogous result for <code>Sub-Cat</code>.</p>
+<p>For more information about these ideas, Lambek and Scott’s
+<em>Introduction to Higher-Order Categorical Logic</em> is an essential
+resource. They vastly generalize the above by considering <span
+class="math inline">\(\lambda\)</span>-theories – type theories
+extending STLC with specified equations – and CCCs satisfying those
+equations. They show that the syntactic category construction gives a
+functor from <span class="math inline">\(\lambda\)</span>-theories to
+CCCs, the internal language of a CCC gives a functor in the other
+direction, and that these two functors give an equivalence of
+categories.</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>This is not precisely correct, as we will see below, we
+should in fact take <em>equivalence classes</em> of renamings with
+respect to their equational theory<a href="#fnref1"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>To be found <a
+href="/agda/stlc-semantics/STLC.html#Sub.Sub-id">here for Sub-id</a> and
+<a href="/agda/stlc-semantics/STLC.html#Sub.∘Sub-≡">here for
+∘Sub-≡</a><a href="#fnref2" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>see <a
+href="/agda/stlc-semantics/STLC.html#Semantics.SetModel.sub-lem">here</a>
+for exploring the substitution lemma and <a
+href="/agda/stlc-semantics/STLC.html#CCC.CCCSemantics.SubstitutionLemma.⟦⟧-Soundness">here</a>
+for the proof of soundness<a href="#fnref3" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>the full development for this section can be followed
+starting <a href="/agda/stlc-semantics/STLC.html#CCC">here</a><a
+href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>see <a
+href="/agda/stlc-semantics/STLC.html#CCC.CCCSemantics.SubstitutionLemma.⟦var⟧-Sub">here</a>
+to explore all the details on proving soundness in the variable case<a
+href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>See <a
+href="/agda/stlc-semantics/STLC.html#CCC.CCCSemantics.SubstitutionLemma.⟦sub⟧-Wk">here</a>
+for details<a href="#fnref6" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>The full proof of the <code>η-lemma</code> <a
+href="/agda/stlc-semantics/STLC.html#CCC.CCCSemantics.SubstitutionLemma.η-lemma">here</a><a
+href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Anyone familiar with the typical axioms of a category
+will notice that there are more laws than might be typical, this is a
+trade-off we face when designing an algebraic interface in a dependent
+type theory. Some of the design decisions for this interface are
+explained in the <a
+href="/agda/stlc-semantics/Categories.Category.Core.html#Category">agda-categories
+source</a><a href="#fnref8" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+        <br>
+        <br>
+
+        <!--Share buttons-->
+
+     </div>
+</article>
+
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="Callan McGillx">
+    <meta name="author" content="Callan McGill">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="On Well-Founded Induction">
+    <meta name="twitter:description" content="Explorations into Well-Founded Relations in constructive mathematics">
+        <title>On Well-Founded Induction</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+<body>
+    <!DOCTYPE html>
+    <header>
+      <nav class="left-sidebar">
+    		<a class="beacon" href="/">
+              <div id="home-text"> HOME </div>
+        </a>
+    		<a class="beacon" href="/about.html">
+              <div id="about-text"> ABOUT </div>
+          </a>		
+        </nav>
+        <div class="right-sidebar">
+            <a class="ext-link" href="https://github.com/boarders">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+            <a class="ext-link" href="https://mathstodon.xyz/@boarders">
+            <img src="/images/mathstodon-logo.png" alt="Mathstodon Profile"/>
+        </a>
+		</div>
+        <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['\\(', '\\)']],
+            displayMath: [['\\[', '\\]']],
+            processEscapes: true,
+            processEnvironments: true
+          },
+          options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+          }
+        };
+        </script>
+        <script type="text/javascript" id="MathJax-script" async
+                src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+        </script>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                On Well-Founded Induction
+            </span>
+            <br>
+            <br>
+            <span class="byline">by Callan McGill</span>
+            <br>
+            <span class="date">Nov 23, 2025</span>
+            <br>
+            <br>
+            <div class="metadata"> </div>
+            </div>
+    </div>
+    <span class="quote"> "Every reading of a classic is in fact a rereading."  - Italo Calvino</span>
+    </div>
+    <article class="post">
+        <p>One of the first things dependently typed progrmaming teaches is that
+thinking of induction as primarily about the natural numbers is an
+impoverished view. Instead, a system like <code>agda</code> encourages
+to think firstly that one can found mathematics on inductive structures
+as the raw prmitives, and secondly that <em>every</em> such structure –
+the inductive collection of binary trees, for example – comes with some
+means of proving properties about it. For instance, binary trees in
+<code>agda</code> might be defined as follows:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> BinTree a <span class="kw">where</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="cn">Leaf</span> <span class="ot">:</span> a <span class="ot">→</span> BinTree a</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="cn">Bin</span> <span class="ot">:</span> BinTree a <span class="ot">→</span> BinTree a <span class="ot">→</span> BinTree a</span></code></pre></div>
+<p>and these come with the following induction principle:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><dfn>bin-tree-induction</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a <span class="ot">:</span> <span class="dt">Type</span><span class="ot">}</span> <span class="ot">(</span>P <span class="ot">:</span> <span class="ot">(</span>BinTree a<span class="ot">)</span> <span class="ot">→</span> <span class="dt">Type</span><span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">((</span>l <span class="ot">:</span> a<span class="ot">)</span> <span class="ot">→</span> P <span class="ot">(</span><span class="cn">Leaf</span> l<span class="ot">))</span> <span class="ot">→</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">(∀</span> <span class="ot">{</span>lt rt <span class="ot">:</span> BinTree a<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>P[lt] <span class="ot">:</span> P lt<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>P[rt] <span class="ot">:</span> P rt<span class="ot">)</span> <span class="ot">→</span> P <span class="ot">(</span><span class="cn">Bin</span> lt rt<span class="ot">))</span> <span class="ot">→</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">(∀</span> <span class="ot">(</span>bin-tree <span class="ot">:</span> BinTree a<span class="ot">)</span> <span class="ot">→</span> P bin-tree<span class="ot">)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><dfn>bin-tree-induction</dfn> P leaf-pf bin-pf <span class="ot">(</span><span class="cn">Leaf</span> l<span class="ot">)</span> <span class="ot">=</span> leaf-pf l</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><dfn>bin-tree-induction</dfn> P leaf-pf bin-pf <span class="ot">(</span><span class="cn">Bin</span> ltree rtree<span class="ot">)</span> <span class="ot">=</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  bin-pf</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="ot">(</span><dfn>bin-tree-induction</dfn> P leaf-pf bin-pf ltree<span class="ot">)</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="ot">(</span><dfn>bin-tree-induction</dfn> P leaf-pf bin-pf rtree<span class="ot">)</span></span></code></pre></div>
+<p>This characterization focuses on an inductive set as a certain
+solution to a universal problem (an initial object in the category of
+<code>F-algebras</code>) and gives us an “immediate predecessor” method
+of proof. This does, however, come with a large downside: there are many
+natural results which we wish to prove by a more flexible method of
+induction. We may wish to do induction on a natural number via its set
+of prime factors, or prove something about an array by splitting it
+half.</p>
+<p>One way to think about such problems is that we need not stick with
+the the given “immediate successor” relation, but instead we can develop
+other relations on a collection, which are appropriate for doing
+induction on. This is the theory of well-founded relations.</p>
+<p>Classically there are various equivalent ways to think about the
+theory of well-founded relations, but as we wish to develop these ideas
+in <code>agda</code>, we should note that these classically equivalent
+definitions split apart. Classically, we have the following theorem
+giving us three different views on what a well-founded relation is:</p>
+<p><strong>Theorem (Well-founded Relations)</strong>: $ $ $ $ Suppose
+<span class="math inline">\(\mathrm{X}\)</span> is a set with binary
+relation <span class="math inline">\(\mathcal{R}\)</span> on it, meaning
+$ $. We write <span class="math inline">\(\mathcal{R}\)</span> infix – $
+$ – to mean that <span class="math inline">\((\x, \y) \in
+R\)</span>.</p>
+<p>The following are equivalent: - Every non-empty subset <span
+class="math inline">\(\mathcal{U}\subset \mathrm{X}\)</span> has an
+<span class="math inline">\(\mathcal{R}\)</span>-least element i.e.
+<span class="math display">\[
+  \exists \mathrm{u&#39;} \in \mathcal{U}\ldot \forall u \in U \ldot
+u&#39; \mathcal{R}u
+\]</span> - Suppose <span class="math inline">\(U\)</span> is a subset
+of <span class="math inline">\(X\)</span>. The following induction
+principle holds: <span class="math display">\[
+  (\forall \x \mathrm{x&#39;} \in X \ldot
+\]</span></p>
+
+        <br>
+        <br>
+
+        <!--Share buttons-->
+
+     </div>
+</article>
+
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>
