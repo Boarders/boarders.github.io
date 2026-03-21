@@ -73,10 +73,12 @@ know who we are, so we don’t need names."  - Neil Gaiman, Coraline</span>
     </div>
     </div>
     <article class="post">
-        <p><em>Note: the original version of this post unfortunately had
-name-capturing errors, and perhaps has some still remaining after
-fixing. Alas, I console myself that this particular misfortune is one
-that has befallen many of my betters.</em></p>
+        <div class="note">
+Note: the original version of this post unfortunately had name-capturing
+errors, and perhaps has some still remaining after fixing. Alas, I
+console myself that this particular misfortune is one that has befallen
+many of my betters.
+</div>
 The untyped lambda calculus has a very simple grammar with just three
 term formers:
 <div style="display:none">
@@ -471,7 +473,7 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a
 <span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>        ((<span class="dt">Lam</span> _ body) , a<span class="op">:</span>args)</span>
 <span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>          <span class="ot">-&gt;</span> go (substitute a body) args</span>
 <span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>        _</span>
-<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>          <span class="co">-- If we encounter no further lambdas then we reduce </span></span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>          <span class="co">-- If we encounter no further lambdas then we reduce</span></span>
 <span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>          <span class="co">-- each of our built-up arguments before re-applying App.</span></span>
 <span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>          <span class="ot">-&gt;</span> foldl&#39; <span class="dt">App</span> t (<span class="fu">fmap</span> nfLN as)</span>
 <span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a></span>
@@ -511,15 +513,15 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- The unary natural numbers.</span></span>
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Nat</span> <span class="ot">=</span> <span class="dt">Z</span> <span class="op">|</span> <span class="dt">S</span> <span class="dt">Nat</span></span>
 <span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">-- Notice here in the inductive case we reduce to normal form. </span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">-- Not doing so leads to a subtly different term wherein we </span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">-- Notice here in the inductive case we reduce to normal form.</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">-- Not doing so leads to a subtly different term wherein we</span></span>
 <span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">-- are applying &quot;S&quot; to a term that itself is a lambda term</span></span>
 <span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co">-- applied to two arguments but not yet β-reduced.</span></span>
 <span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="ot">fromNat ::</span> <span class="dt">Nat</span> <span class="ot">-&gt;</span> <span class="dt">Term</span> <span class="dt">Text</span></span>
 <span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>fromNat <span class="dt">Z</span>     <span class="ot">=</span> <span class="dt">Lam</span> <span class="st">&quot;S&quot;</span> (<span class="dt">Lam</span> <span class="st">&quot;Z&quot;</span> <span class="st">&quot;Z&quot;</span>)</span>
 <span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>fromNat (<span class="dt">S</span> n) <span class="ot">=</span> <span class="dt">Lam</span> <span class="st">&quot;S&quot;</span> (<span class="dt">Lam</span> <span class="st">&quot;Z&quot;</span> (<span class="st">&quot;S&quot;</span> <span class="op">.$</span> (nf <span class="op">$</span> fromNat n <span class="op">.$</span> <span class="st">&quot;S&quot;</span> <span class="op">.$</span> <span class="st">&quot;Z&quot;</span>)))</span>
 <span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co">-- Let us also give ourselves names for the first </span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co">-- Let us also give ourselves names for the first</span></span>
 <span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="co">-- few church numerals for convenience:</span></span>
 <span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>cZero  <span class="ot">=</span> fromNat <span class="dt">Z</span></span>
 <span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>cOne   <span class="ot">=</span> fromNat (<span class="dt">S</span> <span class="dt">Z</span>)</span>
@@ -568,14 +570,14 @@ class="math inline">\(\mathrm{z}\)</span>:</p>
 <div class="sourceCode" id="cb13"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ot">churchAdd ::</span> <span class="dt">Term</span> <span class="dt">Text</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>churchAdd <span class="ot">=</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Lam</span> <span class="st">&quot;n&quot;</span> </span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    (<span class="dt">Lam</span> <span class="st">&quot;m&quot;</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Lam</span> <span class="st">&quot;n&quot;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    (<span class="dt">Lam</span> <span class="st">&quot;m&quot;</span></span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>      (<span class="dt">Lam</span> <span class="st">&quot;S&quot;</span> (<span class="dt">Lam</span> <span class="st">&quot;Z&quot;</span> ((<span class="dt">App</span> <span class="st">&quot;n&quot;</span> <span class="st">&quot;S&quot;</span>) <span class="op">.$</span> (<span class="st">&quot;m&quot;</span> <span class="op">.$</span> <span class="st">&quot;S&quot;</span> <span class="op">.$</span> <span class="st">&quot;Z&quot;</span>)))))</span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="ot">churchMult ::</span> <span class="dt">Term</span> <span class="dt">Text</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>churchMult <span class="ot">=</span> </span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Lam</span> <span class="st">&quot;n&quot;</span> </span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    (<span class="dt">Lam</span> <span class="st">&quot;m&quot;</span> </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>churchMult <span class="ot">=</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Lam</span> <span class="st">&quot;n&quot;</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    (<span class="dt">Lam</span> <span class="st">&quot;m&quot;</span></span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>      (<span class="dt">Lam</span> <span class="st">&quot;S&quot;</span> (<span class="dt">Lam</span> <span class="st">&quot;Z&quot;</span> (<span class="st">&quot;n&quot;</span> <span class="op">.$</span> (<span class="st">&quot;m&quot;</span> <span class="op">.$</span> <span class="st">&quot;S&quot;</span>) <span class="op">.$</span> <span class="st">&quot;Z&quot;</span>))))</span></code></pre></div>
 <p>As a first check let us see that <span class="math inline">\(2 + 2
 \rightsquigarrow 4\)</span> and that <span class="math inline">\(2 * 3
