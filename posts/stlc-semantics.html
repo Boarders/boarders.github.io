@@ -118,7 +118,8 @@ following form:</p>
 \mathrel{:}\mathcal{G}
 \]</span> <span class="math display">\[
      \vdash e \mathrel{:}\mathcal{G}
-\]</span> Such a language would also need to have an equality judgment
+\]</span></p>
+<p>Such a language would also need to have an equality judgment
 capturing the equational theory of groups:</p>
 <p><span class="math display">\[
 \frac{}{\mathrm{x}\mathrel{:}\mathcal{G}\vdash \mathrm{x}\cdot e \equiv
@@ -167,7 +168,8 @@ capturing the equational theory of groups:</p>
 interpret the symbols of the theory, but to give a semantics of each
 judgment, and thus to give meaning first to contexts, and then to
 judgments. Here is an idea for how we might do so – given a judgment of
-this form: <span class="math display">\[
+this form:</p>
+<p><span class="math display">\[
    \mathrm{x}\mathrel{:}\mathcal{G},
 \mathrm{y}\mathrel{:}\mathcal{G}\vdash \mathrm{x}\cdot
 \mathrm{y}\mathrel{:}\mathcal{G}
@@ -176,13 +178,14 @@ class="math inline">\(\mathrm{X}\)</span>, we naively interpret this as
 some function: <span class="math display">\[
   \mathrm{X}\times \mathrm{X}\rightarrow \mathrm{X}
 \]</span></p>
-<p>Similarly, given a term judgment like: <span class="math display">\[
+<p>Similarly, given a term judgment like:</p>
+<p><span class="math display">\[
    \mathrm{x}\mathrel{:}\mathcal{G}, \mathrm{y}\mathrel{:}\mathcal{G},
 \mathrm{z}\mathrel{:}\mathcal{G}\vdash (\mathrm{x}\cdot \mathrm{y})
 \cdot \mathrm{z}\mathrel{:}\mathcal{G}
 \]</span></p>
-<p>we want to interpret this semantically as a function of the form:
-<span class="math display">\[
+<p>we want to interpret this semantically as a function of the form:</p>
+<p><span class="math display">\[
   \mathrm{X}\times \mathrm{X}\times \mathrm{X}\rightarrow \mathrm{X}
 \]</span></p>
 <p>Not wishing to get too into the weeds on this particular example, we
@@ -225,18 +228,22 @@ context <span class="math inline">\(\Gamma = \{\mathrm{x}\_1, \ldots,
 judgments for the theory and, we take for morphisms, equivalence classes
 of substitutions. We won’t spell out this example here as we do
 something similar for simply typed lambda calculus, but we will keep in
-mind the following takeaways: - A semantics of a type theory might be
-thought of as a certain kind of algebraic theory - This semantics comes
-with a canonical syntactical model of the theory which should, in some
-sense, be the free theory. - Our semantics should be <em>sound</em> for
-the type theory – anything we prove in the type theory should be true
-for all algebraic models. - Ideally, our semantics should also be
-<em>complete</em> for the theory – If we can prove some judgment is true
-for all models, then it should be true for the theory. More is true: if
-something is true across all models, then it is true of the canonical
-model, and thus syntactically true. Thus, we see that providing a
-canonical model is fundamentally connected to the idea of
-completeness.</p>
+mind the following takeaways:</p>
+<ul>
+<li>A semantics of a type theory might be thought of as a certain kind
+of algebraic theory</li>
+<li>This semantics comes with a canonical syntactical model of the
+theory which should, in some sense, be the free theory.</li>
+<li>Our semantics should be <em>sound</em> for the type theory –
+anything we prove in the type theory should be true for all algebraic
+models.</li>
+<li>Ideally, our semantics should also be <em>complete</em> for the
+theory – If we can prove some judgment is true for all models, then it
+should be true for the theory. More is true: if something is true across
+all models, then it is true of the canonical model, and thus
+syntactically true. Thus, we see that providing a canonical model is
+fundamentally connected to the idea of completeness.</li>
+</ul>
 <h2 id="semantics-of-simply-typed-lambda-calculus">Semantics of Simply
 Typed Lambda Calculus</h2>
 <p>It is an oft-repeated (perhaps more than understood) fact that the
@@ -569,8 +576,11 @@ class="sourceCode agda"><code class="sourceCode agda"><span id="cb22-1"><a href=
 <span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>    <span class="ot">∀{</span>dom cod Γ<span class="ot">}(</span>bd₁ bd₂ <span class="ot">:</span> <dfn>Tm</dfn> <span class="ot">(</span>Γ <span class="cn">▸</span> dom<span class="ot">)</span> cod<span class="ot">)</span> <span class="ot">→</span></span>
 <span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>      bd₁ ≡Tm bd₂ <span class="ot">→</span> <span class="ot">(</span><span class="cn">fun</span> bd₁<span class="ot">)</span> ≡Tm <span class="ot">(</span><span class="cn">fun</span> bd₂<span class="ot">)</span></span>
 <span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>  <span class="cn">𝟙-η</span> <span class="ot">:</span> <span class="ot">{</span>Γ <span class="ot">:</span> <span class="cn">Ctxt</span><span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>tm-𝟙 <span class="ot">:</span> <dfn>Tm</dfn> Γ <span class="cn">𝟙</span><span class="ot">)</span> <span class="ot">→</span> tm-𝟙 ≡Tm <span class="cn">tt</span></span></code></pre></div>
-<p>We note the following: - We make equality automatically an
-equivalence relation, corresponding to the usual rules:</p>
+<p>We note the following:</p>
+<ul>
+<li>We make equality automatically an equivalence relation,
+corresponding to the usual rules:</li>
+</ul>
 <p><span class="math display">\[
 \dfrac{}{\Gamma \vdash \mathrm{t}\equiv \mathrm{t}\mathrel{:}\mathrm{a}}
 \quad \text{(Refl)}
