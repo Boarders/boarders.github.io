@@ -7,7 +7,7 @@
     <meta name=viewport content="width=device-width, initial-scale=1">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="On Well-Founded Induction">
-    <meta name="twitter:description" content="Explorations into Well-Founded Relations in constructive mathematics">
+    <meta name="twitter:description" content="Explorations into well-founded relations in constructive mathematics">
         <title>On Well-Founded Induction</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/syntax.css">
@@ -60,72 +60,938 @@
             <br>
             <span class="byline">by Callan McGill</span>
             <br>
-            <span class="date">Nov 23, 2025</span>
+            <span class="date">Mar 24, 2026</span>
             <br>
             <br>
             <div class="metadata"> </div>
             </div>
     </div>
     <span class="quote"> "Every reading of a classic is in fact a rereading."  - Italo Calvino</span>
+    <div class="proof-development-link">
+        <a href="/agda/well-founded-relations/InductiveRelations.html">Proof Development</a>
+    </div>
     </div>
     <article class="post">
-        <p>One of the first things dependently typed progrmaming teaches is that
+        <div style="display:none">
+
+</div>
+<p>One of the first things dependently typed programming teaches is that
 thinking of induction as primarily about the natural numbers is an
-impoverished view. Instead, a system like <code>agda</code> encourages
-to think firstly that one can found mathematics on inductive structures
-as the raw prmitives, and secondly that <em>every</em> such structure –
-the inductive collection of binary trees, for example – comes with some
-means of proving properties about it. For instance, binary trees in
-<code>agda</code> might be defined as follows:</p>
+impoverished view. Instead, a proof assistant like <code>agda</code>
+encourages one firstly towards the idea that mathematics can be founded
+on inductive structures as the raw primitives, and secondly that
+<em>every</em> such structure comes with some given means of proving
+properties about it. For instance, binary trees in <code>agda</code>
+might be defined as follows:</p>
 <div class="sourceCode" id="cb1"><pre
-class="sourceCode agda"><code class="sourceCode agda"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> BinTree a <span class="kw">where</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="cn">Leaf</span> <span class="ot">:</span> a <span class="ot">→</span> BinTree a</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="cn">Bin</span> <span class="ot">:</span> BinTree a <span class="ot">→</span> BinTree a <span class="ot">→</span> BinTree a</span></code></pre></div>
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <dfn>BinTree</dfn> <span class="ot">(</span>a <span class="ot">:</span> <span class="dt">Type</span><span class="ot">)</span> <span class="ot">:</span> <span class="dt">Type</span> <span class="kw">where</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="cn">Leaf</span> <span class="ot">:</span> a <span class="ot">→</span> <dfn>BinTree</dfn> a</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="cn">Bin</span> <span class="ot">:</span> <dfn>BinTree</dfn> a <span class="ot">→</span> <dfn>BinTree</dfn> a <span class="ot">→</span> <dfn>BinTree</dfn> a</span></code></pre></div>
 <p>and these come with the following induction principle:</p>
 <div class="sourceCode" id="cb2"><pre
-class="sourceCode agda"><code class="sourceCode agda"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><dfn>bin-tree-induction</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a <span class="ot">:</span> <span class="dt">Type</span><span class="ot">}</span> <span class="ot">(</span>P <span class="ot">:</span> <span class="ot">(</span>BinTree a<span class="ot">)</span> <span class="ot">→</span> <span class="dt">Type</span><span class="ot">)</span> <span class="ot">→</span></span>
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><dfn>bin-tree-induction</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a <span class="ot">:</span> <span class="dt">Type</span><span class="ot">}</span> <span class="ot">(</span>P <span class="ot">:</span> <span class="ot">(</span><dfn>BinTree</dfn> a<span class="ot">)</span> <span class="ot">→</span> <span class="dt">Type</span><span class="ot">)</span> <span class="ot">→</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">((</span>l <span class="ot">:</span> a<span class="ot">)</span> <span class="ot">→</span> P <span class="ot">(</span><span class="cn">Leaf</span> l<span class="ot">))</span> <span class="ot">→</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">(∀</span> <span class="ot">{</span>lt rt <span class="ot">:</span> BinTree a<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>P[lt] <span class="ot">:</span> P lt<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>P[rt] <span class="ot">:</span> P rt<span class="ot">)</span> <span class="ot">→</span> P <span class="ot">(</span><span class="cn">Bin</span> lt rt<span class="ot">))</span> <span class="ot">→</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">(∀</span> <span class="ot">(</span>bin-tree <span class="ot">:</span> BinTree a<span class="ot">)</span> <span class="ot">→</span> P bin-tree<span class="ot">)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">(∀</span> <span class="ot">{</span>lt rt <span class="ot">:</span> <dfn>BinTree</dfn> a<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>P[lt] <span class="ot">:</span> P lt<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>P[rt] <span class="ot">:</span> P rt<span class="ot">)</span> <span class="ot">→</span> P <span class="ot">(</span><span class="cn">Bin</span> lt rt<span class="ot">))</span> <span class="ot">→</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">(∀</span> <span class="ot">(</span>bin-tree <span class="ot">:</span> <dfn>BinTree</dfn> a<span class="ot">)</span> <span class="ot">→</span> P bin-tree<span class="ot">)</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><dfn>bin-tree-induction</dfn> P leaf-pf bin-pf <span class="ot">(</span><span class="cn">Leaf</span> l<span class="ot">)</span> <span class="ot">=</span> leaf-pf l</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><dfn>bin-tree-induction</dfn> P leaf-pf bin-pf <span class="ot">(</span><span class="cn">Bin</span> ltree rtree<span class="ot">)</span> <span class="ot">=</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  bin-pf</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="ot">(</span><dfn>bin-tree-induction</dfn> P leaf-pf bin-pf ltree<span class="ot">)</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="ot">(</span><dfn>bin-tree-induction</dfn> P leaf-pf bin-pf rtree<span class="ot">)</span></span></code></pre></div>
+<p>The idea here is that if we can prove a property about binary trees
+in the <code>Leaf</code> case, and in the <code>Bin</code> case
+(assuming it already holds for the child trees), then that property
+holds for all binary trees.</p>
 <p>This characterization focuses on an inductive set as a certain
-solution to a universal problem (an initial object in the category of
-<code>F-algebras</code>) and gives us an “immediate predecessor” method
-of proof. This does, however, come with a large downside: there are many
-natural results which we wish to prove by a more flexible method of
-induction. We may wish to do induction on a natural number via its set
-of prime factors, or prove something about an array by splitting it
-half.</p>
+solution to a universal problem (an <a
+href="https://ncatlab.org/nlab/show/initial+algebra+of+an+endofunctor">initial
+object in the category of <code>F-algebras</code></a>), and gives us an
+“immediate predecessor” method of inductive proof. This does, however,
+come with a downside: there are many natural results which we wish to
+prove by a more flexible method of induction. For instance, we may wish
+to do <em>strong</em> induction on the natural numbers, or induction via
+a number’s multi-set of prime factors, or to prove something about an
+array by iteratively dividing it in half.</p>
 <p>One way to think about such problems is that we need not stick with
-the the given “immediate successor” relation, but instead we can develop
-other relations on a collection, which are appropriate for doing
-induction on. This is the theory of well-founded relations.</p>
-<p>Classically there are various equivalent ways to think about the
+the given “immediate predecessor” relation, but instead can develop
+other relations on a collection, which are appropriate for performing
+induction. Moreover, if we have an algebraic theory of such inductive
+relations, we might then be able to flexibly combine or alter the
+relations using some basic building blocks. This gives us the theory of
+well-founded relations.</p>
+<p>Classically, there are various equivalent ways to think about the
 theory of well-founded relations, but as we wish to develop these ideas
 in <code>agda</code>, we should note that these classically equivalent
-definitions split apart. Classically, we have the following theorem
+definitions come apart. Classically, we have the following theorem
 giving us three different views on what a well-founded relation is:</p>
-<p><strong>Theorem (Well-founded Relations)</strong>: $ $ $ $ Suppose
-<span class="math inline">\(\mathrm{X}\)</span> is a set with binary
+<p><strong>Theorem (Well-founded Relations)</strong>: Suppose <span
+class="math inline">\(\mathrm{X}\)</span> is a set with a binary
 relation <span class="math inline">\(\mathcal{R}\)</span> on it, meaning
-$ $. We write <span class="math inline">\(\mathcal{R}\)</span> infix – $
-$ – to mean that <span class="math inline">\((\x, \y) \in
-R\)</span>.</p>
-<p>The following are equivalent: - Every non-empty subset <span
-class="math inline">\(\mathcal{U}\subset \mathrm{X}\)</span> has an
-<span class="math inline">\(\mathcal{R}\)</span>-least element i.e.
-<span class="math display">\[
-  \exists \mathrm{u&#39;} \in \mathcal{U}\ldot \forall u \in U \ldot
-u&#39; \mathcal{R}u
-\]</span> - Suppose <span class="math inline">\(U\)</span> is a subset
-of <span class="math inline">\(X\)</span>. The following induction
+<span class="math inline">\(\mathcal{R}\subseteq \mathrm{X}\times
+\mathrm{X}\)</span>. We write <span
+class="math inline">\(\mathcal{R}\)</span> infix – <span
+class="math inline">\(\mathrm{x}\mathcal{R}\mathrm{y}\)</span> – to mean
+that <span class="math inline">\((\mathrm{x}, \mathrm{y}) \in
+\mathcal{R}\)</span>.</p>
+<p>The following are equivalent:</p>
+<ul>
+<li>[<strong>Well-ordering principle</strong>] For every non-empty
+subset <span class="math inline">\(\mathcal{U}\subseteq
+\mathrm{X}\)</span>, there exists an <span
+class="math inline">\(\mathcal{R}\)</span>-minimal element, i.e. an
+element with nothing below it in <span
+class="math inline">\(\mathcal{U}\)</span>: <span
+class="math display">\[
+\forall \mathcal{U}\subseteq \mathrm{X},\, \mathcal{U}\neq \emptyset
+\Rightarrow \exists \mathrm{m}\in \mathcal{U},\, \forall \mathrm{u}\in
+\mathcal{U},\, \neg(\mathrm{u}\mathcal{R}\mathrm{m})
+\]</span></li>
+<li>[<strong>R Inductive</strong>] Suppose <span
+class="math inline">\(\mathcal{U}\)</span> is a subset of <span
+class="math inline">\(\mathrm{X}\)</span>. The following induction
 principle holds: <span class="math display">\[
-  (\forall \x \mathrm{x&#39;} \in X \ldot
+(\forall \mathrm{x}\in \mathrm{X}, (\forall \mathrm{x}&#39; \in
+\mathrm{X}, \mathrm{x}&#39; \mathcal{R}\mathrm{x}\to \mathrm{x}&#39; \in
+\mathcal{U}) \Rightarrow \mathrm{x}\in \mathcal{U}) \Rightarrow U = X
+\]</span></li>
+<li>[<strong>Artinian</strong><a href="#fn1" class="footnote-ref"
+id="fnref1" role="doc-noteref"><sup>1</sup></a>] Say a sequence of
+elements <span
+class="math inline">\(\{\mathrm{x}_{\mathrm{i}}\}_{\mathrm{i}\in
+\mathbb{N}}\)</span> is <span
+class="math inline">\(\mathcal{R}\)</span>-descending if for each <span
+class="math inline">\(\mathrm{j}\in \mathbb{N}\)</span> we have <span
+class="math inline">\(\mathrm{x}_{\mathrm{j}+1}
+\mathcal{R}\mathrm{x}_{\mathrm{j}}\)</span>. We then have that there do
+not exist any infinite <span
+class="math inline">\(\mathcal{R}\)</span>-descending sequences.</li>
+</ul>
+<p>Let us give some idea why the above theorem doesn’t naively hold in a
+constructive setting. Suppose we have some property <span
+class="math inline">\(\mathrm{P}\)</span> (which may be undecidable or
+just not decidable by us) and define a subset <span
+class="math inline">\(\mathcal{U}\subseteq \mathbb{N}\)</span> as
+follows:</p>
+<p><span class="math display">\[
+\mathcal{U}= \begin{cases} \{0, 1\} &amp; \text{if } \mathrm{P}\\ \{1\}
+&amp; \text{otherwise} \end{cases}
 \]</span></p>
+<p>Now, if we were to use the naive constructive version of the
+well-ordered principle, then this would give us some way of constructing
+the least element of this set <span
+class="math inline">\(\mathcal{U}\)</span>, and thus we would be able to
+decide the proposition <span class="math inline">\(\mathrm{P}\)</span>.
+Instead, let’s take the second principle – induction – as the starting
+point of developing the notion of a well-founded relation in
+<code>Agda</code>.</p>
+<h2 id="agda-development">Agda Development</h2>
+<h3 id="definitions">Definitions</h3>
+<p>We will start with the definitions of relation and property. In a
+constructive setting we are often better off working with
+“evidence-carrying” structures, and so a relation is not just a subset
+of the product <span class="math inline">\(\mathcal{A}\times
+\mathcal{A}\)</span>, but for each <span
+class="math inline">\(\mathrm{a}, \mathrm{b}\in \mathcal{A}\)</span> we
+give back the type of proofs of how <span
+class="math inline">\(\mathrm{a}\)</span> is related to <span
+class="math inline">\(\mathrm{b}\)</span>.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><dfn>Rel</dfn> <span class="ot">:</span>  <span class="ot">∀</span> <span class="ot">{</span>ℓ <span class="ot">:</span> Level<span class="ot">}</span> <span class="ot">→</span> <span class="dt">Set</span> ℓ <span class="ot">→</span> <span class="dt">Set</span> <span class="ot">(</span>ℓsuc ℓ<span class="ot">)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><dfn>Rel</dfn> <span class="ot">{</span>ℓ <span class="ot">=</span> ℓ<span class="ot">}</span> A <span class="ot">=</span> A <span class="ot">→</span> A <span class="ot">→</span> <span class="dt">Set</span> ℓ</span></code></pre></div>
+<p>Similarly, rather than subsets, we work with evidence-carrying
+properties which say not just that an element is in some particular
+subset, but give a proof for how it is in the given set. If one is
+already familiar with dependent type theory, we will note that a
+<code>Property</code>, in our sense, is nothing other than a dependent
+type.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><dfn>Property</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>ℓ <span class="ot">:</span> Level<span class="ot">}</span> <span class="ot">→</span> <span class="dt">Set</span> ℓ <span class="ot">→</span> <span class="dt">Set</span> <span class="ot">(</span>ℓsuc ℓ<span class="ot">)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><dfn>Property</dfn> <span class="ot">{</span>ℓ <span class="ot">=</span> ℓ<span class="ot">}</span> A <span class="ot">=</span> A <span class="ot">→</span> <span class="dt">Set</span> ℓ</span></code></pre></div>
+<p>The property we take as fundamental from the above theorem is that of
+an <code>inductive relation</code>. That is to say, we wish to
+characterize those relations upon which we can prove properties by an
+induction principle:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> InductiveDefs <span class="ot">{</span>ℓ <span class="ot">:</span> Level<span class="ot">}</span> <span class="ot">(</span>A <span class="ot">:</span> <span class="dt">Set</span> ℓ<span class="ot">)</span> <span class="kw">where</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- the induction principle for a given relation R and property P</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <dfn>IndPrinciple</dfn> <span class="ot">:</span> <span class="ot">(</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>P <span class="ot">:</span> <dfn>Property</dfn> A<span class="ot">)</span> <span class="ot">→</span> <span class="dt">Set</span> ℓ</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <dfn>IndPrinciple</dfn> R P <span class="ot">=</span> <span class="ot">∀</span> <span class="ot">(</span>y <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> <span class="ot">((∀</span> <span class="ot">(</span>x <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> R x y <span class="ot">→</span> P x<span class="ot">)</span> <span class="ot">→</span> P y<span class="ot">)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- A property is inductive with respect to R if we can prove it</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- by induction on R</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <dfn>InductiveP</dfn> <span class="ot">:</span> <span class="ot">(</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>P <span class="ot">:</span> <dfn>Property</dfn> A<span class="ot">)</span> <span class="ot">→</span> <span class="dt">Set</span> ℓ</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <dfn>InductiveP</dfn> R P <span class="ot">=</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <dfn>IndPrinciple</dfn> R P <span class="ot">→</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="ot">(∀</span> <span class="ot">(</span>x <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> P x<span class="ot">)</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- A relation is inductive if every property</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- is inductive with respect to it</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <dfn>InductiveR</dfn> <span class="ot">:</span> <span class="ot">(</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">)</span> <span class="ot">→</span> <span class="dt">Set</span> <span class="ot">(</span>ℓsuc ℓ<span class="ot">)</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <dfn>InductiveR</dfn> R <span class="ot">=</span> <span class="ot">∀</span> <span class="ot">(</span>P <span class="ot">:</span> <dfn>Property</dfn> A<span class="ot">)</span> <span class="ot">→</span> <dfn>InductiveP</dfn> R P</span></code></pre></div>
+<p>We have then: <code>IndPrinciple R P</code> gives a general inductive
+step — to prove <code>P y</code> we may assume <code>P</code> holds for
+all <code>R</code>-predecessors of <code>y</code>;
+<code>InductiveP R P</code> says that P is provable by this method of
+induction; and <code>InductiveR R</code> says that <em>any</em> property
+<code>P</code> can be proven by the induction principle for
+<code>R</code>.</p>
+<h3 id="strong-induction">Strong induction</h3>
+<p>We would like to think of inductive relations as bonafide objects
+unto themselves. A natural question when we start to think structurally
+in this way is how we can combine or construct new inductive relations
+from existing ones. In this regard, we will first aim at generalizing
+the notion of <em>strong induction</em>. For the natural numbers, we
+have an inductive principle based on the immediate predecessor relation:
+to prove a property <span class="math inline">\(\mathrm{P}\)</span>
+holds for <span class="math inline">\(\mathrm{n}\)</span>, we may assume
+it holds for the predecessor (remembering that <span
+class="math inline">\(0\)</span> has no predecessor) and then show it
+must hold for <span class="math inline">\(\mathrm{n}\)</span>. Strong
+induction instead says that when we are proving <span
+class="math inline">\(\mathrm{P}\; \mathrm{n}\)</span>, we may assume it
+holds for <em>all</em> numbers less than <span
+class="math inline">\(\mathrm{n}\)</span>. From our vantage point, we
+can think of this as going from the predecessor relation <span
+class="math inline">\((\mathrm{n}, \operatorname{succ}
+\mathrm{n})_{\mathrm{n}\in \mathbb{N}}\)</span> to its transitive
+closure <span class="math inline">\(\_&lt;\_\)</span>. We prove, then,
+that this idea holds for <em>any</em> inductive relation:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> InductiveTrans <span class="kw">where</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- _⁺ is the transitive closure of R</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">data</span> <span class="ot">_</span>⁺ <span class="ot">(</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">)</span> <span class="ot">:</span> <dfn>Rel</dfn> A <span class="kw">where</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="cn">gen⁺</span>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>x y <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">→</span> R x y <span class="ot">→</span> <span class="ot">(</span>R ⁺<span class="ot">)</span> x y</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="ot">_</span><span class="cn">⁺↦</span><span class="ot">_</span>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>x y z <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>R ⁺<span class="ot">)</span> x y <span class="ot">→</span> R y z <span class="ot">→</span> <span class="ot">(</span>R ⁺<span class="ot">)</span> x z</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- _* is the reflexive closure of R</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">data</span> <span class="ot">_</span>* <span class="ot">(</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">)</span> <span class="ot">:</span> <dfn>Rel</dfn> A <span class="kw">where</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="cn">gen*</span>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>x y <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">→</span> R x y <span class="ot">→</span> <span class="ot">(</span>R *<span class="ot">)</span> x y</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="cn">id</span>    <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>x <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">→</span> <span class="ot">(</span>R *<span class="ot">)</span> x x</span></code></pre></div>
+<p>In the ordinary proof that weak induction gives strong induction, we
+usually try to package up data of the strong induction into a different
+property which we can prove using weak induction. If we prove <span
+class="math inline">\(\mathrm{P}\)</span> by strong induction, then we
+can transform <span class="math inline">\(\mathrm{P}\)</span> to a new
+property <span class="math inline">\(\mathrm{P}*\)</span> where: <span
+class="math display">\[
+  (\mathrm{P}*)(\mathrm{n}) = \forall \mathrm{m}&lt; \mathrm{n},
+\mathrm{P}\mathrm{m}
+\]</span></p>
+<p>We then have that weak induction on <span
+class="math inline">\(\mathrm{P}*\)</span> proves strong induction for
+<span class="math inline">\(\mathrm{P}\)</span>. Here is our equivalent
+of <span class="math inline">\(\mathrm{P}*\)</span>:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  <dfn>belowP</dfn> <span class="ot">:</span> <span class="ot">{</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">→</span> <dfn>Property</dfn> A <span class="ot">→</span> <dfn>Property</dfn> A</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <dfn>belowP</dfn> <span class="ot">{</span>R <span class="ot">=</span> R<span class="ot">}</span> P b <span class="ot">=</span> <span class="ot">∀</span> <span class="ot">(</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(((</span>R ⁺<span class="ot">)</span> *<span class="ot">)</span> a b<span class="ot">)</span> <span class="ot">→</span> P a</span></code></pre></div>
+<p>We then use this to prove strong induction<a href="#fn2"
+class="footnote-ref" id="fnref2"
+role="doc-noteref"><sup>2</sup></a>.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- If we have the induction principle for R⁺ and P, then</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- we get the induction principle for R with <dfn>belowP</dfn> P</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <dfn>strong-induction-lemma</dfn></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="ot">:</span> <span class="ot">{</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">{</span>P <span class="ot">:</span> <dfn>Property</dfn> A<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <dfn>IndPrinciple</dfn> <span class="ot">(</span>R ⁺<span class="ot">)</span> P <span class="ot">→</span> <dfn>IndPrinciple</dfn> R <span class="ot">(</span><dfn>belowP</dfn> <span class="ot">{</span>R<span class="ot">}</span> P<span class="ot">)</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- We are trying to prove P* c holds whenever we have that it holds</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- for all a with (a R c)</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">--</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- We do case analysis on the proof of (R+)* a b</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">--</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- case 1: (<span class="cn">id</span> : c ≤R c), we need to prove P c</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- By R⁺ induction it is enough to show</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- ∀ (p : a &lt;R⁺ c), P a</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">--   We then case split on p:</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">--   <dfn>∙</dfn> If (p : a &lt;R c) is a single <span class="cn">step</span>, then we have to</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">--     prove P a which follows by the R induction <span class="cn">step</span></span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="co">--     applied to p as this gives us P* a from which we get</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="co">--     P a</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="co">--   <dfn>∙</dfn> If (p : a &lt;R⁺ b &lt;R c) holds then we have by R</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">--     induction that P* b holds and so we have that P a</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="co">--     holds by definition of P*</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  <dfn>strong-induction-lemma</dfn> R⁺ind c stepR-P* <span class="ot">.</span>c <span class="cn">id</span> <span class="ot">=</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    R⁺ind c <span class="ot">λ</span> <span class="ot">{</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>      a <span class="ot">(</span><span class="cn">gen⁺</span> Rac<span class="ot">)</span> <span class="ot">→</span> stepR-P* a Rac a <span class="cn">id</span> <span class="ot">;</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>      a <span class="ot">(_</span><span class="cn">⁺↦</span><span class="ot">_</span> <span class="ot">{</span>y <span class="ot">=</span> b<span class="ot">}</span> R⁺ab Rbc<span class="ot">)</span> <span class="ot">→</span> stepR-P* b Rbc a <span class="ot">(</span><span class="cn">gen*</span> R⁺ab<span class="ot">)}</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- In the second case we have a single R <span class="cn">step</span> (p : b &lt;R c)</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- and we have to show that P b holds</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>  <span class="co">--</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- But, we have that P* b holds by R induction and so we</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- automatically have P b</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>  <dfn>strong-induction-lemma</dfn> R⁺ind c stepR-P* b <span class="ot">(</span><span class="cn">gen*</span> <span class="ot">(</span><span class="cn">gen⁺</span> Rbc<span class="ot">))</span> <span class="kw">with</span> stepR-P* b Rbc</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>  <span class="ot">...</span> <span class="ot">|</span> P*b <span class="ot">=</span> P*b b <span class="cn">id</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Similarly, in the third case we have a &lt;R⁺ b &lt;R c, and we want to show</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- P a holds</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>  <span class="co">--</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- But, by R induction we have that P*b holds and so we have</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- that P a holds as a &lt;R⁺ b</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>  <dfn>strong-induction-lemma</dfn> indP c stepR-P* a <span class="ot">(</span><span class="cn">gen*</span> <span class="ot">(_</span><span class="cn">⁺↦</span><span class="ot">_</span> <span class="ot">{</span>y <span class="ot">=</span> b<span class="ot">}</span> R⁺ab Rbc<span class="ot">))</span> <span class="kw">with</span></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>    stepR-P* b Rbc</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>  <span class="ot">...</span> <span class="ot">|</span> P*b <span class="ot">=</span> P*b a <span class="ot">(</span><span class="cn">gen*</span> R⁺ab<span class="ot">)</span></span></code></pre></div>
+<p>We can then show that if ordinary induction holds for <span
+class="math inline">\(\mathrm{P}*\)</span>, then strong induction holds
+for <span class="math inline">\(\mathrm{P}\)</span>.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- By the <dfn>lemma</dfn>, we can prove (R ⁺) is inductive for any property</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- P if we assume that R is inductive for P*</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><dfn>liftInd</dfn></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">:</span> <span class="ot">{</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">{</span>P <span class="ot">:</span> <dfn>Property</dfn> A<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <dfn>InductiveP</dfn> R <span class="ot">(</span><dfn>belowP</dfn> <span class="ot">{</span>R<span class="ot">}</span> P<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <dfn>InductiveP</dfn> <span class="ot">(</span>R ⁺<span class="ot">)</span> P</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><dfn>liftInd</dfn> IndP* indR⁺ a <span class="ot">=</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  IndP* <span class="ot">(</span><dfn>strong-induction-lemma</dfn> indR⁺<span class="ot">)</span> a a <span class="cn">id</span></span></code></pre></div>
+<p>Finally, we get that if a relation is inductive, then its transitive
+closure is too:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><dfn>RtoR⁺-inductive</dfn> <span class="ot">:</span> <span class="ot">{</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">→</span> <dfn>InductiveR</dfn> R <span class="ot">→</span> <dfn>InductiveR</dfn> <span class="ot">(</span>R ⁺<span class="ot">)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><dfn>RtoR⁺-inductive</dfn> <span class="ot">{</span>R<span class="ot">}</span> IndR P <span class="ot">=</span> <dfn>liftInd</dfn> <span class="ot">(</span>IndR <span class="ot">(</span><dfn>belowP</dfn> P<span class="ot">))</span></span></code></pre></div>
+<p>Much easier, we can show that if we have strong induction then we
+have ordinary induction:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- use R induction to prove R⁺ induction by only using single steps a &lt;R b</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><dfn>RtoR⁺-principle</dfn> <span class="ot">:</span> <span class="ot">{</span>P <span class="ot">:</span> <dfn>Property</dfn> A<span class="ot">}{</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">→</span> <dfn>IndPrinciple</dfn> R P <span class="ot">→</span> <dfn>IndPrinciple</dfn> <span class="ot">(</span>R ⁺<span class="ot">)</span> P</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><dfn>RtoR⁺-principle</dfn> indR b R⁺step-ab <span class="ot">=</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  indR b <span class="ot">(λ</span> a Rab <span class="ot">→</span> R⁺step-ab a <span class="ot">(</span><span class="cn">gen⁺</span> Rab<span class="ot">))</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><dfn>R⁺toR-inductive</dfn> <span class="ot">:</span> <span class="ot">{</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">→</span> <dfn>InductiveR</dfn> <span class="ot">(</span>R ⁺<span class="ot">)</span> <span class="ot">→</span> <dfn>InductiveR</dfn> R</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><dfn>R⁺toR-inductive</dfn> IndR⁺ P <span class="ot">=</span> <span class="ot">λ</span> indR a <span class="ot">→</span> IndR⁺ P <span class="ot">(</span><dfn>RtoR⁺-principle</dfn> indR<span class="ot">)</span> a</span></code></pre></div>
+<p>We therefore get that a relation is inductive if, and only if, its
+transitive closure is inductive:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><dfn>⁺Inductive</dfn> <span class="ot">:</span> <span class="ot">{</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">→</span> Equivalence <span class="ot">(</span>setoid <span class="ot">(</span><dfn>InductiveR</dfn> R<span class="ot">))</span> <span class="ot">(</span>setoid <span class="ot">(</span><dfn>InductiveR</dfn> <span class="ot">(</span>R ⁺<span class="ot">)))</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><dfn>⁺Inductive</dfn> <span class="ot">{</span>R <span class="ot">=</span> R<span class="ot">}</span> <span class="ot">=</span> <span class="kw">record</span> <span class="ot">{</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>     <span class="kw">to</span> <span class="ot">=</span> <dfn>RtoR⁺-inductive</dfn> <span class="ot">{</span>R <span class="ot">=</span> R<span class="ot">}</span> <span class="ot">;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>     from <span class="ot">=</span>  <dfn>R⁺toR-inductive</dfn> <span class="ot">{</span>R <span class="ot">=</span> R<span class="ot">}</span> <span class="ot">;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>     to-cong <span class="ot">=</span> cong <dfn>RtoR⁺-inductive</dfn> <span class="ot">;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>     from-cong <span class="ot">=</span> cong <dfn>R⁺toR-inductive</dfn></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>   <span class="ot">}</span></span></code></pre></div>
+<h3 id="pullback-relation">Pullback Relation</h3>
+<p>Next up, we often want to do a “course-of-values” induction. For
+instance, we prove some property holds of binary trees by using
+induction on the height of a tree. The way we can think of this more
+abstractly is that we have a function <code>height : BinTree → ℕ</code>
+and use the <em>pullback</em> of the immediate predecessor relation on
+<code>ℕ</code> to get an induction principle on <code>BinTree</code> for
+the height of sub-trees. We call this the pullback relation, because it
+is the ordinary pullback of a relation considered as a subset, in the
+sense that the following diagram is a pullback square:</p>
+<p><span class="math display">\[
+\begin{array}{ccc}
+f^*S &amp; \xrightarrow{\;f^*\;} &amp; S \\
+\Big\downarrow{\scriptstyle\subseteq} &amp; &amp;
+\Big\downarrow{\scriptstyle\subseteq} \\
+A \times A &amp; \xrightarrow{\;f \times f\;} &amp; B \times B
+\end{array}
+\]</span></p>
+<p>We give an explicit construction of the pullback, and also introduce
+both the pullback and <span class="math inline">\(\Pi\)</span> type for
+properties as we use these to transfer the induction principle from
+<span class="math inline">\(\mathcal{A}\)</span> to <span
+class="math inline">\(\mathrm{B}\)</span>:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> InductivePullback <span class="ot">{</span>ℓ <span class="ot">:</span> Level<span class="ot">}</span> <span class="ot">(</span>A B <span class="ot">:</span> <span class="dt">Set</span> ℓ<span class="ot">)</span> <span class="kw">where</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Function</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> InductiveDefs</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Product</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- pullback relation</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="ot">_</span><dfn>←R</dfn><span class="ot">_</span> <span class="ot">:</span> <span class="ot">(</span>f <span class="ot">:</span> A <span class="ot">→</span> B<span class="ot">)</span> <span class="ot">→</span> <dfn>Rel</dfn> B <span class="ot">→</span> <dfn>Rel</dfn> A</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  f <dfn>←R</dfn> R <span class="ot">=</span> <span class="ot">λ</span> a₀ a₁ <span class="ot">→</span> R <span class="ot">(</span>f a₀<span class="ot">)</span> <span class="ot">(</span>f a₁<span class="ot">)</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- pullback of a property</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="ot">_</span><dfn>←P</dfn><span class="ot">_</span> <span class="ot">:</span> <span class="ot">(</span>f <span class="ot">:</span> A <span class="ot">→</span> B<span class="ot">)</span> <span class="ot">→</span> <dfn>Property</dfn> B <span class="ot">→</span> <dfn>Property</dfn> A</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  f <dfn>←P</dfn> P <span class="ot">=</span> P ∘ f</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">--  Π-type: Π_f P b - right adjoint to above pullback/substitution</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  Π<span class="ot">_</span><dfn>∙</dfn><span class="ot">_</span> <span class="ot">:</span> <span class="ot">(</span>f <span class="ot">:</span> A <span class="ot">→</span> B<span class="ot">)</span> <span class="ot">→</span> <dfn>Property</dfn> A <span class="ot">→</span> <dfn>Property</dfn> B</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  Π f <dfn>∙</dfn> P <span class="ot">=</span> <span class="ot">λ</span> b <span class="ot">→</span> <span class="ot">∀</span> <span class="ot">(</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>f a ≡ b<span class="ot">)</span> <span class="ot">→</span> P a</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- If we have an induction principle for the pullback relation</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- then we can prove an induction principle for the Π-type property</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <dfn>pullback-ind</dfn></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>      <span class="ot">:</span> <span class="ot">{</span>R <span class="ot">:</span> <dfn>Rel</dfn> B<span class="ot">}</span> <span class="ot">{</span>P <span class="ot">:</span> <dfn>Property</dfn> A<span class="ot">}{</span>f <span class="ot">:</span> A <span class="ot">→</span> B<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>      <dfn>IndPrinciple</dfn> A <span class="ot">(</span>f <dfn>←R</dfn> R<span class="ot">)</span> P <span class="ot">→</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>      <dfn>IndPrinciple</dfn> B R <span class="ot">(</span>Π f <dfn>∙</dfn> P <span class="ot">)</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  <dfn>pullback-ind</dfn> <span class="ot">{</span>f <span class="ot">=</span> f<span class="ot">}</span> indR← <span class="ot">.(</span>f a₁<span class="ot">)</span> indΣ a₁ refl <span class="ot">=</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    indR← a₁ <span class="ot">(λ</span> a₀ Ra₀₁ <span class="ot">→</span> indΣ <span class="ot">(</span>f a₀<span class="ot">)</span> Ra₀₁ a₀ refl<span class="ot">)</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- If we have an inductive relation R on B, then</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- the pullback relation is also inductive</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>  <dfn>pullback-Ind</dfn> <span class="ot">:</span> <span class="ot">{</span>R <span class="ot">:</span> <dfn>Rel</dfn> B<span class="ot">}(</span>f <span class="ot">:</span> A <span class="ot">→</span> B<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>    <dfn>InductiveR</dfn> B R <span class="ot">→</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    <dfn>InductiveR</dfn> A <span class="ot">(</span>f <dfn>←R</dfn> R<span class="ot">)</span></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>  <dfn>pullback-Ind</dfn> f IndR P indR← a <span class="ot">=</span> <dfn>Π-aP</dfn> a refl</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>      <dfn>Π-aP</dfn> <span class="ot">:</span> <span class="ot">(</span>Π f <dfn>∙</dfn> P<span class="ot">)</span> <span class="ot">(</span>f a<span class="ot">)</span></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>      <dfn>Π-aP</dfn> <span class="ot">=</span> IndR <span class="ot">(</span>Π f <dfn>∙</dfn> P<span class="ot">)</span> <span class="ot">(</span><dfn>pullback-ind</dfn> indR←<span class="ot">)</span> <span class="ot">(</span>f a<span class="ot">)</span></span></code></pre></div>
+<p>We note here that we make use of the right adjoint to pullback or
+substitution, and if <span class="math inline">\(\mathrm{P}\)</span>
+holds inductively on our pullback relation, then we get exactly that
+<span class="math inline">\(\Pi_{\mathrm{f}} P\)</span> holds
+inductively for our original relation.</p>
+<h3 id="pointwise-product">Pointwise Product</h3>
+<p>One elementary way we can build new inductive relations is to take
+the pointwise product of two inductive relations on sets <code>A</code>
+and <code>B</code>.</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> InductivePWise <span class="ot">{</span>ℓ <span class="ot">:</span> Level<span class="ot">}</span> <span class="ot">(</span>A B <span class="ot">:</span> <span class="dt">Set</span> ℓ<span class="ot">)</span> <span class="kw">where</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Product</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Sum</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> InductiveDefs</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">data</span> <dfn>PWise</dfn> <span class="ot">(</span>R₀ <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">)</span> <span class="ot">(</span>R₁ <span class="ot">:</span> <dfn>Rel</dfn> B<span class="ot">)</span> <span class="ot">:</span> <dfn>Rel</dfn> <span class="ot">(</span>A × B<span class="ot">)</span> <span class="kw">where</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="cn">PWise-R</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a₀ a₁ <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">{</span>b₀ b₁ <span class="ot">:</span> B<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>      R₀ a₀ a₁ <span class="ot">→</span> R₁ b₀ b₁ <span class="ot">→</span> <dfn>PWise</dfn> R₀ R₁ <span class="ot">(</span>a₀ , b₀<span class="ot">)</span> <span class="ot">(</span>a₁ , b₁<span class="ot">)</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="cn">FstP</span> <span class="ot">:</span> <dfn>Property</dfn> <span class="ot">(</span>A × B<span class="ot">)</span> <span class="ot">→</span> <dfn>Property</dfn> A</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="cn">FstP</span> P× <span class="ot">=</span> <span class="ot">λ</span> a <span class="ot">→</span> <span class="ot">(</span>b <span class="ot">:</span> B<span class="ot">)</span> <span class="ot">→</span> P× <span class="ot">(</span>a , b<span class="ot">)</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="cn">SndP</span> <span class="ot">:</span> <dfn>Property</dfn> <span class="ot">(</span>A × B<span class="ot">)</span> <span class="ot">→</span> <dfn>Property</dfn> B</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="cn">SndP</span> P× <span class="ot">=</span> <span class="ot">λ</span> b <span class="ot">→</span> <span class="ot">(</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> P× <span class="ot">(</span>a , b<span class="ot">)</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="cn">pwise-ind</span> <span class="ot">:</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="ot">{</span>R₀ <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">{</span>R₁ <span class="ot">:</span> <dfn>Rel</dfn> B<span class="ot">}{</span>P× <span class="ot">:</span> <dfn>Property</dfn> <span class="ot">(</span>A × B<span class="ot">)}</span> <span class="ot">→</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <dfn>IndPrinciple</dfn> <span class="ot">(</span>A × B<span class="ot">)</span> <span class="ot">(</span><dfn>PWise</dfn> R₀ R₁<span class="ot">)</span> P× <span class="ot">→</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="ot">(</span><dfn>IndPrinciple</dfn> A R₀ <span class="ot">(</span><span class="cn">FstP</span> P×<span class="ot">))</span> × <span class="ot">(</span><dfn>IndPrinciple</dfn> B R₁ <span class="ot">(</span><span class="cn">SndP</span> P×<span class="ot">))</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  <span class="cn">pwise-ind</span> <span class="ot">{</span>R₀ <span class="ot">=</span> R₀<span class="ot">}{</span>R₁ <span class="ot">=</span> R₁<span class="ot">}</span> <span class="ot">{</span>P× <span class="ot">=</span> P×<span class="ot">}</span> indPW <span class="ot">=</span> <span class="cn">indFst</span> , <span class="cn">indSnd</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>      <span class="cn">indFst</span> <span class="ot">:</span> <dfn>IndPrinciple</dfn> A R₀ <span class="ot">(</span><span class="cn">FstP</span> P×<span class="ot">)</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>      <span class="cn">indFst</span> <span class="ot">=</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>        <span class="ot">λ</span> a&#39; indA b&#39; <span class="ot">→</span> indPW <span class="ot">(</span>a&#39; , b&#39;<span class="ot">)</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>          <span class="ot">(λ</span> <span class="ot">{</span> <span class="ot">.(_</span> , <span class="ot">_)</span> <span class="ot">(</span><span class="cn">PWise-R</span> <span class="ot">{</span>a₀ <span class="ot">=</span> a&#39;<span class="ot">}</span> <span class="ot">{</span>b₀ <span class="ot">=</span> b&#39;<span class="ot">}</span> Ra&#39;a Rb&#39;b<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>            indA a&#39; Ra&#39;a b&#39;<span class="ot">})</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>      <span class="cn">indSnd</span> <span class="ot">:</span> <dfn>IndPrinciple</dfn> B R₁ <span class="ot">(</span><span class="cn">SndP</span> P×<span class="ot">)</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>      <span class="cn">indSnd</span> <span class="ot">=</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>        <span class="ot">λ</span> b&#39; indB a&#39; <span class="ot">→</span> indPW <span class="ot">(</span>a&#39; , b&#39;<span class="ot">)</span></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>          <span class="ot">(λ</span> <span class="ot">{</span> <span class="ot">.(_</span> , <span class="ot">_)</span> <span class="ot">(</span><span class="cn">PWise-R</span> <span class="ot">{</span>a₀ <span class="ot">=</span> a&#39;<span class="ot">}</span> <span class="ot">{</span>b₀ <span class="ot">=</span> b&#39;<span class="ot">}</span> Ra&#39;a Rb&#39;b<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>            indB b&#39; Rb&#39;b a&#39;<span class="ot">}</span></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a><span class="ot">)</span></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>  <span class="cn">PWise-Ind</span> <span class="ot">:</span></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>    <span class="ot">{</span>R₀ <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">{</span>R₁ <span class="ot">:</span> <dfn>Rel</dfn> B<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>    <dfn>InductiveR</dfn> A R₀ ⊎ <dfn>InductiveR</dfn> B R₁ <span class="ot">→</span></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>    <dfn>InductiveR</dfn> <span class="ot">(</span>A × B<span class="ot">)</span> <span class="ot">(</span><dfn>PWise</dfn> R₀ R₁<span class="ot">)</span></span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>  <span class="cn">PWise-Ind</span> <span class="ot">{</span>R₀ <span class="ot">=</span> R₀<span class="ot">}</span> <span class="ot">{</span>R₁ <span class="ot">=</span> R₁<span class="ot">}</span> <span class="ot">(</span>inj₁ IndA<span class="ot">)</span> P× indPW <span class="ot">(</span>a , b<span class="ot">)</span> <span class="ot">=</span> <span class="cn">Pa∀</span> b</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>      <span class="cn">Pa∀</span> <span class="ot">:</span> <span class="ot">(</span>b <span class="ot">:</span> B<span class="ot">)</span> <span class="ot">→</span> P× <span class="ot">(</span>a , b<span class="ot">)</span></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>      <span class="cn">Pa∀</span> <span class="ot">=</span> IndA <span class="ot">(</span><span class="cn">FstP</span> P×<span class="ot">)</span> <span class="ot">(</span>proj₁ <span class="ot">(</span><span class="cn">pwise-ind</span> indPW<span class="ot">))</span> a</span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>  <span class="cn">PWise-Ind</span> <span class="ot">{</span>R₀ <span class="ot">=</span> R₀<span class="ot">}</span> <span class="ot">{</span>R₁ <span class="ot">=</span> R₁<span class="ot">}</span> <span class="ot">(</span>inj₂ IndB<span class="ot">)</span> P× indPW <span class="ot">(</span>a , b<span class="ot">)</span> <span class="ot">=</span> <span class="cn">P∀b</span> a</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>      <span class="cn">P∀b</span> <span class="ot">:</span> <span class="ot">(</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> P× <span class="ot">(</span>a , b<span class="ot">)</span></span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>      <span class="cn">P∀b</span> <span class="ot">=</span> IndB <span class="ot">(</span><span class="cn">SndP</span> P×<span class="ot">)</span> <span class="ot">(</span>proj₂ <span class="ot">(</span><span class="cn">pwise-ind</span> indPW<span class="ot">))</span> b</span></code></pre></div>
+<p>We note that when proving this pointwise product induction principle,
+we only actually need one of the two component relations to be
+inductive. This becomes most apparent once we have introduced the
+equivalent formulation that a relation is Artinian, since any infinite
+descending sequence of pairs will give an infinite descending sequence
+for each component.</p>
+<h3 id="sum-of-relations">Sum of Relations</h3>
+<p>Similarly, if we have an inductive relation <span
+class="math inline">\(\mathcal{R}_0\)</span> on <span
+class="math inline">\(\mathcal{A}\)</span>, and <span
+class="math inline">\(\mathcal{R}_1\)</span> on <span
+class="math inline">\(\mathrm{B}\)</span>, then we have an inductive
+relation <span class="math inline">\(\mathcal{R}_0 \uplus
+\mathcal{R}_1\)</span> on <span class="math inline">\(\mathcal{A}\uplus
+\mathrm{B}\)</span>. For this, we make everything in the first component
+<span class="math inline">\(\mathcal{R}\)</span>-smaller than everything
+in the second component. This is just like the usual ordinal sum<a
+href="#fn3" class="footnote-ref" id="fnref3"
+role="doc-noteref"><sup>3</sup></a>.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> InductiveSum <span class="ot">{</span>ℓ <span class="ot">:</span> Level<span class="ot">}</span> <span class="ot">(</span>A B <span class="ot">:</span> <span class="dt">Set</span> ℓ<span class="ot">)</span> <span class="kw">where</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Product</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Sum</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> InductiveDefs</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- The sum relation says:</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">--   • ∀ (a a&#39; : A), aRa&#39; gives (inj₁ a) R (inj₁ a&#39;)</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">--   • ∀ (b b&#39; : B), bRb&#39; gives (inj₂ b) R (inj₂ b&#39;)</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">--   • ∀ (a : A)(b : B), (inj₁ a) R (inj₂ b)</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">data</span> <dfn>SumR</dfn> <span class="ot">(</span>R₀ <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">)</span> <span class="ot">(</span>R₁ <span class="ot">:</span> <dfn>Rel</dfn> B<span class="ot">)</span> <span class="ot">:</span> <dfn>Rel</dfn> <span class="ot">(</span>A ⊎ B<span class="ot">)</span> <span class="kw">where</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="cn">onL</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a₀ a₁ <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>      R₀ a₀ a₁ <span class="ot">→</span> <dfn>SumR</dfn> R₀ R₁ <span class="ot">(</span>inj₁ a₀<span class="ot">)</span> <span class="ot">(</span>inj₁ a₁<span class="ot">)</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="cn">onR</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>b₀ b₁ <span class="ot">:</span> B<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>      R₁ b₀ b₁ <span class="ot">→</span> <dfn>SumR</dfn> R₀ R₁ <span class="ot">(</span>inj₂ b₀<span class="ot">)</span> <span class="ot">(</span>inj₂ b₁<span class="ot">)</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="cn">onLR</span> <span class="ot">:</span> <span class="ot">∀{</span>a <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">{</span>b <span class="ot">:</span> B<span class="ot">}</span> <span class="ot">→</span> <dfn>SumR</dfn> R₀ R₁ <span class="ot">(</span>inj₁ a<span class="ot">)</span> <span class="ot">(</span>inj₂ b<span class="ot">)</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Given a property on the disjoint union, we can</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- extract properties on each component</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  <span class="cn">inj₁P</span> <span class="ot">:</span> <dfn>Property</dfn> <span class="ot">(</span>A ⊎ B<span class="ot">)</span> <span class="ot">→</span> <dfn>Property</dfn> A</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>  <span class="cn">inj₁P</span> P⊎ <span class="ot">=</span> <span class="ot">λ</span> a <span class="ot">→</span> P⊎ <span class="ot">(</span>inj₁ a<span class="ot">)</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- The induced property on B assumes we have already proven</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- the property for all (a : A)</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>  <span class="cn">inj₂P</span> <span class="ot">:</span> <dfn>Property</dfn> <span class="ot">(</span>A ⊎ B<span class="ot">)</span> <span class="ot">→</span> <dfn>Property</dfn> B</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>  <span class="cn">inj₂P</span> P⊎ <span class="ot">=</span> <span class="ot">λ</span> b <span class="ot">→</span> <span class="ot">(∀</span> <span class="ot">(</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> P⊎ <span class="ot">(</span>inj₁ a<span class="ot">))</span> <span class="ot">→</span> P⊎ <span class="ot">(</span>inj₂ b<span class="ot">)</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- If we have an induction principle for a property on the sum</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- then we can extract the induced induction principles for</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- each of the extracted properties:</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>  <span class="cn">sum-ind</span> <span class="ot">:</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>    <span class="ot">{</span>R₀ <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">{</span>R₁ <span class="ot">:</span> <dfn>Rel</dfn> B<span class="ot">}{</span>P⊎ <span class="ot">:</span> <dfn>Property</dfn> <span class="ot">(</span>A ⊎ B<span class="ot">)}</span> <span class="ot">→</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>    <dfn>IndPrinciple</dfn> <span class="ot">(</span>A ⊎ B<span class="ot">)</span> <span class="ot">(</span><dfn>SumR</dfn> R₀ R₁<span class="ot">)</span> P⊎ <span class="ot">→</span></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>    <span class="ot">(</span><dfn>IndPrinciple</dfn> A R₀ <span class="ot">(</span><span class="cn">inj₁P</span> P⊎<span class="ot">))</span> × <span class="ot">(</span><dfn>IndPrinciple</dfn> B R₁ <span class="ot">(</span><span class="cn">inj₂P</span> P⊎<span class="ot">))</span></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>  <span class="cn">sum-ind</span> <span class="ot">{</span>R₀ <span class="ot">=</span> R₀<span class="ot">}{</span>R₁ <span class="ot">=</span> R₁<span class="ot">}</span> <span class="ot">{</span>P⊎ <span class="ot">=</span> P⊎<span class="ot">}</span> ind⊎ <span class="ot">=</span> <span class="cn">ind-inj₁</span> , <span class="cn">ind-inj₂</span></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>      <span class="cn">ind-inj₁</span> <span class="ot">:</span> <dfn>IndPrinciple</dfn> A R₀ <span class="ot">(</span><span class="cn">inj₁P</span> P⊎<span class="ot">)</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>      <span class="cn">ind-inj₁</span> <span class="ot">=</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>        <span class="ot">λ</span> a indA <span class="ot">→</span> ind⊎ <span class="ot">(</span>inj₁ a<span class="ot">)</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>          <span class="ot">(λ</span> <span class="ot">{</span> <span class="ot">.(</span>inj₁ <span class="ot">_)</span> <span class="ot">(</span><span class="cn">onL</span> Ra&#39;a<span class="ot">)</span> <span class="ot">→</span> indA <span class="ot">_</span> Ra&#39;a<span class="ot">})</span></span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>      <span class="cn">ind-inj₂</span> <span class="ot">:</span> <dfn>IndPrinciple</dfn> B R₁ <span class="ot">(</span><span class="cn">inj₂P</span> P⊎<span class="ot">)</span></span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>      <span class="cn">ind-inj₂</span> <span class="ot">=</span></span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>        <span class="ot">λ</span> b indB Pinj₁ <span class="ot">→</span> ind⊎ <span class="ot">(</span>inj₂ b<span class="ot">)</span></span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>          <span class="ot">(λ</span> <span class="ot">{</span> <span class="ot">.(</span>inj₂ <span class="ot">_)</span> <span class="ot">(</span><span class="cn">onR</span> Rb&#39;b<span class="ot">)</span> <span class="ot">→</span> indB <span class="ot">_</span> Rb&#39;b Pinj₁ <span class="ot">;</span></span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a>               <span class="ot">.(</span>inj₁ <span class="ot">_)</span> <span class="cn">onLR</span> <span class="ot">→</span> Pinj₁ <span class="ot">_}</span></span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>          <span class="ot">)</span></span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- If we have that R₀ and R₁ are inductive, then the sum is inductive</span></span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>  <span class="cn">SumR-Ind</span> <span class="ot">:</span></span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>    <span class="ot">{</span>R₀ <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">{</span>R₁ <span class="ot">:</span> <dfn>Rel</dfn> B<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>    <dfn>InductiveR</dfn> A R₀ <span class="ot">→</span> <dfn>InductiveR</dfn> B R₁ <span class="ot">→</span></span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a>    <dfn>InductiveR</dfn> <span class="ot">(</span>A ⊎ B<span class="ot">)</span> <span class="ot">(</span><dfn>SumR</dfn> R₀ R₁<span class="ot">)</span></span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- If we are proving the property for a term of type (inj₁ a),</span></span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- then we can use induction for A and the induced property on A</span></span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a>  <span class="cn">SumR-Ind</span> <span class="ot">{</span>R₀ <span class="ot">=</span> R₀<span class="ot">}</span> <span class="ot">{</span>R₁ <span class="ot">=</span> R₁<span class="ot">}</span> IndA IndB P⊎ ind⊎ <span class="ot">(</span>inj₁ a<span class="ot">)</span> <span class="ot">=</span> <span class="cn">Pinj₁a</span></span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a>      <span class="cn">Pinj₁a</span> <span class="ot">:</span> P⊎ <span class="ot">(</span>inj₁ a<span class="ot">)</span></span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a>      <span class="cn">Pinj₁a</span> <span class="ot">=</span> IndA <span class="ot">(</span><span class="cn">inj₁P</span> P⊎<span class="ot">)</span> <span class="ot">(</span>proj₁ <span class="ot">(</span><span class="cn">sum-ind</span> ind⊎<span class="ot">))</span> a</span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- If we are proving the property for (inj₂ b) then</span></span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- we use B induction to prove the induced property</span></span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- holds assuming it holds for all (a : A)</span></span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a>  <span class="co">--</span></span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- We can then discharge this assumption by recursively calling</span></span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- <span class="cn">SumR-Ind</span> for the given a</span></span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a>  <span class="cn">SumR-Ind</span> <span class="ot">{</span>R₀ <span class="ot">=</span> R₀<span class="ot">}</span> <span class="ot">{</span>R₁ <span class="ot">=</span> R₁<span class="ot">}</span> IndA IndB P⊎ ind⊎ <span class="ot">(</span>inj₂ b<span class="ot">)</span> <span class="ot">=</span> <span class="cn">Pinj₂b</span></span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a>      <span class="cn">Pinj₂b-step</span> <span class="ot">:</span> <span class="ot">((</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> P⊎ <span class="ot">(</span>inj₁ a<span class="ot">))</span> <span class="ot">→</span> P⊎ <span class="ot">(</span>inj₂ b<span class="ot">)</span></span>
+<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a>      <span class="cn">Pinj₂b-step</span> <span class="ot">=</span></span>
+<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a>        IndB <span class="ot">(</span><span class="cn">inj₂P</span> P⊎<span class="ot">)</span> <span class="ot">(</span>proj₂ <span class="ot">(</span><span class="cn">sum-ind</span> ind⊎<span class="ot">))</span> b</span>
+<span id="cb15-72"><a href="#cb15-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-73"><a href="#cb15-73" aria-hidden="true" tabindex="-1"></a>      <span class="cn">Pinj₂b</span> <span class="ot">:</span> P⊎ <span class="ot">(</span>inj₂ b<span class="ot">)</span></span>
+<span id="cb15-74"><a href="#cb15-74" aria-hidden="true" tabindex="-1"></a>      <span class="cn">Pinj₂b</span> <span class="ot">=</span> <span class="cn">Pinj₂b-step</span> <span class="ot">λ</span> a <span class="ot">→</span> <span class="cn">SumR-Ind</span> IndA IndB P⊎ ind⊎ <span class="ot">(</span>inj₁ a<span class="ot">)</span></span></code></pre></div>
+<h3 id="artinian-condition">Artinian Condition</h3>
+<p>Let us think back to the various equivalent formulations of a
+well-founded relation. We can think about what it means to say
+constructively that a relation doesn’t have an infinite chain. One
+formulation<a href="#fn4" class="footnote-ref" id="fnref4"
+role="doc-noteref"><sup>4</sup></a> gives a kind of inductive
+description, which we call <code>FinDesc</code>, of those elements that
+not part of infinite descending chains:</p>
+<ul>
+<li>If an element has no element less than it, then it satisfies
+<code>FinDesc</code></li>
+<li>If all of the elements immediately less than a given element already
+satisfy <code>FinDesc</code>, then the given element satisfies
+<code>FinDesc</code>.</li>
+</ul>
+<p><strong>Note</strong>: As we show below, the much more standard way
+to refer to <code>FinDesc</code> is as an accessibility predicate –
+denoted <code>Acc</code> in <code>agda</code> – and one usually calls a
+relation that we refer to as <code>Artinian</code> just by the term
+<code>WellFounded</code> since this is the most useful general
+formulation.</p>
+<p>This can be encoded in the following definition:</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> Descending <span class="ot">{</span>ℓ <span class="ot">:</span> Level<span class="ot">}</span> <span class="ot">{</span>A <span class="ot">:</span> <span class="dt">Set</span> ℓ<span class="ot">}</span> <span class="kw">where</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Empty</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Product</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Relation<span class="ot">.</span>Nullary</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> InductiveDefs</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">data</span> <dfn>FinDesc</dfn> <span class="ot">(</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">)</span> <span class="ot">(</span>y <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">:</span> <span class="dt">Set</span> ℓ <span class="kw">where</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="cn">step</span> <span class="ot">:</span> <span class="ot">(∀</span> <span class="ot">(</span>x <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> R x y <span class="ot">→</span> <dfn>FinDesc</dfn> R x<span class="ot">)</span> <span class="ot">→</span> <dfn>FinDesc</dfn> R y</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- A relation is <span class="cn">Artinian</span> if all elements satisfy <dfn>FinDesc</dfn></span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="cn">Artinian</span> <span class="ot">:</span> <span class="ot">(</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">)</span> <span class="ot">→</span> <span class="dt">Set</span> ℓ</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="cn">Artinian</span> R <span class="ot">=</span> <span class="ot">∀</span> <span class="ot">(</span>x <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> <dfn>FinDesc</dfn> R x</span></code></pre></div>
+<p>We can then show that a relation is Artinian if, and only if, it is
+inductive:</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>  <dfn>ArtinianToInd</dfn> <span class="ot">:</span> <span class="ot">{</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">→</span> <span class="cn">Artinian</span> R <span class="ot">→</span> <dfn>InductiveR</dfn> A R</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <dfn>ArtinianToInd</dfn> <span class="ot">{</span>R <span class="ot">=</span> R<span class="ot">}</span> fin-desc P indR b <span class="ot">=</span> <dfn>lemma</dfn> b <span class="ot">(</span>fin-desc b<span class="ot">)</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>	  <span class="co">-- We prove P b holds by induction,</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>	  <span class="co">-- if we have aRb, then because b satisfies <dfn>FinDesc</dfn>,</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>	  <span class="co">-- then so does a and so we apply the <dfn>lemma</dfn> recursively</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>	  <span class="co">-- to prove P a</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>      <dfn>lemma</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">(</span>b <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> <dfn>FinDesc</dfn> R b <span class="ot">→</span> P b</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>      <dfn>lemma</dfn> b <span class="ot">(</span><span class="cn">step</span> DaRb<span class="ot">)</span> <span class="ot">=</span> indR b <span class="ot">(λ</span> a Rab <span class="ot">→</span> <dfn>lemma</dfn> a <span class="ot">(</span>DaRb a Rab<span class="ot">))</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- If R is inductive, then we can prove it is <span class="cn">Artinian</span></span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- by applying induction to the <dfn>FinDesc</dfn> property</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <dfn>indToArtinian</dfn> <span class="ot">:</span> <span class="ot">{</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">→</span> <dfn>InductiveR</dfn> A R <span class="ot">→</span> <span class="cn">Artinian</span> R</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <dfn>indToArtinian</dfn> <span class="ot">{</span>R <span class="ot">=</span> R<span class="ot">}</span> indR <span class="ot">=</span> indR <span class="ot">(</span><dfn>FinDesc</dfn> R<span class="ot">)</span> <span class="ot">λ</span> <span class="ot">_</span> <span class="ot">→</span> <span class="cn">step</span></span></code></pre></div>
+<p>Finally, as we mentioned we note that our concept
+<code>FinDesc</code> is equivalent to one already in <code>Agda</code>’s
+<code>stdlib</code> called <code>Acc</code>:</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Induction<span class="ot">.</span>WellFounded <span class="kw">using</span> <span class="ot">(</span>Acc<span class="ot">;</span> acc<span class="ot">;</span> WellFounded<span class="ot">)</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <dfn>descToAcc</dfn> <span class="ot">:</span> <span class="ot">{</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">{</span>x <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">→</span> <dfn>FinDesc</dfn> R x <span class="ot">→</span> Acc R x</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <dfn>descToAcc</dfn> <span class="ot">(</span><span class="cn">step</span> f<span class="ot">)</span> <span class="ot">=</span> acc <span class="ot">(λ</span> <span class="ot">{</span>y<span class="ot">}</span> Ryx <span class="ot">→</span> <dfn>descToAcc</dfn> <span class="ot">(</span>f y Ryx<span class="ot">))</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <dfn>accToFinDesc</dfn> <span class="ot">:</span> <span class="ot">{</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">{</span>x <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">→</span> Acc R x <span class="ot">→</span> <dfn>FinDesc</dfn> R x</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <dfn>accToFinDesc</dfn> <span class="ot">(</span>acc f<span class="ot">)</span> <span class="ot">=</span> <span class="cn">step</span> <span class="ot">(λ</span> y Ryx <span class="ot">→</span> <dfn>accToFinDesc</dfn> <span class="ot">(</span>f Ryx<span class="ot">))</span></span></code></pre></div>
+<h3 id="lexicographic-ordering">Lexicographic Ordering</h3>
+<p>A different way of giving a well-ordering to a product than the
+pointwise order is the lexicographic ordering. For this, we have two
+relations <span class="math inline">\(\mathcal{R}_0\)</span> on <span
+class="math inline">\(\mathcal{A}\)</span>, <span
+class="math inline">\(\mathcal{R}_1\)</span> on <span
+class="math inline">\(\mathrm{B}\)</span>, and then we define a new
+relation <span class="math inline">\(\mathcal{R}\)</span> on pairs,
+where we say <span class="math inline">\((\mathrm{a}, \mathrm{b}) \;
+\mathcal{R}\; (\mathrm{a}&#39;, \mathrm{b}&#39;)\)</span> in just the
+cases when either:</p>
+<ul>
+<li>We have that <span class="math inline">\(\mathrm{a}\;
+\mathcal{R}_0\; \mathrm{a}&#39;\)</span></li>
+<li>We have that <span class="math inline">\(\mathrm{a}=
+\mathrm{a}&#39;\)</span> and also that <span
+class="math inline">\(\mathrm{b}\; \mathcal{R}_1\;
+\mathrm{b}&#39;\)</span></li>
+</ul>
+<p>One thing that might bother us about this definition is that it is
+very non-symmetric, treating the first variable as somehow
+distinguished. When such a situation arises, one is often well-placed to
+ask if this can be better explained by using a dependent pair instead of
+a product. This is indeed the case, and so we will work in the
+generality that we have not just two types <span
+class="math inline">\(\mathcal{A}\)</span> and <span
+class="math inline">\(\mathrm{B}\)</span>, but that <span
+class="math inline">\(\mathrm{B}\)</span> is a dependent type over <span
+class="math inline">\(\mathcal{A}\)</span>:</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> InductiveLex <span class="ot">{</span>ℓ <span class="ot">:</span> Level<span class="ot">}</span> <span class="ot">(</span>A <span class="ot">:</span> <span class="dt">Set</span> ℓ<span class="ot">)</span> <span class="ot">(</span>B <span class="ot">:</span> A <span class="ot">→</span> <span class="dt">Set</span> ℓ<span class="ot">)</span> <span class="kw">where</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Product</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> InductiveDefs</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> Descending</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">data</span> <dfn>Lex</dfn> <span class="ot">(</span>R₀ <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">)</span> <span class="ot">(</span>R₁ <span class="ot">:</span> <span class="ot">(</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> <dfn>Rel</dfn> <span class="ot">(</span>B a<span class="ot">))</span> <span class="ot">:</span> <dfn>Rel</dfn> <span class="ot">(</span>Σ A B<span class="ot">)</span> <span class="kw">where</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="cn">FstR</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a₀ a₁ <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">{</span>b₀ <span class="ot">:</span> B a₀<span class="ot">}</span> <span class="ot">{</span>b₁ <span class="ot">:</span> B a₁<span class="ot">}</span> <span class="ot">→</span> R₀ a₀ a₁ <span class="ot">→</span> <dfn>Lex</dfn> R₀ R₁ <span class="ot">(</span>a₀ , b₀<span class="ot">)</span> <span class="ot">(</span>a₁ , b₁<span class="ot">)</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="cn">SndR</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>a <span class="ot">:</span> A<span class="ot">}</span> <span class="ot">{</span>b₀ b₁ <span class="ot">:</span> B a<span class="ot">}</span> <span class="ot">→</span> R₁ a b₀ b₁ <span class="ot">→</span> <dfn>Lex</dfn> R₀ R₁ <span class="ot">(</span>a , b₀<span class="ot">)</span> <span class="ot">(</span>a , b₁<span class="ot">)</span></span></code></pre></div>
+<p>Ordinarily, when we want to prove lexicographic ordering is a
+well-ordering, we want to use our descending sequence condition. Imagine
+we have a descending sequence in <code>Σ A B</code>: <span
+class="math inline">\(\mathrm{p}_0,\; \mathrm{p}_1,\; \ldots\)</span>
+and suppose <span class="math inline">\(\mathrm{p}_0 = (\mathrm{x},
+\mathrm{y})\)</span>. We then have that there can only exist a finite
+number of terms in our sequence with <span
+class="math inline">\(\mathrm{x}\)</span> as their first term since
+<span class="math inline">\(\mathrm{B}\; \mathrm{x}\)</span> satisfies
+the descending sequence condition. But then, because <span
+class="math inline">\(\mathcal{A}\)</span> also satisfies the descending
+sequence condition, we see that this jump in the first term of the
+sequence can only happen a finite number of times and thus that overall
+such a sequence cannot be infinite. Because this argument seems much
+more natural than arguing directly with the induction principle, we use
+the Artinian/Accessibility characterization from the previous section to
+show that the lexicographic ordering is Artinian:</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- We fix a given a and b and want to show that if a satisfies <dfn>FinDesc</dfn></span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- and the relation on B is pointwise <span class="cn">Artinian</span>, then (a, b) satisfies</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- <dfn>FinDesc</dfn> for the lex relation</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <dfn>desc-lem</dfn> <span class="ot">:</span> <span class="ot">{</span>R₀ <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">{</span>R₁ <span class="ot">:</span> <span class="ot">(</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> <dfn>Rel</dfn> <span class="ot">(</span>B a<span class="ot">)}</span> <span class="ot">→</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="ot">(</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">(</span>b <span class="ot">:</span> B a<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <dfn>FinDesc</dfn> R₀ a <span class="ot">→</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="ot">((</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> <span class="cn">Artinian</span> <span class="ot">(</span>R₁ a<span class="ot">))</span> <span class="ot">→</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <dfn>FinDesc</dfn> <span class="ot">(</span>R₁ a<span class="ot">)</span> b <span class="ot">→</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <dfn>FinDesc</dfn> <span class="ot">(</span><dfn>Lex</dfn> R₀ R₁<span class="ot">)</span> <span class="ot">(</span>a , b<span class="ot">)</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- We here case on the proof that a satisfies <dfn>FinDesc</dfn></span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <dfn>desc-lem</dfn> <span class="ot">{</span>R₀ <span class="ot">=</span> R₀<span class="ot">}</span> <span class="ot">{</span>R₁ <span class="ot">=</span> R₁<span class="ot">}</span> a b <span class="ot">(</span><span class="cn">step</span> a-step<span class="ot">)</span> dB db <span class="ot">=</span> <dfn>inner</dfn> db</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>	  <span class="co">-- For this fixed a, we then split on the proof that b is artinian</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>	  <span class="co">-- where:</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>	  <span class="co">--   - in the case that we descend on the first component, we use</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>	  <span class="co">--     that a satisfies <dfn>FinDesc</dfn> and recurse with a&#39;</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>	  <span class="co">--   - in the case that we recurse on the second component, then</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>	  <span class="co">--     we recurse on <dfn>inner</dfn> which descends on b</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>      <dfn>inner</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>b&#39; <span class="ot">:</span> B a<span class="ot">}</span> <span class="ot">→</span> <dfn>FinDesc</dfn> <span class="ot">(</span>R₁ a<span class="ot">)</span> b&#39; <span class="ot">→</span> <dfn>FinDesc</dfn> <span class="ot">(</span><dfn>Lex</dfn> R₀ R₁<span class="ot">)</span> <span class="ot">(</span>a , b&#39;<span class="ot">)</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>      <dfn>inner</dfn> <span class="ot">(</span><span class="cn">step</span> b-step<span class="ot">)</span> <span class="ot">=</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>        <span class="cn">step</span> <span class="ot">(λ</span> <span class="ot">{</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>          <span class="ot">.(_</span> , <span class="ot">_)</span> <span class="ot">(</span><span class="cn">FstR</span> Ra&#39;a<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>            <dfn>desc-lem</dfn> <span class="ot">_</span> <span class="ot">_</span> <span class="ot">(</span>a-step <span class="ot">_</span> Ra&#39;a<span class="ot">)</span> dB <span class="ot">(</span>dB <span class="ot">_</span> <span class="ot">_)</span> <span class="ot">;</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>          <span class="ot">.(</span>a , <span class="ot">_)</span> <span class="ot">(</span><span class="cn">SndR</span> Rb&#39;b<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>            <dfn>inner</dfn> <span class="ot">(</span>b-step <span class="ot">_</span> Rb&#39;b<span class="ot">)}</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>            <span class="ot">)</span></span></code></pre></div>
+<p>We can then show that the lexicographic ordering is Artinian (and
+therefore inductive):</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>  <dfn>Desc-Lex</dfn> <span class="ot">:</span> <span class="ot">{</span>R₀ <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">{</span>R₁ <span class="ot">:</span> <span class="ot">(</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> <dfn>Rel</dfn> <span class="ot">(</span>B a<span class="ot">)}</span> <span class="ot">→</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Artinian</span> R₀ <span class="ot">→</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="ot">((</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> <span class="cn">Artinian</span> <span class="ot">(</span>R₁ a<span class="ot">))</span> <span class="ot">→</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Artinian</span> <span class="ot">(</span><dfn>Lex</dfn> R₀ R₁<span class="ot">)</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <dfn>Desc-Lex</dfn> desc-R₀ desc-R₁ <span class="ot">(</span>a , b<span class="ot">)</span> <span class="ot">=</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <dfn>desc-lem</dfn> a b <span class="ot">(</span>desc-R₀ a<span class="ot">)</span> desc-R₁ <span class="ot">(</span>desc-R₁ a b<span class="ot">)</span></span></code></pre></div>
+<h3 id="natural-number-induction">Natural Number Induction</h3>
+<p>Given that we are talking about <em>induction</em>, we’d be remiss if
+we didn’t demonstrate how natural number induction fits into our scheme.
+Let’s define the ordinary predecessor relation, and show that this is
+nothing but the ordinary induction principle for the natural
+numbers:</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> InductiveNat <span class="kw">where</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> InductiveDefs</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Product</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Empty</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Nat</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <dfn>predRel</dfn> <span class="ot">:</span> <dfn>Rel</dfn> ℕ</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <dfn>predRel</dfn> n m <span class="ot">=</span> m ≡ suc n</span></code></pre></div>
+<p>We then show that if something satisfies the induction principle for
+<code>predRel</code>, then we can extract from it the ordinary inputs
+for natural number induction:</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>  <span class="kw">module</span> Proof<span class="ot">(</span>P <span class="ot">:</span> <dfn>Property</dfn> ℕ<span class="ot">)</span> <span class="kw">where</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- We need to use that 0 has no predecessor</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <dfn>predRel-0</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>n <span class="ot">:</span> ℕ<span class="ot">}</span> <span class="ot">→</span> <dfn>predRel</dfn> n <span class="dv">0</span> <span class="ot">→</span> ⊥</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <dfn>predRel-0</dfn> <span class="ot">()</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <dfn>indSplit</dfn> <span class="ot">:</span> <dfn>IndPrinciple</dfn> ℕ <dfn>predRel</dfn> P <span class="ot">→</span> <span class="ot">(</span>P <span class="dv">0</span> × <span class="ot">(∀</span> <span class="ot">(</span>n <span class="ot">:</span> ℕ<span class="ot">)</span> <span class="ot">→</span> P n <span class="ot">→</span> P <span class="ot">(</span>suc n<span class="ot">)))</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <dfn>indSplit</dfn> indP <span class="ot">=</span> <dfn>P0</dfn> , <dfn>Psuc</dfn></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>      <span class="kw">where</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>      <dfn>P0</dfn> <span class="ot">:</span> P <span class="dv">0</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>      <dfn>P0</dfn> <span class="ot">=</span> indP zero <span class="ot">(λ</span> n suc0 <span class="ot">→</span> ⊥-elim <span class="ot">(</span><dfn>predRel-0</dfn> suc0<span class="ot">))</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>      <dfn>Psuc</dfn> <span class="ot">:</span>  <span class="ot">(∀</span> <span class="ot">(</span>n <span class="ot">:</span> ℕ<span class="ot">)</span> <span class="ot">→</span> P n <span class="ot">→</span> P <span class="ot">(</span>suc n<span class="ot">))</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>      <dfn>Psuc</dfn> n Pn <span class="ot">=</span> indP <span class="ot">(</span>suc n<span class="ot">)</span> <span class="ot">λ</span> <span class="ot">{</span> m refl <span class="ot">→</span> Pn<span class="ot">}</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>    <dfn>ℕ-ind</dfn> <span class="ot">:</span> P <span class="dv">0</span> <span class="ot">→</span> <span class="ot">(∀</span> <span class="ot">(</span>n <span class="ot">:</span> ℕ<span class="ot">)</span> <span class="ot">→</span> P n <span class="ot">→</span> P <span class="ot">(</span>suc n<span class="ot">))</span> <span class="ot">→</span> <span class="ot">(∀</span> <span class="ot">(</span>n <span class="ot">:</span> ℕ<span class="ot">)</span> <span class="ot">→</span> P n<span class="ot">)</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>    <dfn>ℕ-ind</dfn> <dfn>P0</dfn> <dfn>Psuc</dfn> zero <span class="ot">=</span> <dfn>P0</dfn></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>    <dfn>ℕ-ind</dfn> <dfn>P0</dfn> <dfn>Psuc</dfn> <span class="ot">(</span>suc n<span class="ot">)</span> <span class="ot">=</span> <dfn>Psuc</dfn> n <span class="ot">(</span><dfn>ℕ-ind</dfn> <dfn>P0</dfn> <dfn>Psuc</dfn> n<span class="ot">)</span></span></code></pre></div>
+<p>We can therefore show that <code>predRel</code> is an inductive
+relation:</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>  <dfn>predRelInductive</dfn> <span class="ot">:</span> <dfn>InductiveR</dfn> ℕ <dfn>predRel</dfn></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <dfn>predRelInductive</dfn> P indP <span class="kw">with</span> <dfn>indSplit</dfn> P indP</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">...</span> <span class="ot">|</span> <dfn>P0</dfn> , <dfn>Psuc</dfn> <span class="ot">=</span> <dfn>ℕ-ind</dfn> P <dfn>P0</dfn> <dfn>Psuc</dfn></span></code></pre></div>
+<p>Thus we re-capture the familiar principle of mathematical induction
+as a special case using the immediate predecessor relation.</p>
+<h3 id="w-types">W-types</h3>
+<p>Another very general way type theorists have of talking about
+induction is via <a
+href="https://ncatlab.org/nlab/show/W-type">W-types</a>, that is, the
+type of well-founded trees. The idea of a <code>W-type</code> is that we
+have a type <span class="math inline">\(\mathcal{A}\)</span> of “shapes”
+and a dependent type <span class="math inline">\(\mathrm{P}:
+\mathcal{A}\rightarrow \mathrm{Type}\)</span> of “positions”,
+corresponding to a type of indices where we can place a recursive
+sub-tree<a href="#fn5" class="footnote-ref" id="fnref5"
+role="doc-noteref"><sup>5</sup></a>.</p>
+<p>For instance, we can encode the natural numbers by taking <span
+class="math inline">\(\mathcal{A}= \mathbb{2}\)</span> corresponding to
+the constructors <code>Zero</code> and <code>Succ</code>, and where we
+define the “positions” for each constructor as <span
+class="math display">\[
+\mathrm{P}(\mathrm{b}) = \begin{cases} \bot &amp; \text{if } \mathrm{b}=
+0 \\ \top &amp; \text{if } \mathrm{b}= 1 \end{cases}
+\]</span></p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> Inductive-W-types <span class="ot">{</span>ℓ <span class="ot">:</span> Level<span class="ot">}</span> <span class="kw">where</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> InductiveDefs</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Product</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Empty</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">data</span> <dfn>W</dfn> <span class="ot">(</span>A <span class="ot">:</span> <span class="dt">Set</span> ℓ<span class="ot">)</span> <span class="ot">(</span>P <span class="ot">:</span> A <span class="ot">→</span> <span class="dt">Set</span> ℓ<span class="ot">)</span> <span class="ot">:</span> <span class="dt">Set</span> ℓ <span class="kw">where</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    <span class="cn">sup</span> <span class="ot">:</span> <span class="ot">(</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>f <span class="ot">:</span> P a <span class="ot">→</span> <dfn>W</dfn> A P<span class="ot">)</span> <span class="ot">→</span> <dfn>W</dfn> A P</span></code></pre></div>
+<p>This has the following primitive induction principle:</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>  <span class="kw">module</span> WType <span class="ot">(</span>A <span class="ot">:</span> <span class="dt">Set</span> ℓ<span class="ot">)</span> <span class="ot">(</span>P <span class="ot">:</span> A <span class="ot">→</span> <span class="dt">Set</span> ℓ<span class="ot">)</span> <span class="kw">where</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <dfn>Tree</dfn> <span class="ot">:</span> <span class="dt">Set</span> ℓ</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <dfn>Tree</dfn> <span class="ot">=</span> <dfn>W</dfn> A P</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- For each constructor a with argument p : P a</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- we assume that the property holds for each subtree f p</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- and then have that it holds for each tree constructor from</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- p and f p</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <dfn>IndPrincipleTree</dfn> <span class="ot">:</span> <span class="ot">(</span>Q <span class="ot">:</span> <dfn>Property</dfn> <dfn>Tree</dfn><span class="ot">)</span> <span class="ot">→</span> <span class="dt">Set</span> ℓ</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    <dfn>IndPrincipleTree</dfn> Q <span class="ot">=</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>      <span class="ot">(∀</span> <span class="ot">(</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">(</span>f <span class="ot">:</span> P a <span class="ot">→</span> <dfn>W</dfn> A P<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>      <span class="ot">(∀</span> <span class="ot">(</span>p <span class="ot">:</span> P a<span class="ot">)</span> <span class="ot">→</span> Q <span class="ot">(</span>f p<span class="ot">))</span> <span class="ot">→</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>      Q <span class="ot">(</span><span class="cn">sup</span> a f<span class="ot">))</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- We can then use this induction principle to prove a property holds</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- for all W-types</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    <dfn>TreeInd</dfn> <span class="ot">:</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>      <span class="ot">{</span>Q <span class="ot">:</span> <dfn>Property</dfn> <dfn>Tree</dfn><span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>      <dfn>IndPrincipleTree</dfn> Q <span class="ot">→</span></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>      <span class="ot">(∀</span> <span class="ot">(</span>t <span class="ot">:</span> <dfn>Tree</dfn><span class="ot">)</span> <span class="ot">→</span> Q t<span class="ot">)</span></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>    <dfn>TreeInd</dfn> <span class="ot">{</span>Q<span class="ot">}</span> indT <span class="ot">(</span><span class="cn">sup</span> a f<span class="ot">)</span> <span class="ot">=</span> indT a f <span class="ot">λ</span> pa <span class="ot">→</span> <dfn>TreeInd</dfn> <span class="ot">{</span>Q<span class="ot">}</span> indT <span class="ot">(</span>f pa<span class="ot">)</span></span></code></pre></div>
+<p>As with <span class="math inline">\(\mathbb{N}\)</span>, we can show
+that induction for the immediate sub-term relation gives us back this
+same induction principle:</p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- The relation we take is essentially the immediate sub-tree relation</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- so we say sub R (<span class="cn">sup</span> a f) just in the case that there exists some</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- position pa : P a s.t. sub is propositionally equal to the tree f pa</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <dfn>TreeRel</dfn> <span class="ot">:</span> <dfn>Rel</dfn> <dfn>Tree</dfn></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <dfn>TreeRel</dfn> sub <span class="ot">(</span><span class="cn">sup</span> a f<span class="ot">)</span> <span class="ot">=</span> Σ[ pa ∈ P a ] sub ≡ f pa</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- If we have the induction principle for this relation then</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- we get the above W-tree induction principle</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    <dfn>indSplit</dfn> <span class="ot">:</span> <span class="ot">{</span>Q <span class="ot">:</span> <dfn>Property</dfn> <dfn>Tree</dfn><span class="ot">}</span> <span class="ot">→</span> <dfn>IndPrinciple</dfn> <dfn>Tree</dfn> <dfn>TreeRel</dfn> Q <span class="ot">→</span> <dfn>IndPrincipleTree</dfn> Q</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    <dfn>indSplit</dfn> indP <span class="ot">=</span> <span class="ot">λ</span> a f subT-P <span class="ot">→</span> indP <span class="ot">(</span><span class="cn">sup</span> a f<span class="ot">)</span> <span class="ot">(λ</span> <span class="ot">{</span> <span class="ot">.(</span>f pa<span class="ot">)</span> <span class="ot">(</span>pa , refl<span class="ot">)</span> <span class="ot">→</span> subT-P pa<span class="ot">})</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- We therefore have that the immediate subtree relation is inductive</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    <dfn>TreeRelInd</dfn> <span class="ot">:</span> <dfn>InductiveR</dfn> <dfn>Tree</dfn> <dfn>TreeRel</dfn></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>    <dfn>TreeRelInd</dfn> Q indP <span class="kw">with</span> <dfn>indSplit</dfn> <span class="ot">{</span>Q <span class="ot">=</span> Q<span class="ot">}</span> indP</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>    <span class="ot">...</span> <span class="ot">|</span> indP <span class="ot">=</span> <dfn>TreeInd</dfn> <span class="ot">{</span>Q <span class="ot">=</span> Q<span class="ot">}</span> indP</span></code></pre></div>
+<h3 id="automorphisms-of-relations">Automorphisms of relations</h3>
+<p>To give some flavour of further ideas we could explore, note that
+lots of what we have developed is very closely aligned with the theory
+of <a href="https://ncatlab.org/nlab/show/ordinal+number">ordinals</a>.
+This suggests not only developing new ways to construct inductive
+relations, but also thinking about the category of such relations and
+what properties it has. For instance, it is an important and well-known
+fact about ordinals that any automorphism of an ordinal must be the
+identity. As we might imagine, something similar is true for our
+well-founded relations.</p>
+<p>Let’s first set up what a homomorphism between two relations is:</p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> WellOrderedAuto <span class="kw">where</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Relation<span class="ot">.</span>Binary<span class="ot">.</span>PropositionalEquality <span class="kw">using</span> <span class="ot">(_</span>≡<span class="ot">_;</span> refl<span class="ot">;</span> sym<span class="ot">;</span> subst<span class="ot">)</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Relation<span class="ot">.</span>Binary <span class="kw">using</span> <span class="ot">(</span>Trichotomous<span class="ot">;</span> Tri<span class="ot">)</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> Descending</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">record</span> <dfn>RelHom</dfn> <span class="ot">{</span>ℓ <span class="ot">:</span> Level<span class="ot">}</span> <span class="ot">{</span>A B <span class="ot">:</span> <span class="dt">Set</span> ℓ<span class="ot">}</span> <span class="ot">(</span>R₁ <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">)</span> <span class="ot">(</span>R₂ <span class="ot">:</span> <dfn>Rel</dfn> B<span class="ot">)</span> <span class="ot">:</span> <span class="dt">Set</span> ℓ <span class="kw">where</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">field</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>      <span class="cn">fn</span> <span class="ot">:</span> A <span class="ot">→</span> B</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>      <span class="cn">rel-preserve</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>x y<span class="ot">}</span> <span class="ot">→</span> R₁ x y <span class="ot">→</span> R₂ <span class="ot">(</span><span class="cn">fn</span> x<span class="ot">)</span> <span class="ot">(</span><span class="cn">fn</span> y<span class="ot">)</span></span></code></pre></div>
+<p>This gives us a notion of isomorphism between relations:</p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>  <span class="kw">record</span> <dfn>Iso</dfn> <span class="ot">{</span>ℓ <span class="ot">:</span> Level<span class="ot">}</span> <span class="ot">{</span>A B <span class="ot">:</span> <span class="dt">Set</span> ℓ<span class="ot">}</span> <span class="ot">(</span>R₁ <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">)</span> <span class="ot">(</span>R₂ <span class="ot">:</span> <dfn>Rel</dfn> B<span class="ot">)</span> <span class="ot">:</span> <span class="dt">Set</span> ℓ <span class="kw">where</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">field</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>      <span class="cn">to-hom</span> <span class="ot">:</span> <dfn>RelHom</dfn> R₁ R₂</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>      <span class="cn">from-hom</span> <span class="ot">:</span> <dfn>RelHom</dfn> R₂ R₁</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">module</span> T <span class="ot">=</span> <dfn>RelHom</dfn> <span class="cn">to-hom</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">module</span> F <span class="ot">=</span> <dfn>RelHom</dfn> <span class="cn">from-hom</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">field</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>      <span class="cn">to∘from</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">(</span>b <span class="ot">:</span> B<span class="ot">)</span> <span class="ot">→</span> T<span class="ot">.</span><span class="cn">fn</span> <span class="ot">(</span>F<span class="ot">.</span><span class="cn">fn</span> b<span class="ot">)</span> ≡ b</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>      <span class="cn">from∘to</span> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">(</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> F<span class="ot">.</span><span class="cn">fn</span> <span class="ot">(</span>T<span class="ot">.</span><span class="cn">fn</span> a<span class="ot">)</span> ≡ a</span></code></pre></div>
+<p>We can then show (by induction) that no automorphism of an inductive
+relation can send an element to one that is <span
+class="math inline">\(\mathcal{R}\)</span>-smaller than it:</p>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <dfn>RelHom</dfn></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <dfn>Iso</dfn></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> InductiveDefs</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Empty<span class="ot">.</span>Polymorphic <span class="kw">using</span> <span class="ot">(</span>⊥<span class="ot">;</span> ⊥-elim<span class="ot">)</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">open</span> <span class="kw">import</span> Data<span class="ot">.</span>Product</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <dfn>ind-auto-no-regress</dfn> <span class="ot">:</span> <span class="ot">{</span>ℓ <span class="ot">:</span> Level<span class="ot">}</span> <span class="ot">{</span>A <span class="ot">:</span> <span class="dt">Set</span> ℓ<span class="ot">}</span> <span class="ot">{</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">(</span>IndR <span class="ot">:</span> <dfn>InductiveR</dfn> A R<span class="ot">)</span> <span class="ot">→</span> <span class="ot">(</span>iso-R <span class="ot">:</span> <dfn>Iso</dfn> R R<span class="ot">)</span> <span class="ot">→</span> <span class="ot">∀</span> <span class="ot">(</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> R <span class="ot">(</span><span class="cn">fn</span> <span class="ot">(</span><span class="cn">to-hom</span> iso-R<span class="ot">)</span> a<span class="ot">)</span> a <span class="ot">→</span> ⊥</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <dfn>ind-auto-no-regress</dfn> <span class="ot">{</span>ℓ <span class="ot">=</span> ℓ<span class="ot">}</span> <span class="ot">{</span>A <span class="ot">=</span> A<span class="ot">}</span> <span class="ot">{</span>R <span class="ot">=</span> R<span class="ot">}</span> IndR iso-R <span class="ot">=</span> <dfn>R-sep-holds</dfn></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">module</span> I <span class="ot">=</span> <dfn>Iso</dfn> iso-R</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    fwd <span class="ot">=</span> I<span class="ot">.</span>T<span class="ot">.</span><span class="cn">fn</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>    R-hom <span class="ot">=</span> I<span class="ot">.</span>T<span class="ot">.</span><span class="cn">rel-preserve</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>    <dfn>R-sep</dfn> <span class="ot">:</span> <dfn>Property</dfn> A</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>    <dfn>R-sep</dfn> a <span class="ot">=</span> R <span class="ot">(</span><span class="cn">fn</span> <span class="ot">(</span><span class="cn">to-hom</span> iso-R<span class="ot">)</span> a<span class="ot">)</span> a <span class="ot">→</span> ⊥ <span class="ot">{</span>ℓ<span class="ot">}</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>    <dfn>R-sep-holds</dfn> <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">(</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> <dfn>R-sep</dfn> a</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>    <dfn>R-sep-holds</dfn> a <span class="ot">=</span> IndR <dfn>R-sep</dfn> <span class="ot">(λ</span> a&#39; inda&#39;&#39; a&#39;Ra <span class="ot">→</span> inda&#39;&#39; <span class="ot">(</span>fwd a&#39;<span class="ot">)</span> a&#39;Ra <span class="ot">(</span>R-hom a&#39;Ra<span class="ot">))</span> a</span></code></pre></div>
+<p>This shows that no automorphism <span
+class="math inline">\(f\)</span> satisfies <span
+class="math inline">\(\mathrm{f}(\mathrm{a})\; \mathcal{R}\;
+\mathrm{a}\)</span>. But then, applying this to the inverse automorphism
+<span class="math inline">\(\mathrm{f}^{-1}\)</span> at <span
+class="math inline">\(\mathrm{f}(\mathrm{a})\)</span>, we get that no
+automorphism satisfies <span
+class="math inline">\(\mathrm{f}^{-1}(\mathrm{f}(\mathrm{a}))\;
+\mathcal{R}\; \mathrm{f}(\mathrm{a})\)</span>, i.e., <span
+class="math inline">\(\mathrm{a}\mathcal{R}\mathrm{f}(\mathrm{a})\)</span>,
+so automorphisms also don’t send elements to those that are <span
+class="math inline">\(\mathcal{R}\)</span>-larger than them:</p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>  <dfn>ind-auto-no-progress</dfn></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="ot">:</span> <span class="ot">{</span>ℓ <span class="ot">:</span> Level<span class="ot">}</span> <span class="ot">{</span>A <span class="ot">:</span> <span class="dt">Set</span> ℓ<span class="ot">}</span> <span class="ot">{</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>      <dfn>InductiveR</dfn> A R <span class="ot">→</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>      <span class="ot">(</span>iso-R <span class="ot">:</span> <dfn>Iso</dfn> R R<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>      <span class="ot">∀</span> <span class="ot">(</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> R a <span class="ot">(</span><span class="cn">fn</span> <span class="ot">(</span><span class="cn">to-hom</span> iso-R<span class="ot">)</span> a<span class="ot">)</span> <span class="ot">→</span> ⊥</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <dfn>ind-auto-no-progress</dfn> <span class="ot">{</span>A <span class="ot">=</span> A<span class="ot">}</span> <span class="ot">{</span>R <span class="ot">=</span> R<span class="ot">}</span> IndR iso-R a Rafa <span class="ot">=</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <dfn>ind-auto-no-regress</dfn> IndR <dfn>iso-R⁻¹</dfn> <span class="ot">(</span><span class="cn">fn</span> <span class="ot">(</span><span class="cn">to-hom</span> iso-R<span class="ot">)</span> a<span class="ot">)</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>      <span class="ot">(</span>subst <span class="ot">(λ</span> x <span class="ot">→</span> R x <span class="ot">(</span><span class="cn">fn</span> <span class="ot">(</span><span class="cn">to-hom</span> iso-R<span class="ot">)</span> a<span class="ot">))</span> <span class="ot">(</span>sym <span class="ot">(</span><span class="cn">from∘to</span> iso-R a<span class="ot">))</span> Rafa<span class="ot">)</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>      <span class="co">-- Rewrite</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>      <span class="co">--   Rafa : R a (f a)) ↦</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>      <span class="co">--        : R (f⁻¹ (f a)) (f a)</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>      <span class="co">-- so we can use <dfn>ind-auto-no-regress</dfn> with <dfn>iso-R⁻¹</dfn> at value f a</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>      <span class="co">-- if f is an iso then f⁻¹ is also</span></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>      <dfn>iso-R⁻¹</dfn> <span class="ot">:</span> <dfn>Iso</dfn> R R</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>      <dfn>iso-R⁻¹</dfn> <span class="ot">=</span> <span class="kw">record</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>        <span class="ot">{</span> <span class="cn">to-hom</span>   <span class="ot">=</span> <span class="cn">from-hom</span> iso-R</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>        <span class="ot">;</span> <span class="cn">from-hom</span> <span class="ot">=</span> <span class="cn">to-hom</span> iso-R</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>        <span class="ot">;</span> <span class="cn">to∘from</span>  <span class="ot">=</span> <span class="cn">from∘to</span> iso-R</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>        <span class="ot">;</span> <span class="cn">from∘to</span>  <span class="ot">=</span> <span class="cn">to∘from</span> iso-R</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>        <span class="ot">}</span></span></code></pre></div>
+<p>Finally, if our relation is a total order, so that each pair of
+elements is <span class="math inline">\(\mathcal{R}\)</span>-comparable,
+we get that any automorphism is extensionally equal to the identity:</p>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- For a totally ordered inductive relation any automorphism must be</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- extensionally equal to the identity.</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <dfn>auto-is-identity</dfn></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">:</span> <span class="ot">{</span>ℓ <span class="ot">:</span> Level<span class="ot">}</span> <span class="ot">{</span>A <span class="ot">:</span> <span class="dt">Set</span> ℓ<span class="ot">}</span> <span class="ot">{</span>R <span class="ot">:</span> <dfn>Rel</dfn> A<span class="ot">}</span> <span class="ot">→</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>      <dfn>InductiveR</dfn> A R <span class="ot">→</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>      Trichotomous <span class="ot">_</span>≡<span class="ot">_</span> R <span class="ot">→</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>      <span class="ot">(</span>iso-R <span class="ot">:</span> <dfn>Iso</dfn> R R<span class="ot">)</span> <span class="ot">→</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>      <span class="ot">∀</span> <span class="ot">(</span>a <span class="ot">:</span> A<span class="ot">)</span> <span class="ot">→</span> <span class="cn">fn</span> <span class="ot">(</span><span class="cn">to-hom</span> iso-R<span class="ot">)</span> a ≡ a</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <dfn>auto-is-identity</dfn> <span class="ot">{</span>R <span class="ot">=</span> R<span class="ot">}</span> IndR triR iso-R a <span class="kw">with</span> triR a <span class="ot">(</span><span class="cn">fn</span> <span class="ot">(</span><span class="cn">to-hom</span> iso-R<span class="ot">)</span> a<span class="ot">)</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="ot">...</span> <span class="ot">|</span> Tri<span class="ot">.</span>tri&lt; Rafa  <span class="ot">_</span>  <span class="ot">_</span>  <span class="ot">=</span> ⊥-elim <span class="ot">(</span><dfn>ind-auto-no-progress</dfn> IndR iso-R a Rafa<span class="ot">)</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  <span class="ot">...</span> <span class="ot">|</span> Tri<span class="ot">.</span>tri≈ <span class="ot">_</span>  a≡fa  <span class="ot">_</span>  <span class="ot">=</span> sym a≡fa</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  <span class="ot">...</span> <span class="ot">|</span> Tri<span class="ot">.</span>tri&gt; <span class="ot">_</span>  <span class="ot">_</span>  Rfaa  <span class="ot">=</span> ⊥-elim <span class="ot">(</span><dfn>ind-auto-no-regress</dfn>  IndR iso-R a Rfaa<span class="ot">)</span></span></code></pre></div>
+<p>The ideas in this post – especially using the accessibility predicate
+associated to a relation – are exactly what systems like
+<code>lean</code> and <code>rocq</code> use to compile recursive
+definitions using eliminators. They are also the foundation of systems
+like <code>rocq</code>’s <a
+href="https://mattam82.github.io/Coq-Equations/">equations library</a>.
+There is far more to be said beyond our introduction for constructively
+developing the theory of well-founded relations, and relatedly the
+theory of ordinals. For more on this topic from the point of view of
+constructive mathematics, I would recommend looking at <a
+href="https://github.com/martinescardo/TypeTopology">TypeTopology</a>,
+as well as other works by <a
+href="https://martinescardo.github.io/">Martin Escardo</a> and his
+collaborators.</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>We use the name <a
+href="https://en.wikipedia.org/wiki/Artinian_ring"><em>artinian</em></a>
+as this is the term used in commutative algebra to describe a ring which
+satisfies the descending chain condition for ideals.<a href="#fnref1"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>This proof goes from <code>IndPrinciple R⁺ P</code> to
+<code>IndPrinciple R P*</code> and this looks suspiciously like it
+should be an adjunction of some kind, perhaps using the category of <a
+href="https://en.wikipedia.org/wiki/Chu_space">Chu Spaces</a><a
+href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>see <a
+href="https://en.wikipedia.org/wiki/Ordinal_arithmetic">here</a> for
+more details<a href="#fnref3" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>which I learned properly from the majestic <a
+href="https://1lab.dev/Data.Wellfounded.Base.html#well-founded">1lab</a><a
+href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>This terminology comes from the theory of <a
+href="https://en.wikipedia.org/wiki/Polynomial_functor_(type_theory)">containers</a>,
+where a <code>W-type</code> is a fixed point for the functor associated
+with a container<a href="#fnref5" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 
         <br>
         <br>
