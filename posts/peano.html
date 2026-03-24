@@ -71,7 +71,10 @@ anything else (and doubtless always has), it is neither ‘number’ nor
 ‘size,’ but always form."  - Grothendieck</span>
     </div>
     <article class="post">
-        The 19th century brought about an unprecedented revolution in the
+        <div style="display:none">
+()
+</div>
+<p>The 19th century brought about an unprecedented revolution in the
 foundations of mathematics culminating in the Zermelo–Frankel (ZF)
 axioms. The ZF axioms gave a logical basis to Cantor’s <em>set
 theory</em> as a foundational theory, in which the main branches of
@@ -81,10 +84,7 @@ approach that the axiomatic method was born. This is of historical and
 philosophical interest as it marks a decisive structuralist turn in
 mathematical thought. It is at this time that mathematical objects begin
 to be characterized not by any particular construction, but by the
-collection of axioms (or laws) an object satisfies.
-<div style="display:none">
-()
-</div>
+collection of axioms (or laws) an object satisfies.</p>
 <p>Consider a paradigmatic case: characterizing the natural numbers. In
 this post we will explore two different formulations of the natural
 numbers, the first of which is given by Peano in the late 19th century,
@@ -157,7 +157,7 @@ few imports we will need later:</p>
 class="sourceCode agda"><code class="sourceCode agda"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <dfn>Peano</dfn> <span class="kw">where</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Relation<span class="ot">.</span>Binary<span class="ot">.</span>PropositionalEquality</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">using</span> <span class="ot">(_</span>≡<span class="ot">_;</span> <span class="cn">refl</span><span class="ot">;</span> <span class="ot">_</span>≢<span class="ot">_;</span> cong<span class="ot">;</span> <dfn>trans</dfn><span class="ot">;</span> sym<span class="ot">)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">using</span> <span class="ot">(_</span>≡<span class="ot">_;</span> <span class="cn">refl</span><span class="ot">;</span> <span class="ot">_</span>≢<span class="ot">_;</span> <dfn>cong</dfn><span class="ot">;</span> <dfn>trans</dfn><span class="ot">;</span> sym<span class="ot">)</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">open</span> <span class="kw">import</span> Function</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">using</span> <span class="ot">(_</span>∘<span class="ot">_)</span></span></code></pre></div>
 <p>Typically, we define the (unary) natural numbers as follows:</p>
@@ -439,7 +439,7 @@ principles we have imported above (again simplifying away level
 polymorphism):</p>
 <div class="sourceCode" id="cb20"><pre
 class="sourceCode agda"><code class="sourceCode agda"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Funtions preserve equality:</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>cong</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><dfn>cong</dfn></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">:</span> <span class="ot">{</span>A <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">{</span>B <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span> <span class="ot">(</span>f <span class="ot">:</span> A <span class="ot">→</span> B<span class="ot">)</span> <span class="ot">{</span>x y <span class="ot">:</span> A<span class="ot">}</span></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> x ≡ y <span class="ot">→</span> f x ≡ f y</span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
@@ -456,19 +456,19 @@ class="sourceCode agda"><code class="sourceCode agda"><span id="cb22-1"><a href=
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><dfn>from∘to</dfn> <span class="ot">:</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">∀</span> <span class="ot">{</span>N <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}{{</span> rel <span class="ot">:</span> <dfn>EqRel</dfn> N<span class="ot">}}</span> <span class="ot">→</span> <span class="ot">{{</span>peano <span class="ot">:</span> <dfn>Peano</dfn> N<span class="ot">}}</span> <span class="ot">→</span> <span class="ot">(</span>n <span class="ot">:</span> N<span class="ot">)</span> <span class="ot">→</span></span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <dfn>from-ℕ</dfn> <span class="ot">(</span><dfn>to-ℕ</dfn> n<span class="ot">)</span> <dfn>≃</dfn> n</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><dfn>from∘to</dfn> <span class="ot">{</span>N<span class="ot">}</span> n <span class="ot">=</span> <dfn>liftEq</dfn> <span class="ot">(</span>prop-eq <span class="ot">{</span>N<span class="ot">})</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><dfn>from∘to</dfn> <span class="ot">{</span>N<span class="ot">}</span> n <span class="ot">=</span> <dfn>liftEq</dfn> <span class="ot">(</span><dfn>prop-eq</dfn> <span class="ot">{</span>N<span class="ot">})</span></span>
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>             <span class="co">-- We make use of <dfn>liftEq</dfn> as we prove the</span></span>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>             <span class="co">-- stronger claim that <dfn>from-ℕ</dfn> (<dfn>to-ℕ</dfn> n) ≡ n</span></span>
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
 <span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- In the <span class="cn">zero</span> case we apply <span class="cn">induction-zero</span> underneath <dfn>from-ℕ</dfn></span></span>
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- and then use the definition of <dfn>from-ℕ</dfn>.</span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  zero-lem</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <dfn>zero-lem</dfn></span>
 <span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">{{_</span> <span class="ot">:</span> <dfn>EqRel</dfn> N<span class="ot">}}</span> <span class="ot">{{</span>peano <span class="ot">:</span> <dfn>Peano</dfn> N<span class="ot">}}</span></span>
 <span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> <dfn>from-ℕ</dfn> <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">(</span><span class="cn">induction</span> <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> <dfn>ℕ</dfn><span class="ot">)</span> <span class="cn">zero</span> <span class="cn">Zero</span> <span class="cn">Succ</span><span class="ot">)</span> ≡ <span class="cn">zero</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  zero-lem <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">=</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <dfn>zero-lem</dfn> <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">=</span></span>
 <span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span></span>
 <span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>      <dfn>pf1</dfn> <span class="ot">:</span> <dfn>from-ℕ</dfn> <span class="ot">(</span><span class="cn">induction</span> <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> <dfn>ℕ</dfn><span class="ot">)</span> <span class="cn">zero</span> <span class="cn">Zero</span> <span class="cn">Succ</span><span class="ot">)</span> ≡ <dfn>from-ℕ</dfn> <span class="cn">Zero</span></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>      <dfn>pf1</dfn> <span class="ot">=</span> cong <dfn>from-ℕ</dfn> <span class="ot">(</span><span class="cn">induction-zero</span> <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> <dfn>ℕ</dfn><span class="ot">)</span> <span class="cn">Zero</span> <span class="cn">Succ</span><span class="ot">)</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>      <dfn>pf1</dfn> <span class="ot">=</span> <dfn>cong</dfn> <dfn>from-ℕ</dfn> <span class="ot">(</span><span class="cn">induction-zero</span> <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> <dfn>ℕ</dfn><span class="ot">)</span> <span class="cn">Zero</span> <span class="cn">Succ</span><span class="ot">)</span></span>
 <span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>      <dfn>pf2</dfn> <span class="ot">:</span> <dfn>from-ℕ</dfn> <span class="cn">Zero</span> ≡ <span class="cn">zero</span></span>
 <span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>      <dfn>pf2</dfn> <span class="ot">=</span> <span class="cn">refl</span></span>
@@ -476,33 +476,33 @@ class="sourceCode agda"><code class="sourceCode agda"><span id="cb22-1"><a href=
 <span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>      <dfn>trans</dfn> <dfn>pf1</dfn> <dfn>pf2</dfn></span>
 <span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- In the successor case we similarly apply <span class="cn">induction-succ</span></span></span>
 <span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- underneath <dfn>from-ℕ</dfn> and then recurse on the previous proof.</span></span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>  succ-lem</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>  <dfn>succ-lem</dfn></span>
 <span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>    <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">{{_</span> <span class="ot">:</span> <dfn>EqRel</dfn> N<span class="ot">}}</span> <span class="ot">{{</span>peano <span class="ot">:</span> <dfn>Peano</dfn> N<span class="ot">}}</span> <span class="ot">(</span>prev <span class="ot">:</span> N<span class="ot">)</span></span>
 <span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> <dfn>from-ℕ</dfn> <span class="ot">(</span><span class="cn">induction</span> <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> <dfn>ℕ</dfn><span class="ot">)</span> prev <span class="cn">Zero</span> <span class="cn">Succ</span><span class="ot">)</span> ≡ prev</span>
 <span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> <dfn>from-ℕ</dfn> <span class="ot">(</span><span class="cn">induction</span> <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> <dfn>ℕ</dfn><span class="ot">)</span> <span class="ot">(</span><span class="cn">succ</span> prev<span class="ot">)</span> <span class="cn">Zero</span> <span class="cn">Succ</span><span class="ot">)</span> ≡ <span class="cn">succ</span> prev</span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>  succ-lem prev pf <span class="ot">=</span></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>  <dfn>succ-lem</dfn> prev pf <span class="ot">=</span></span>
 <span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span></span>
 <span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>      <dfn>pf1</dfn> <span class="ot">:</span> <dfn>from-ℕ</dfn> <span class="ot">(</span><span class="cn">induction</span> <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> <dfn>ℕ</dfn><span class="ot">)</span> <span class="ot">(</span><span class="cn">succ</span> prev<span class="ot">)</span> <span class="cn">Zero</span> <span class="cn">Succ</span><span class="ot">)</span></span>
 <span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>          ≡ <dfn>from-ℕ</dfn> <span class="ot">(</span><span class="cn">Succ</span> <span class="ot">(</span><span class="cn">induction</span> <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> <dfn>ℕ</dfn><span class="ot">)</span> prev <span class="cn">Zero</span> <span class="cn">Succ</span><span class="ot">))</span></span>
-<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>      <dfn>pf1</dfn> <span class="ot">=</span> cong <dfn>from-ℕ</dfn> <span class="ot">(</span><span class="cn">induction-succ</span> <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> <dfn>ℕ</dfn><span class="ot">)</span> prev <span class="cn">Zero</span> <span class="cn">Succ</span><span class="ot">)</span></span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>      <dfn>pf1</dfn> <span class="ot">=</span> <dfn>cong</dfn> <dfn>from-ℕ</dfn> <span class="ot">(</span><span class="cn">induction-succ</span> <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> <dfn>ℕ</dfn><span class="ot">)</span> prev <span class="cn">Zero</span> <span class="cn">Succ</span><span class="ot">)</span></span>
 <span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>      <dfn>pf2</dfn> <span class="ot">:</span> <dfn>from-ℕ</dfn> <span class="ot">(</span><span class="cn">Succ</span> <span class="ot">(</span><span class="cn">induction</span> <span class="ot">(λ</span> <span class="ot">_</span> <span class="ot">→</span> <dfn>ℕ</dfn><span class="ot">)</span> prev <span class="cn">Zero</span> <span class="cn">Succ</span><span class="ot">))</span> ≡ <span class="ot">(</span><span class="cn">succ</span> prev<span class="ot">)</span></span>
-<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>      <dfn>pf2</dfn> <span class="ot">=</span> cong <span class="cn">succ</span> pf</span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>      <dfn>pf2</dfn> <span class="ot">=</span> <dfn>cong</dfn> <span class="cn">succ</span> pf</span>
 <span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">in</span></span>
 <span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>      <dfn>trans</dfn> <dfn>pf1</dfn> <dfn>pf2</dfn></span>
 <span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>  prop-eq</span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>  <dfn>prop-eq</dfn></span>
 <span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>    <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>N<span class="ot">}</span> <span class="ot">{{_</span> <span class="ot">:</span> <dfn>EqRel</dfn> N<span class="ot">}}</span> <span class="ot">{{</span>peano <span class="ot">:</span> <dfn>Peano</dfn> N<span class="ot">}}</span></span>
 <span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> <dfn>from-ℕ</dfn> <span class="ot">(</span><dfn>to-ℕ</dfn> n<span class="ot">)</span> ≡ n</span>
-<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a>  prop-eq <span class="ot">=</span></span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a>  <dfn>prop-eq</dfn> <span class="ot">=</span></span>
 <span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a>      <span class="cn">induction</span></span>
 <span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a>     <span class="co">-- we use <span class="cn">induction</span> on the principle</span></span>
 <span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a>     <span class="co">-- we are trying to show with the above</span></span>
 <span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a>     <span class="co">-- lemmas.</span></span>
 <span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a>        <span class="ot">(λ</span> n <span class="ot">→</span> <dfn>from-ℕ</dfn> <span class="ot">(</span><dfn>to-ℕ</dfn>  n<span class="ot">)</span> ≡ n<span class="ot">)</span></span>
 <span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a>        n</span>
-<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a>        zero-lem</span>
-<span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a>        <span class="ot">(λ</span> <span class="ot">{</span>prev<span class="ot">}</span> <span class="ot">→</span> succ-lem prev<span class="ot">)</span></span></code></pre></div>
+<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a>        <dfn>zero-lem</dfn></span>
+<span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a>        <span class="ot">(λ</span> <span class="ot">{</span>prev<span class="ot">}</span> <span class="ot">→</span> <dfn>succ-lem</dfn> prev<span class="ot">)</span></span></code></pre></div>
 <p>This shows that any two types which satisfy the Peano axioms are
 equivalent in the sense that there are maps between them which form an
 isomorphism up to equivalence.</p>
@@ -632,7 +632,7 @@ class="sourceCode agda"><code class="sourceCode agda"><span id="cb29-1"><a href=
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">constructor</span> AlgHom</span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">field</span></span>
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    →-fun  <span class="ot">:</span> A <span class="ot">→</span> B</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    μ-comm</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <dfn>μ-comm</dfn></span>
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>      <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">(</span>fa <span class="ot">:</span> F A<span class="ot">)</span></span>
 <span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>      <span class="ot">→</span> →-fun <span class="ot">(</span><dfn>Alg</dfn><span class="ot">.</span><span class="cn">μ</span> FA fa<span class="ot">)</span> ≡ <span class="ot">(</span><dfn>Alg</dfn><span class="ot">.</span><span class="cn">μ</span> FB<span class="ot">)</span> <span class="ot">(</span><span class="cn">Arr</span> →-fun fa<span class="ot">)</span></span></code></pre></div>
 <p>Now we can try to prove that the algebra structure on <span
@@ -641,11 +641,11 @@ there is an induced map to every other <span
 class="math inline">\(\mathrm{F}\)</span>-<span
 class="math inline">\(\mathrm{algebra}\)</span>:</p>
 <div class="sourceCode" id="cb30"><pre
-class="sourceCode agda"><code class="sourceCode agda"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ℕ-weakly-initial</span>
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><dfn>ℕ-weakly-initial</dfn></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>A <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">{{</span>FA <span class="ot">:</span> <dfn>Alg</dfn> <dfn>NatP</dfn> A<span class="ot">}}</span></span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> Alg-Homo <dfn>ℕ</dfn> A <dfn>ℕ-Alg</dfn> FA</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>ℕ-weakly-initial <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">=</span> AlgH <dfn>init-ℕ</dfn> <span class="cn">law</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><dfn>ℕ-weakly-initial</dfn> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">=</span> AlgH <dfn>init-ℕ</dfn> <span class="cn">law</span></span>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <dfn>init-ℕ</dfn> <span class="ot">:</span> <dfn>ℕ</dfn> <span class="ot">→</span> A</span>
 <span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <dfn>init-ℕ</dfn> <span class="cn">Zero</span>     <span class="ot">=</span> <span class="cn">μ</span> <span class="cn">ZeroP</span></span>
@@ -672,17 +672,17 @@ class="sourceCode agda"><code class="sourceCode agda"><span id="cb31-1"><a href=
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">(</span>alg-hom <span class="ot">:</span> Alg-Homo <dfn>ℕ</dfn> A <dfn>ℕ-Alg</dfn> FA<span class="ot">)</span></span>
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">∀</span> <span class="ot">(</span>n <span class="ot">:</span> <dfn>ℕ</dfn><span class="ot">)</span></span>
 <span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">(</span>Alg-Homo<span class="ot">.</span>→-fun alg-hom n<span class="ot">)</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  ≡ <span class="ot">(</span>Alg-Homo<span class="ot">.</span>→-fun <span class="ot">(</span>ℕ-weakly-initial <span class="ot">{{</span>FA<span class="ot">}})</span> n<span class="ot">)</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><dfn>ℕ-init-uniq</dfn> alg-hom <span class="cn">Zero</span> <span class="ot">=</span> μ-comm <span class="cn">ZeroP</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  ≡ <span class="ot">(</span>Alg-Homo<span class="ot">.</span>→-fun <span class="ot">(</span><dfn>ℕ-weakly-initial</dfn> <span class="ot">{{</span>FA<span class="ot">}})</span> n<span class="ot">)</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><dfn>ℕ-init-uniq</dfn> alg-hom <span class="cn">Zero</span> <span class="ot">=</span> <dfn>μ-comm</dfn> <span class="cn">ZeroP</span></span>
 <span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
 <span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">open</span> Alg-Homo alg-hom <span class="kw">public</span></span>
 <span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><dfn>ℕ-init-uniq</dfn> <span class="ot">{{</span>FA<span class="ot">}}</span> alg-hom <span class="ot">(</span><span class="cn">Succ</span> n<span class="ot">)</span> <span class="ot">=</span></span>
 <span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span></span>
 <span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>    <dfn>pf1</dfn> <span class="ot">:</span>  →-fun <span class="ot">(</span><span class="cn">Succ</span> n<span class="ot">)</span> ≡ <span class="cn">μ</span> <span class="ot">(</span><span class="cn">SuccP</span> <span class="ot">(</span>→-fun n<span class="ot">))</span></span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    <dfn>pf1</dfn> <span class="ot">=</span> μ-comm <span class="ot">(</span><span class="cn">SuccP</span> n<span class="ot">)</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    <dfn>pf1</dfn> <span class="ot">=</span> <dfn>μ-comm</dfn> <span class="ot">(</span><span class="cn">SuccP</span> n<span class="ot">)</span></span>
 <span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>    <dfn>pf2</dfn> <span class="ot">:</span>  <span class="cn">μ</span> <span class="ot">(</span><span class="cn">SuccP</span> <span class="ot">(</span>→-fun n<span class="ot">))</span> ≡ <span class="cn">μ</span> <span class="ot">(</span><span class="cn">SuccP</span> <span class="ot">(</span>Alg-Homo<span class="ot">.</span>→-fun ℕ-weakly-initial n<span class="ot">))</span></span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>    <dfn>pf2</dfn> <span class="ot">=</span> cong <span class="ot">(</span><span class="cn">μ</span> ∘ <span class="cn">SuccP</span><span class="ot">)</span> <span class="ot">(</span><dfn>ℕ-init-uniq</dfn> alg-hom n<span class="ot">)</span></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>    <dfn>pf2</dfn> <span class="ot">:</span>  <span class="cn">μ</span> <span class="ot">(</span><span class="cn">SuccP</span> <span class="ot">(</span>→-fun n<span class="ot">))</span> ≡ <span class="cn">μ</span> <span class="ot">(</span><span class="cn">SuccP</span> <span class="ot">(</span>Alg-Homo<span class="ot">.</span>→-fun <dfn>ℕ-weakly-initial</dfn> n<span class="ot">))</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>    <dfn>pf2</dfn> <span class="ot">=</span> <dfn>cong</dfn> <span class="ot">(</span><span class="cn">μ</span> ∘ <span class="cn">SuccP</span><span class="ot">)</span> <span class="ot">(</span><dfn>ℕ-init-uniq</dfn> alg-hom n<span class="ot">)</span></span>
 <span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>  <span class="kw">in</span></span>
 <span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>    <dfn>trans</dfn> <dfn>pf1</dfn> <dfn>pf2</dfn></span>
 <span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
@@ -699,7 +699,7 @@ class="sourceCode agda"><code class="sourceCode agda"><span id="cb33-1"><a href=
 class="math inline">\(\mathrm{comm}\)</span> law!</p>
 <p>In the successor case we have to prove:</p>
 <div class="sourceCode" id="cb34"><pre
-class="sourceCode agda"><code class="sourceCode agda"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>→-fun <span class="ot">(</span><span class="cn">Succ</span> n<span class="ot">)</span> ≡ <span class="cn">μ</span> <span class="ot">(</span><span class="cn">SuccP</span> <span class="ot">(</span>Alg-Homo<span class="ot">.</span>→-fun ℕ-weakly-initial n<span class="ot">))</span></span></code></pre></div>
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>→-fun <span class="ot">(</span><span class="cn">Succ</span> n<span class="ot">)</span> ≡ <span class="cn">μ</span> <span class="ot">(</span><span class="cn">SuccP</span> <span class="ot">(</span>Alg-Homo<span class="ot">.</span>→-fun <dfn>ℕ-weakly-initial</dfn> n<span class="ot">))</span></span></code></pre></div>
 <p>We use a similar observation as above to first rewrite the
 left-hand-side using the <span class="math inline">\(\mu\)</span>-<span
 class="math inline">\(\mathrm{comm}\)</span> law. At that point (as
@@ -766,11 +766,11 @@ class="sourceCode agda"><code class="sourceCode agda"><span id="cb35-1"><a href=
 <span id="cb35-54"><a href="#cb35-54" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <dfn>List</dfn> A <span class="ot">→</span> B</span>
 <span id="cb35-55"><a href="#cb35-55" aria-hidden="true" tabindex="-1"></a><span class="cn">foldr-Alg</span> <span class="ot">=</span> <span class="cn">foldr</span> <span class="ot">(λ</span> a b <span class="ot">→</span> <span class="cn">μ</span> <span class="ot">(</span><span class="cn">ConsP</span> a b<span class="ot">))</span> <span class="ot">(</span><span class="cn">μ</span> <span class="cn">NilP</span><span class="ot">)</span></span>
 <span id="cb35-56"><a href="#cb35-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-57"><a href="#cb35-57" aria-hidden="true" tabindex="-1"></a>List-weakly-initial</span>
+<span id="cb35-57"><a href="#cb35-57" aria-hidden="true" tabindex="-1"></a><dfn>List-weakly-initial</dfn></span>
 <span id="cb35-58"><a href="#cb35-58" aria-hidden="true" tabindex="-1"></a>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>A B <span class="ot">:</span> <span class="dt">Set</span><span class="ot">}</span></span>
 <span id="cb35-59"><a href="#cb35-59" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">{{</span>FA <span class="ot">:</span> <dfn>Alg</dfn> <span class="ot">(</span><dfn>ListP</dfn> A<span class="ot">)</span> B<span class="ot">}}</span></span>
 <span id="cb35-60"><a href="#cb35-60" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> Alg-Homo <span class="ot">(</span><dfn>List</dfn> A<span class="ot">)</span> B <span class="ot">(</span><span class="cn">List-Alg</span> <span class="ot">{</span>A<span class="ot">})</span> FA</span>
-<span id="cb35-61"><a href="#cb35-61" aria-hidden="true" tabindex="-1"></a>List-weakly-initial <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">=</span> AlgHom <span class="cn">foldr-Alg</span> <span class="cn">law</span></span>
+<span id="cb35-61"><a href="#cb35-61" aria-hidden="true" tabindex="-1"></a><dfn>List-weakly-initial</dfn> <span class="ot">{</span>A<span class="ot">}</span> <span class="ot">{</span>B<span class="ot">}</span> <span class="ot">=</span> AlgHom <span class="cn">foldr-Alg</span> <span class="cn">law</span></span>
 <span id="cb35-62"><a href="#cb35-62" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
 <span id="cb35-63"><a href="#cb35-63" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-64"><a href="#cb35-64" aria-hidden="true" tabindex="-1"></a>  <span class="cn">law</span> <span class="ot">:</span> <span class="ot">(</span>fa <span class="ot">:</span> <dfn>ListP</dfn> A <span class="ot">(</span><dfn>List</dfn> A<span class="ot">))</span> <span class="ot">→</span></span>
