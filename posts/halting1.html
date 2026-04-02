@@ -11,6 +11,8 @@
         <title>The Halting Problem (part 1)</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/lean.css">
+    <script src="/js/lean.js" defer></script>
 </head>
 <body>
     <!DOCTYPE html>
@@ -24,6 +26,10 @@
           </a>		
         </nav>
         <div class="right-sidebar">
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle light mode" title="Toggle light/dark mode">
+              <span class="theme-toggle-thumb"></span>
+            </button>
+    
             <a class="ext-link" href="https://github.com/boarders">
             <img src="/images/github-logo.png" alt="Github Profile"/>
         </a>
@@ -70,7 +76,10 @@
 you come to the end: then stop.&#39;"  - Lewis Carroll, Alice in Wonderland</span>
     </div>
     <article class="post">
-        <p>The halting problem states, informally, that there is no algorithm to
+        <div style="display:none">
+( )
+</div>
+<p>The halting problem states, informally, that there is no algorithm to
 determine whether an <em>arbitrary</em> program (when provided with some
 given input) will halt. Even for specific programs this can lead to
 interesting unsolved questions. A well-known example is the <a
@@ -106,14 +115,12 @@ post</a>, we will formalise the argument in Agda and fill in most of the
 lingering details we brush aside here.</p>
 <p>In the setting of the lambda calculus, a precise statement of halting
 can be given thusly:</p>
-<strong>Theorem (<span
-class="math inline">\(\lambda\)</span>-Halting)</strong>: There does not
-exist a <span class="math inline">\(\lambda\)</span>-term
-<div style="display:none">
-( )
-</div>
-<p><span class="math inline">\(\mathbf{HALT}\)</span> such that for any
-given lambda term <span class="math inline">\(\mathrm{L}\)</span>, <span
+<p><strong>Theorem (<span
+class="math inline">\(\lambda\)</span>-Halting)</strong></p>
+<p>There does not exist a <span
+class="math inline">\(\lambda\)</span>-term <span
+class="math inline">\(\mathbf{HALT}\)</span> such that for any given
+lambda term <span class="math inline">\(\mathrm{L}\)</span>, <span
 class="math inline">\(\mathbf{HALT}\text{ } \mathrm{L}\)</span>
 evaluates to <span class="math inline">\(\mathbf{true}\)</span> when
 <span class="math inline">\(\mathrm{L}\)</span> terminates and <span
@@ -331,8 +338,8 @@ and the naturality of studying computability theory from this
 perspective. In the <a
 href="https://boarders.github.io/posts/halting2.html">next post</a>, we
 will formalise this argument in Agda.</p>
-<p><i>With warmest thanks to Alixandra Prybyla and Sam Derbyshire for
-their valuable feedback.</i></p>
+<p><i>With warmest thanks to Sam Derbyshire for their valuable
+feedback.</i></p>
 
         <br>
         <br>

@@ -11,6 +11,8 @@
         <title>The Halting Problem (part 2)</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/syntax.css">
+    <link rel="stylesheet" href="/css/lean.css">
+    <script src="/js/lean.js" defer></script>
 </head>
 <body>
     <!DOCTYPE html>
@@ -24,6 +26,10 @@
           </a>		
         </nav>
         <div class="right-sidebar">
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle light mode" title="Toggle light/dark mode">
+              <span class="theme-toggle-thumb"></span>
+            </button>
+    
             <a class="ext-link" href="https://github.com/boarders">
             <img src="/images/github-logo.png" alt="Github Profile"/>
         </a>
@@ -421,7 +427,7 @@ future) that the lambda calculus is confluent. As such, we allow
 ourselves to assume it as a postulate:</p>
 <div class="sourceCode" id="cb17"><pre
 class="sourceCode agda"><code class="sourceCode agda"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">postulate</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  confluence</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <dfn>confluence</dfn></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>a<span class="ot">}</span></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> <span class="ot">{</span>e e1 e2 <span class="ot">:</span> <dfn>Expr</dfn> Γ a<span class="ot">}</span></span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> e ⇓ e1 <span class="ot">→</span> e ⇓ e2</span>
@@ -437,7 +443,7 @@ to reduce to the same value:</p>
 class="sourceCode agda"><code class="sourceCode agda"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>⇓-val-uniq</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ ty<span class="ot">}</span> <span class="ot">{</span>e e&#39; v <span class="ot">:</span> <dfn>Expr</dfn> Γ ty<span class="ot">}</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <dfn>Value</dfn> v <span class="ot">→</span> e ⇓ v <span class="ot">→</span> e ⇓ e&#39; <span class="ot">→</span> e&#39; ⇓ v</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>⇓-val-uniq pf e⇓v e⇓e&#39; <span class="kw">with</span> confluence e⇓v e⇓e&#39;</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>⇓-val-uniq pf e⇓v e⇓e&#39; <span class="kw">with</span> <dfn>confluence</dfn> e⇓v e⇓e&#39;</span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="ot">...</span> <span class="ot">|</span> Sg e3 <span class="ot">(</span>Sg v⇓e3 e&#39;⇓e3<span class="ot">)</span> <span class="kw">with</span> ⇓-val pf v⇓e3</span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="ot">...</span> <span class="ot">|</span> refl <span class="ot">=</span> e&#39;⇓e3</span></code></pre></div>
 <p>From this, we can conclude the “head-expansion” property we wanted of
@@ -469,21 +475,21 @@ conditional function, <code>bool</code>.</p>
 <div class="sourceCode" id="cb22"><pre
 class="sourceCode agda"><code class="sourceCode agda"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- In both cases if there is no reduction then we directly step.</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- Otherwise we reduce the conditional and recurse on the result.</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>bool-stepper-tt</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><dfn>bool-stepper-tt</dfn></span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>th el<span class="ot">}</span> <span class="ot">(</span>b <span class="ot">:</span> <dfn>Expr</dfn> Γ <span class="cn">𝔹</span><span class="ot">)</span></span>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> b ⇓ <span class="cn">tt</span> <span class="ot">→</span> <span class="ot">(</span><span class="cn">bool</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span><span class="cn">𝔹</span><span class="ot">}</span> b th el<span class="ot">)</span> ⇓ th</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>bool-stepper-tt <span class="ot">{_}</span> <span class="ot">{</span>th<span class="ot">}</span> <span class="ot">{</span>el<span class="ot">}</span> <span class="ot">.</span><span class="cn">tt</span> <span class="ot">(.</span><span class="cn">tt</span> ∎<span class="ot">)</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><dfn>bool-stepper-tt</dfn> <span class="ot">{_}</span> <span class="ot">{</span>th<span class="ot">}</span> <span class="ot">{</span>el<span class="ot">}</span> <span class="ot">.</span><span class="cn">tt</span> <span class="ot">(.</span><span class="cn">tt</span> ∎<span class="ot">)</span></span>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="cn">bool</span> <span class="cn">tt</span> th el <span class="cn">→⟨</span> if-tt-↓ ⟩ <span class="ot">(</span>th ∎<span class="ot">)</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>bool-stepper-tt <span class="ot">{_}</span> <span class="ot">{</span>th<span class="ot">}</span> <span class="ot">{</span>el<span class="ot">}</span> b <span class="ot">(_</span><span class="cn">→⟨</span><span class="ot">_</span>⟩<span class="ot">_</span> <span class="ot">.</span>b <span class="ot">{</span>M<span class="ot">}</span> x st<span class="ot">)</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="ot">_</span><span class="cn">→⟨</span><span class="ot">_</span>⟩<span class="ot">_</span> <span class="ot">(</span><span class="cn">bool</span> b th el<span class="ot">)</span> <span class="ot">(</span>if-↓ x<span class="ot">)</span> <span class="ot">(</span>bool-stepper-tt M st<span class="ot">)</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><dfn>bool-stepper-tt</dfn> <span class="ot">{_}</span> <span class="ot">{</span>th<span class="ot">}</span> <span class="ot">{</span>el<span class="ot">}</span> b <span class="ot">(_</span><span class="cn">→⟨</span><span class="ot">_</span>⟩<span class="ot">_</span> <span class="ot">.</span>b <span class="ot">{</span>M<span class="ot">}</span> x st<span class="ot">)</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="ot">_</span><span class="cn">→⟨</span><span class="ot">_</span>⟩<span class="ot">_</span> <span class="ot">(</span><span class="cn">bool</span> b th el<span class="ot">)</span> <span class="ot">(</span>if-↓ x<span class="ot">)</span> <span class="ot">(</span><dfn>bool-stepper-tt</dfn> M st<span class="ot">)</span></span>
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>bool-stepper-ff</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><dfn>bool-stepper-ff</dfn></span>
 <span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>th el<span class="ot">}</span> <span class="ot">(</span>b <span class="ot">:</span> <dfn>Expr</dfn> Γ <span class="cn">𝔹</span><span class="ot">)</span></span>
 <span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> b ⇓ <span class="cn">ff</span> <span class="ot">→</span> <span class="ot">(</span><span class="cn">bool</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span><span class="cn">𝔹</span><span class="ot">}</span> b th el<span class="ot">)</span> ⇓ el</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>bool-stepper-ff <span class="ot">{_}</span> <span class="ot">{</span>th<span class="ot">}</span> <span class="ot">{</span>el<span class="ot">}</span> <span class="ot">.</span><span class="cn">ff</span> <span class="ot">(.</span><span class="cn">ff</span> ∎<span class="ot">)</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><dfn>bool-stepper-ff</dfn> <span class="ot">{_}</span> <span class="ot">{</span>th<span class="ot">}</span> <span class="ot">{</span>el<span class="ot">}</span> <span class="ot">.</span><span class="cn">ff</span> <span class="ot">(.</span><span class="cn">ff</span> ∎<span class="ot">)</span></span>
 <span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="cn">bool</span> <span class="cn">ff</span> th el <span class="cn">→⟨</span> if-ff-↓ ⟩ <span class="ot">(</span>el ∎<span class="ot">)</span></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>bool-stepper-ff <span class="ot">{_}</span> <span class="ot">{</span>th<span class="ot">}</span> <span class="ot">{</span>el<span class="ot">}</span> b <span class="ot">(_</span><span class="cn">→⟨</span><span class="ot">_</span>⟩<span class="ot">_</span> <span class="ot">.</span>b <span class="ot">{</span>M<span class="ot">}</span> x st<span class="ot">)</span></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="ot">_</span><span class="cn">→⟨</span><span class="ot">_</span>⟩<span class="ot">_</span> <span class="ot">(</span><span class="cn">bool</span> b th el<span class="ot">)</span> <span class="ot">(</span>if-↓ x<span class="ot">)</span> <span class="ot">(</span>bool-stepper-ff M st<span class="ot">)</span></span></code></pre></div>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><dfn>bool-stepper-ff</dfn> <span class="ot">{_}</span> <span class="ot">{</span>th<span class="ot">}</span> <span class="ot">{</span>el<span class="ot">}</span> b <span class="ot">(_</span><span class="cn">→⟨</span><span class="ot">_</span>⟩<span class="ot">_</span> <span class="ot">.</span>b <span class="ot">{</span>M<span class="ot">}</span> x st<span class="ot">)</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="ot">_</span><span class="cn">→⟨</span><span class="ot">_</span>⟩<span class="ot">_</span> <span class="ot">(</span><span class="cn">bool</span> b th el<span class="ot">)</span> <span class="ot">(</span>if-↓ x<span class="ot">)</span> <span class="ot">(</span><dfn>bool-stepper-ff</dfn> M st<span class="ot">)</span></span></code></pre></div>
 <p>We are now in a position to show that
 <code>halt (fix-problem) ⇓ tt</code> gives rise to a contradiction which
 we do in a number of simple steps:</p>
@@ -502,11 +508,11 @@ class="sourceCode agda"><code class="sourceCode agda"><span id="cb23-1"><a href=
 <span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="co">--</span></span>
 <span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="co">-- and so we need that <dfn>halt</dfn> is a closed term. That is precisely what</span></span>
 <span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="co">-- <dfn>halt-sub</dfn> gives us:</span></span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>fp-step1</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><dfn>fp-step1</dfn></span>
 <span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>   <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span>e <span class="ot">:</span> <dfn>Expr</dfn> Γ <span class="cn">𝔹</span><span class="ot">}</span></span>
 <span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><dfn>fix-problem</dfn> <span class="ot">{</span>Γ<span class="ot">})</span> ↓ e</span>
 <span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> e ≡ <span class="cn">bool</span> <span class="ot">(</span><span class="cn">app</span> <dfn>halt</dfn> <dfn>fix-problem</dfn><span class="ot">)</span> <dfn>bot</dfn> <span class="cn">tt</span></span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>fp-step1 <span class="ot">{</span>Γ<span class="ot">}</span> fix-↓</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a><dfn>fp-step1</dfn> <span class="ot">{</span>Γ<span class="ot">}</span> fix-↓</span>
 <span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>  <span class="kw">rewrite</span> <span class="ot">(</span><dfn>halt-sub</dfn> <span class="ot">{</span>Γ <dfn>,</dfn> <span class="cn">𝔹</span><span class="ot">}</span> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span><span class="cn">𝔹</span><span class="ot">}</span> <span class="ot">(</span><dfn>sub</dfn> <span class="ot">{</span>Γ<span class="ot">}</span> <dfn>fix-problem</dfn><span class="ot">))</span></span>
 <span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> refl</span>
 <span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a></span>
@@ -521,64 +527,64 @@ class="sourceCode agda"><code class="sourceCode agda"><span id="cb23-1"><a href=
 <span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a><span class="co">-- We then make use of this fact and step 1 to show</span></span>
 <span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a><span class="co">-- that <dfn>fix-problem</dfn> steps as we expect:</span></span>
-<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>fp-step2</span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a><dfn>fp-step2</dfn></span>
 <span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>   <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span></span>
 <span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><dfn>fix-problem</dfn> <span class="ot">{</span>Γ<span class="ot">})</span> ↓ <span class="ot">(</span><span class="cn">bool</span> <span class="ot">(</span><span class="cn">app</span> <dfn>halt</dfn> <span class="ot">(</span><dfn>fix-problem</dfn><span class="ot">))</span> <dfn>bot</dfn> <span class="cn">tt</span><span class="ot">)</span></span>
-<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>fp-step2 <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">=</span></span>
-<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>  ≡-↓ <span class="ot">(</span>fix-↓ <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span><span class="cn">𝔹</span><span class="ot">}</span> <span class="ot">{</span><dfn>problem</dfn><span class="ot">})</span> <span class="ot">(</span>fp-step1 <span class="ot">(</span>fix-↓ <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span><span class="cn">𝔹</span><span class="ot">}</span> <span class="ot">{</span><dfn>problem</dfn><span class="ot">}))</span></span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a><dfn>fp-step2</dfn> <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">=</span></span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>  ≡-↓ <span class="ot">(</span>fix-↓ <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span><span class="cn">𝔹</span><span class="ot">}</span> <span class="ot">{</span><dfn>problem</dfn><span class="ot">})</span> <span class="ot">(</span><dfn>fp-step1</dfn> <span class="ot">(</span>fix-↓ <span class="ot">{</span>Γ<span class="ot">}</span> <span class="ot">{</span><span class="cn">𝔹</span><span class="ot">}</span> <span class="ot">{</span><dfn>problem</dfn><span class="ot">}))</span></span>
 <span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a><span class="co">-- In the next two steps we then use our assumption and the</span></span>
 <span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a><span class="co">-- big step lemma to derive a contradiction:</span></span>
-<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a>fp-step3</span>
+<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a><dfn>fp-step3</dfn></span>
 <span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a>   <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span></span>
 <span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><span class="cn">app</span> <span class="ot">(</span><dfn>halt</dfn> <span class="ot">{</span>Γ<span class="ot">})</span> <dfn>fix-problem</dfn><span class="ot">)</span> ⇓ <span class="cn">tt</span></span>
 <span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><span class="cn">bool</span> <span class="ot">(</span><span class="cn">app</span> <span class="ot">(</span><dfn>halt</dfn> <span class="ot">{</span>Γ<span class="ot">})</span> <dfn>fix-problem</dfn><span class="ot">)</span> <dfn>bot</dfn> <span class="cn">tt</span><span class="ot">)</span> ⇓ <dfn>bot</dfn></span>
-<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a>fp-step3 ⇓-tt <span class="ot">=</span> bool-stepper-tt <span class="ot">_</span>  ⇓-tt</span>
+<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a><dfn>fp-step3</dfn> ⇓-tt <span class="ot">=</span> <dfn>bool-stepper-tt</dfn> <span class="ot">_</span>  ⇓-tt</span>
 <span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a>fp-step4</span>
+<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a><dfn>fp-step4</dfn></span>
 <span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a>   <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span></span>
 <span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><span class="cn">app</span> <span class="ot">(</span><dfn>halt</dfn> <span class="ot">{</span>Γ<span class="ot">})</span> <dfn>fix-problem</dfn><span class="ot">)</span> ⇓ <span class="cn">tt</span></span>
 <span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><dfn>fix-problem</dfn> <span class="ot">{</span>Γ<span class="ot">})</span> ⇓ <dfn>bot</dfn></span>
-<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a>fp-step4 <span class="ot">{</span>Γ<span class="ot">}</span> ⇓-tt <span class="ot">=</span> <dfn>fix-problem</dfn> <span class="cn">→⟨</span> fp-step2 ⟩ fp-step3 ⇓-tt</span></code></pre></div>
+<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a><dfn>fp-step4</dfn> <span class="ot">{</span>Γ<span class="ot">}</span> ⇓-tt <span class="ot">=</span> <dfn>fix-problem</dfn> <span class="cn">→⟨</span> <dfn>fp-step2</dfn> ⟩ <dfn>fp-step3</dfn> ⇓-tt</span></code></pre></div>
 <p>The other half of the argument, assuming
 <code>halt (fix-problem) ⇓ ff</code>, is quite a bit simpler. To prove
 halting, we only need to exhibit some particular sequence of
 reductions:</p>
 <div class="sourceCode" id="cb24"><pre
-class="sourceCode agda"><code class="sourceCode agda"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>fp-step5</span>
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><dfn>fp-step5</dfn></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>   <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><span class="cn">app</span> <span class="ot">(</span><dfn>halt</dfn> <span class="ot">{</span>Γ<span class="ot">})</span> <dfn>fix-problem</dfn><span class="ot">)</span> ⇓ <span class="cn">ff</span></span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><span class="cn">bool</span> <span class="ot">(</span><span class="cn">app</span> <span class="ot">(</span><dfn>halt</dfn> <span class="ot">{</span>Γ<span class="ot">})</span> <dfn>fix-problem</dfn><span class="ot">)</span> <dfn>bot</dfn> <span class="cn">tt</span><span class="ot">)</span> ⇓ <span class="cn">tt</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>fp-step5 ⇓-ff <span class="ot">=</span> bool-stepper-ff <span class="ot">_</span> ⇓-ff</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><dfn>fp-step5</dfn> ⇓-ff <span class="ot">=</span> <dfn>bool-stepper-ff</dfn> <span class="ot">_</span> ⇓-ff</span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co">-- We make use of our substition lemma (fp-step2) to</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co">-- We make use of our substition lemma (<dfn>fp-step2</dfn>) to</span></span>
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co">-- show under this assumption that <dfn>fix-problem</dfn> big</span></span>
 <span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- steps to <span class="cn">tt</span>.</span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>fp-step6</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><dfn>fp-step6</dfn></span>
 <span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>   <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span></span>
 <span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <span class="ot">(</span><span class="cn">app</span> <span class="ot">(</span><dfn>halt</dfn> <span class="ot">{</span>Γ<span class="ot">})</span> <dfn>fix-problem</dfn><span class="ot">)</span> ⇓ <span class="cn">ff</span></span>
 <span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>   <span class="ot">→</span> <dfn>fix-problem</dfn> ⇓ <span class="cn">tt</span></span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>fp-step6 ⇓-ff <span class="ot">=</span> <dfn>fix-problem</dfn> <span class="cn">→⟨</span> fp-step2 ⟩ fp-step5 ⇓-ff</span></code></pre></div>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><dfn>fp-step6</dfn> ⇓-ff <span class="ot">=</span> <dfn>fix-problem</dfn> <span class="cn">→⟨</span> <dfn>fp-step2</dfn> ⟩ <dfn>fp-step5</dfn> ⇓-ff</span></code></pre></div>
 <p>Finally, let’s package up these results into their respective
 contradictions:</p>
 <div class="sourceCode" id="cb25"><pre
-class="sourceCode agda"><code class="sourceCode agda"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fix-problem-tt</span>
+class="sourceCode agda"><code class="sourceCode agda"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><dfn>fix-problem-tt</dfn></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <span class="ot">(</span><span class="cn">app</span> <span class="ot">(</span><dfn>halt</dfn> <span class="ot">{</span>Γ<span class="ot">})</span> <dfn>fix-problem</dfn><span class="ot">)</span> ⇓ <span class="cn">tt</span></span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">→</span> <dfn>Halt</dfn> <span class="ot">{</span>Γ<span class="ot">}</span> <dfn>fix-problem</dfn> <span class="ot">→</span> ⊥</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>fix-problem-tt ⇓-tt h <span class="ot">=</span> ⇓-bot-⊥ <span class="ot">_</span> <span class="ot">(</span>fp-step4 ⇓-tt<span class="ot">)</span> h</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><dfn>fix-problem-tt</dfn> ⇓-tt h <span class="ot">=</span> ⇓-bot-⊥ <span class="ot">_</span> <span class="ot">(</span><dfn>fp-step4</dfn> ⇓-tt<span class="ot">)</span> h</span>
 <span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>fix-problem-ff</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><dfn>fix-problem-ff</dfn></span>
 <span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="ot">:</span> <span class="ot">∀</span> <span class="ot">{</span>Γ<span class="ot">}</span></span>
 <span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> <span class="ot">(</span><span class="cn">app</span> <span class="ot">(</span><dfn>halt</dfn> <span class="ot">{</span>Γ<span class="ot">})</span> <dfn>fix-problem</dfn><span class="ot">)</span> ⇓ <span class="cn">ff</span></span>
 <span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="ot">→</span> <span class="ot">(</span>¬ <dfn>Halt</dfn> <span class="ot">{</span>Γ<span class="ot">}</span> <dfn>fix-problem</dfn><span class="ot">)</span> <span class="ot">→</span> ⊥</span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>fix-problem-ff ⇓-ff ¬h <span class="ot">=</span> ¬h <span class="ot">(</span><span class="cn">halts</span> <span class="cn">V-tt</span> <span class="ot">(</span>fp-step6 ⇓-ff<span class="ot">))</span></span></code></pre></div>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><dfn>fix-problem-ff</dfn> ⇓-ff ¬h <span class="ot">=</span> ¬h <span class="ot">(</span><span class="cn">halts</span> <span class="cn">V-tt</span> <span class="ot">(</span><dfn>fp-step6</dfn> ⇓-ff<span class="ot">))</span></span></code></pre></div>
 <p>and put everything together:</p>
 <div class="sourceCode" id="cb26"><pre
 class="sourceCode agda"><code class="sourceCode agda"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><dfn>halting</dfn> <span class="ot">:</span> ⊥</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><dfn>halting</dfn> <span class="kw">with</span> <dfn>halt-ret</dfn> <span class="ot">{</span>nil<span class="ot">}</span> <dfn>fix-problem</dfn></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><dfn>halting</dfn> <span class="ot">|</span> inj₁ ⇓tt  <span class="ot">=</span> fix-problem-tt ⇓tt <span class="ot">(</span><dfn>halt-tt</dfn> <dfn>fix-problem</dfn> ⇓tt<span class="ot">)</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><dfn>halting</dfn> <span class="ot">|</span> inj₂ ⇓ff  <span class="ot">=</span> fix-problem-ff ⇓ff <span class="ot">(</span><dfn>halt-ff</dfn> <dfn>fix-problem</dfn> ⇓ff<span class="ot">)</span></span></code></pre></div>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><dfn>halting</dfn> <span class="ot">|</span> inj₁ ⇓tt  <span class="ot">=</span> <dfn>fix-problem-tt</dfn> ⇓tt <span class="ot">(</span><dfn>halt-tt</dfn> <dfn>fix-problem</dfn> ⇓tt<span class="ot">)</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><dfn>halting</dfn> <span class="ot">|</span> inj₂ ⇓ff  <span class="ot">=</span> <dfn>fix-problem-ff</dfn> ⇓ff <span class="ot">(</span><dfn>halt-ff</dfn> <dfn>fix-problem</dfn> ⇓ff<span class="ot">)</span></span></code></pre></div>
 <p>Hopefully this post has given an approachable account of formalising
 one of the central results in computability theory. We hope to have also
 demonstrated, from a programming language theory perspective, some of

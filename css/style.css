@@ -805,4 +805,122 @@ mjx-container[display="true"] {
   overflow-x: auto;
 }
 
+/* =========================================================================
+   DARK/LIGHT MODE TOGGLE SWITCH
+   ========================================================================= */
+
+.theme-toggle {
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  background: #555;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.3s;
+  opacity: 0.7;
+  align-self: center;
+}
+.theme-toggle:hover { opacity: 1; }
+html.light .theme-toggle { background: #0033b3; opacity: 0.85; }
+html.light .theme-toggle:hover { opacity: 1; }
+
+.theme-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.25s;
+  pointer-events: none;
+}
+html.light .theme-toggle-thumb { transform: translateX(20px); }
+
+/* =========================================================================
+   LIGHT MODE — Verso/lean-standalone palette
+   ========================================================================= */
+
+html.light {
+  background: #f8f5f0;
+  color: #1a1a1a;
+}
+
+html.light header {
+  background: rgba(248, 245, 240, 0.97);
+  border-bottom: 1px solid #d0ccc5;
+}
+
+html.light .beacon {
+  background-color: #e0ddd8 !important;
+  color: #1a1a1a !important;
+}
+
+html.light a,
+html.light a:visited,
+html.light a:hover {
+  color: #EB005B;
+}
+
+html.light a.tag,
+html.light a.category {
+  color: #1a1a1a;
+  border-color: rgba(100, 100, 100, 0.5);
+}
+html.light a.tag:hover,
+html.light a.category:hover {
+  background: #1a1a1a;
+  color: #f8f5f0;
+  text-decoration: none;
+}
+
+html.light .table-of-contents li a {
+  color: #1a1a1a;
+  border-top-color: #bbb;
+}
+html.light .table-of-contents li a:hover {
+  background: #e0ddd8;
+  color: #1a1a1a;
+  text-decoration: none;
+}
+
+html.light .arrow { background: #e0ddd8; }
+html.light .arrow:hover {
+  color: #EB005B;
+  border-color: #EB005B;
+  background: #fff;
+}
+
+html.light .monochrome { color: #1a1a1a; }
+
+html.light h2 { border-color: #bbb; }
+html.light h3 { border-color: #bbb; }
+html.light blockquote > p { border-left-color: rgba(100, 100, 100, 0.5); }
+
+html.light .footnote-popup {
+  background: #f8f5f0;
+  border-color: #bbb;
+  color: #1a1a1a;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+html.light a.footnote-ref { color: #0033b3; }
+html.light .footnotes { border-top-color: #bbb; }
+
+html.light .gem-info table { border-color: #1a1a1a; }
+html.light .gem-info table td { border-color: #1a1a1a; }
+
+html.light .date { color: rgba(0, 0, 0, 0.45); }
+html.light .categories,
+html.light .tags { color: rgba(0, 0, 0, 0.45); }
+
+html.light code { color: #1a1a1a; }
+
+html.light .post .note {
+  color: #374151;
+  border-left-color: #bbb;
+}
+
 /*# sourceMappingURL=style.css.map */

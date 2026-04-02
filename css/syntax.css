@@ -132,3 +132,53 @@ code {
 .math.display {
     color: #e0af68;
 }
+
+/* ========================================== */
+/* Light mode syntax highlighting            */
+/* Verso/lean-standalone palette             */
+/* ========================================== */
+
+/* Light mode: non-Agda code — override every token that was white */
+html.light code { color: #1a1a1a; }
+html.light .sourceCode .kw { color: #0033b3; }
+html.light .sourceCode .dt { color: #6b21a8; }
+html.light .sourceCode .dv { color: #991b1b; }
+html.light .sourceCode .bn { color: #991b1b; }
+html.light .sourceCode .fl { color: #991b1b; }
+html.light .sourceCode .ch { color: #991b1b; }
+html.light .sourceCode .st { color: #991b1b; }
+html.light .sourceCode .co { color: #4b5563; }
+html.light .sourceCode .ot { color: #1a1a1a; }
+html.light .sourceCode .fu { color: #1a6b4a; }
+html.light .sourceCode .al { color: #cc0000; }
+html.light .sourceCode .er { color: #cc0000; }
+
+/* Light mode: Agda */
+html.light .sourceCode.agda .kw  { color: #0033b3; font-weight: bold; font-style: normal; }
+html.light .sourceCode.agda .dt  { color: #6b21a8; }
+html.light .sourceCode.agda .ot  { color: #374151; }
+html.light .sourceCode.agda .fu  { color: #1a6b4a; }
+html.light .sourceCode.agda .co  { color: #4b5563; font-style: italic; }
+html.light .sourceCode.agda .pp  { color: #92400e; }
+html.light .sourceCode.agda .dv,
+html.light .sourceCode.agda .bn,
+html.light .sourceCode.agda .fl  { color: #991b1b; }
+html.light .sourceCode.agda .st,
+html.light .sourceCode.agda .ch  { color: #991b1b; }
+html.light .sourceCode.agda .va  { color: #1a1a1a; }
+html.light .sourceCode.agda .cn  { color: #6b21a8; }
+html.light .sourceCode.agda dfn  { color: #1a6b4a; font-weight: bold; font-style: normal; }
+html.light .sourceCode.agda .constructor { color: #92400e; }
+html.light .sourceCode.agda .er  { color: #cc0000; }
+html.light .sourceCode.agda .al  { color: #cc0000; }
+
+html.light .sourceCode.agda .co dfn,
+html.light .sourceCode.agda .co .cn {
+    color: inherit;
+    font-weight: inherit;
+    font-style: inherit;
+}
+
+/* Light mode: math (lean keyword blue) */
+html.light .math.inline  { color: #0033b3; }
+html.light .math.display { color: #0033b3; }

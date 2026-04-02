@@ -1,18 +1,6 @@
-function switchTheme(){
-    var button = document.getElementById("theme-button");
-    var html = document.getElementsByTagName("html")[0];
-    html.classList.toggle("dark");
-
-    if(button.innerHTML == "DAY"){
-        button.innerHTML = "NIGHT";
-        // Expire in two months
-        setCookie("theme", "night", 60*24*60*60*1000);
-    } else {
-        button.innerHTML = "DAY";
-        // Expire in two months
-        setCookie("theme", "day", 60*24*60*60*1000);
-    }
-    return;
+function setTheme(light) {
+    document.documentElement.classList.toggle('light', light);
+    setCookie('theme', light ? 'light' : 'dark', 60*24*60*60*1000);
 }
 
 function setCookie(cname,cvalue,extime)
@@ -35,15 +23,18 @@ function getCookie(cname)
     return "";
 }
 
-// Switch theme if cookie is set
-if (getCookie('theme')=='night') {
-    switchTheme();
+// Restore theme from cookie
+if (getCookie('theme') === 'light') {
+    document.documentElement.classList.add('light');
 }
 
-// Switch theme if button is clicked.
-var button = document.getElementById("theme-button");
-if (button) {
-    button.addEventListener('click', switchTheme);
+// Wire toggle button
+var toggle = document.getElementById('theme-toggle');
+if (toggle) {
+    toggle.addEventListener('click', function() {
+        var isLight = document.documentElement.classList.contains('light');
+        setTheme(!isLight);
+    });
 }
 
 // Footnote popup functionality
