@@ -105,10 +105,12 @@ ul, ol {
 }
 
 #abouttext {
-		width: 600px;
+    max-width: 600px;
+    width: 100%;
     margin: 0 auto;
-		text-align: left;
-		margin-top: 2em;
+    text-align: left;
+    margin-top: 2em;
+    box-sizing: border-box;
 }
 
 .sourceCode #aboutSC {
@@ -672,11 +674,22 @@ a.tag, a.category {
     width: 26px;
     height: 26px; }
 
-  /* Content: increase horizontal padding and reduce font slightly */
+  /* Content: fill viewport width so children cannot overflow the page */
   .post {
+    width: 100%;
+    box-sizing: border-box;
     padding: 0 1.25rem;
     font-size: 1rem;
     margin-top: 1.5em; }
+
+  /* Prevent pre/code blocks from widening the page */
+  pre {
+    max-width: 100%;
+    overflow-x: auto; }
+
+  /* About page: was a fixed 600px which overflows narrow screens */
+  #abouttext {
+    padding: 0 1.25rem; }
 
   /* Reduce the drop-cap — 8em is ~128px and dominates the first screen */
   .post > p:first-of-type:first-letter {
@@ -715,7 +728,12 @@ a.tag, a.category {
   .page p {
     padding-bottom: 1em;
     font-size: 1em;
-    line-height: 1.8em; } }
+    line-height: 1.8em; }
+
+  /* Table of contents: min-width: 300px can overflow narrow screens */
+  .table-of-contents li a {
+    width: 90%;
+    min-width: 0; } }
 
 @media only screen and (max-height: 450px) {
   .masthead {
