@@ -1,0 +1,75 @@
+{"items":
+ [{"range":
+   {"start": {"line": 1, "column": 1}, "end": {"line": 1, "column": 31}},
+   "kind": "Lean.Parser.Module.header",
+   "defines": [],
+   "code": 6},
+  {"range":
+   {"start": {"line": 2, "column": 1}, "end": {"line": 3, "column": 1}},
+   "kind": "Lean.Parser.Command.check",
+   "defines": [],
+   "code": 26},
+  {"range":
+   {"start": {"line": 3, "column": 1}, "end": {"line": 3, "column": 1}},
+   "kind": "Lean.Parser.Command.eoi",
+   "defines": [],
+   "code": 29}],
+ "data":
+ {"tokens":
+  {"8":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.check-31",
+      "name": ["Lean", "Parser", "Command", "check"],
+      "docs": null}},
+    "content": "#check"},
+   "3":
+   {"kind": {"moduleName": {"name": ["Mathlib", "Data", "List", "Basic"]}},
+    "content": "Mathlib.Data.List.Basic"},
+   "27": {"kind": "unknown", "content": ""},
+   "22": {"kind": "unknown", "content": "isPrefix"},
+   "20": {"kind": "unknown", "content": "."},
+   "18":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "List.{u} (α : Type u) : Type u",
+      "name": ["List"],
+      "isDef": false,
+      "docs":
+      "Linked lists: ordered lists, in which each element has a reference to the next element.\n\nMost operations on linked lists take time proportional to the length of the list, because each\nelement must be traversed to find the next element.\n\n`List α` is isomorphic to `Array α`, but they are useful for different things:\n* `List α` is easier for reasoning, and `Array α` is modeled as a wrapper around `List α`.\n* `List α` works well as a persistent data structure, when many copies of the tail are shared. When\n  the value is not shared, `Array α` will have better performance because it can do destructive\n  updates.\n"}},
+    "content": "List"},
+   "0":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Module.import-0",
+      "name": ["Lean", "Parser", "Module", "import"],
+      "docs": null}},
+    "content": "import"}},
+  "nextKey": 30,
+  "messageContents":
+  {"17": {"append": [10, 16]},
+   "16": {"append": [11, 12, 13, 14, 15, 10, 10, 10]},
+   "15": {"text": "`"},
+   "14": {"text": "List.isPrefix"},
+   "13": {"text": " `"},
+   "12": {"text": "constant"},
+   "11": {"text": "Unknown "},
+   "10": {"text": ""}},
+  "goals": {},
+  "code":
+  {"9": {"token": {"tok": 8}},
+   "7": {"text": {"str": "\n"}},
+   "6": {"seq": {"highlights": [1, 2, 4, 5]}},
+   "5": {"seq": {"highlights": []}},
+   "4": {"token": {"tok": 3}},
+   "29": {"seq": {"highlights": [7, 28, 5]}},
+   "28": {"token": {"tok": 27}},
+   "26": {"seq": {"highlights": [7, 9, 2, 25, 5]}},
+   "25": {"span": {"info": [["error", 17]], "content": 24}},
+   "24": {"seq": {"highlights": [19, 21, 23, 5]}},
+   "23": {"token": {"tok": 22}},
+   "21": {"token": {"tok": 20}},
+   "2": {"text": {"str": " "}},
+   "19": {"token": {"tok": 18}},
+   "1": {"token": {"tok": 0}}}}}

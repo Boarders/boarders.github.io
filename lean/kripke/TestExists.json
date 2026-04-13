@@ -1,0 +1,217 @@
+{"items":
+ [{"range": null,
+   "kind": "Lean.Parser.Module.header",
+   "defines": [],
+   "code": 0},
+  {"range":
+   {"start": {"line": 1, "column": 1}, "end": {"line": 4, "column": 6}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": [],
+   "code": 65},
+  {"range":
+   {"start": {"line": 5, "column": 1}, "end": {"line": 5, "column": 1}},
+   "kind": "Lean.Parser.Command.eoi",
+   "defines": [],
+   "code": 69}],
+ "data":
+ {"tokens":
+  {"8": {"kind": "unknown", "content": ":"},
+   "67": {"kind": "unknown", "content": ""},
+   "61":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.tacticRfl-91",
+      "name": ["Lean", "Parser", "Tactic", "tacticRfl"],
+      "docs":
+      "This tactic applies to a goal whose target has the form `x ~ x`,\nwhere `~` is equality, heterogeneous equality or any relation that\nhas a reflexivity lemma tagged with the attribute @[refl].\n"}},
+    "content": "rfl"},
+   "6":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "∃ x, x = 1", "name": "_uniq.46"}},
+    "content": "h"},
+   "56": {"kind": "unknown", "content": "⟩"},
+   "53": {"kind": "unknown", "content": "⟨"},
+   "51":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.obtain-65",
+      "name": ["Lean", "Parser", "Tactic", "obtain"],
+      "docs":
+      "The `obtain` tactic is a combination of `have` and `rcases`. See `rcases` for\na description of supported patterns.\n\n```lean\nobtain ⟨patt⟩ : type := proof\n```\nis equivalent to\n```lean\nhave h : type := proof\nrcases h with ⟨patt⟩\n```\n\nIf `⟨patt⟩` is omitted, `rcases` will try to infer the pattern.\n\nIf `type` is omitted, `:= proof` is required.\n"}},
+    "content": "obtain"},
+   "47":
+   {"kind": {"var": {"typeFormat": null, "type": "x = 1", "name": "_uniq.249"}},
+    "content": "hx"},
+   "44":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Nat : Type",
+      "name": ["Nat"],
+      "isDef": false,
+      "docs":
+      "The natural numbers, starting at zero.\n\nThis type is special-cased by both the kernel and the compiler, and overridden with an efficient\nimplementation. Both use a fast arbitrary-precision arithmetic library (usually\n[GMP](https://gmplib.org/)); at runtime, `Nat` values that are sufficiently small are unboxed.\n"}},
+    "content": "Nat"},
+   "43":
+   {"kind": {"var": {"typeFormat": null, "type": "Nat", "name": "_uniq.248"}},
+    "content": "x"},
+   "4": {"kind": "unknown", "content": "("},
+   "38":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.byTactic-38",
+      "name": ["Lean", "Parser", "Term", "byTactic"],
+      "docs":
+      "`by tac` constructs a term of the expected type by running the tactic(s) `tac`. "}},
+    "content": "by"},
+   "33": {"kind": "unknown", "content": "1"},
+   "31":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Eq.{u_1} {α : Sort u_1} : α → α → Prop",
+      "name": ["Eq"],
+      "isDef": false,
+      "docs":
+      "The equality relation. It has one introduction rule, `Eq.refl`.\nWe use `a = b` as notation for `Eq a b`.\nA fundamental property of equality is that it is an equivalence relation.\n```\nvariable (α : Type) (a b c d : α)\nvariable (hab : a = b) (hcb : c = b) (hcd : c = d)\n\nexample : a = d :=\n  Eq.trans (Eq.trans hab (Eq.symm hcb)) hcd\n```\nEquality is much more than an equivalence relation, however. It has the important property that every assertion\nrespects the equivalence, in the sense that we can substitute equal expressions without changing the truth value.\nThat is, given `h1 : a = b` and `h2 : p a`, we can construct a proof for `p b` using substitution: `Eq.subst h1 h2`.\nExample:\n```\nexample (α : Type) (a b : α) (p : α → Prop)\n        (h1 : a = b) (h2 : p a) : p b :=\n  Eq.subst h1 h2\n\nexample (α : Type) (a b : α) (p : α → Prop)\n    (h1 : a = b) (h2 : p a) : p b :=\n  h1 ▸ h2\n```\nThe triangle in the second presentation is a macro built on top of `Eq.subst` and `Eq.symm`, and you can enter it by typing `\\t`.\nFor more information: [Equality](https://lean-lang.org/theorem_proving_in_lean4/quantifiers_and_equality.html#equality)\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `=` in identifiers is `eq`."}},
+    "content": "="},
+   "29":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Exists.{u} {α : Sort u} (p : α → Prop) : Prop",
+      "name": ["Exists"],
+      "isDef": false,
+      "docs":
+      "Existential quantification. If `p : α → Prop` is a predicate, then `∃ x : α, p x`\nasserts that there is some `x` of type `α` such that `p x` holds.\nTo create an existential proof, use the `exists` tactic,\nor the anonymous constructor notation `⟨x, h⟩`.\nTo unpack an existential, use `cases h` where `h` is a proof of `∃ x : α, p x`,\nor `let ⟨x, hx⟩ := h` where `.\n\nBecause Lean has proof irrelevance, any two proofs of an existential are\ndefinitionally equal. One consequence of this is that it is impossible to recover the\nwitness of an existential from the mere fact of its existence.\nFor example, the following does not compile:\n```\nexample (h : ∃ x : Nat, x = x) : Nat :=\n  let ⟨x, _⟩ := h  -- fail, because the goal is `Nat : Type`\n  x\n```\nThe error message `recursor 'Exists.casesOn' can only eliminate into Prop` means\nthat this only works when the current goal is another proposition:\n```\nexample (h : ∃ x : Nat, x = x) : True :=\n  let ⟨x, _⟩ := h  -- ok, because the goal is `True : Prop`\n  trivial\n```\n"}},
+    "content": ","},
+   "27":
+   {"kind": {"var": {"typeFormat": null, "type": "Nat", "name": "_uniq.256"}},
+    "content": "x"},
+   "25":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Exists.{u} {α : Sort u} (p : α → Prop) : Prop",
+      "name": ["Exists"],
+      "isDef": false,
+      "docs":
+      "Existential quantification. If `p : α → Prop` is a predicate, then `∃ x : α, p x`\nasserts that there is some `x` of type `α` such that `p x` holds.\nTo create an existential proof, use the `exists` tactic,\nor the anonymous constructor notation `⟨x, h⟩`.\nTo unpack an existential, use `cases h` where `h` is a proof of `∃ x : α, p x`,\nor `let ⟨x, hx⟩ := h` where `.\n\nBecause Lean has proof irrelevance, any two proofs of an existential are\ndefinitionally equal. One consequence of this is that it is impossible to recover the\nwitness of an existential from the mere fact of its existence.\nFor example, the following does not compile:\n```\nexample (h : ∃ x : Nat, x = x) : Nat :=\n  let ⟨x, _⟩ := h  -- fail, because the goal is `Nat : Type`\n  x\n```\nThe error message `recursor 'Exists.casesOn' can only eliminate into Prop` means\nthat this only works when the current goal is another proposition:\n```\nexample (h : ∃ x : Nat, x = x) : True :=\n  let ⟨x, _⟩ := h  -- ok, because the goal is `True : Prop`\n  trivial\n```\n"}},
+    "content": "∃"},
+   "22": {"kind": "unknown", "content": ":="},
+   "20": {"kind": "unknown", "content": ")"},
+   "18": {"kind": {"withType": {"type": "Nat"}}, "content": "1"},
+   "16": {"kind": "unknown", "content": "="},
+   "14": {"kind": "unknown", "content": ","},
+   "12":
+   {"kind": {"var": {"typeFormat": null, "type": "Nat", "name": "_uniq.6"}},
+    "content": "x"},
+   "10": {"kind": "unknown", "content": "∃"},
+   "1":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.example-0",
+      "name": ["Lean", "Parser", "Command", "example"],
+      "docs": null}},
+    "content": "example"}},
+  "nextKey": 70,
+  "messageContents": {},
+  "goals":
+  {"50":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 46, "ppType": null, "names": [43]},
+     {"typeAndVal": 49, "ppType": null, "names": [47]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 36},
+   "37":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses": [{"typeAndVal": 35, "ppType": null, "names": [6]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 36}},
+  "code":
+  {"9": {"token": {"tok": 8}},
+   "7": {"token": {"tok": 6}},
+   "69": {"seq": {"highlights": [66, 68, 0]}},
+   "68": {"token": {"tok": 67}},
+   "66": {"text": {"str": "\n"}},
+   "65":
+   {"seq":
+    {"highlights":
+     [2,
+      3,
+      5,
+      7,
+      3,
+      9,
+      3,
+      11,
+      3,
+      13,
+      15,
+      3,
+      13,
+      3,
+      17,
+      3,
+      19,
+      21,
+      3,
+      9,
+      3,
+      19,
+      3,
+      17,
+      3,
+      19,
+      3,
+      23,
+      3,
+      41,
+      42,
+      59,
+      60,
+      64,
+      0]}},
+   "64": {"tactics": {"startPos": 91, "info": [], "endPos": 94, "content": 63}},
+   "63": {"seq": {"highlights": [62, 0]}},
+   "62": {"token": {"tok": 61}},
+   "60": {"text": {"str": "\n  "}},
+   "59":
+   {"tactics": {"startPos": 65, "info": [50], "endPos": 88, "content": 58}},
+   "58":
+   {"seq": {"highlights": [52, 3, 54, 48, 15, 3, 55, 57, 3, 23, 3, 7, 0]}},
+   "57": {"token": {"tok": 56}},
+   "55": {"token": {"tok": 47}},
+   "54": {"token": {"tok": 53}},
+   "52": {"token": {"tok": 51}},
+   "5": {"token": {"tok": 4}},
+   "49": {"seq": {"highlights": [24, 48, 3, 32, 3, 34]}},
+   "48": {"token": {"tok": 43}},
+   "46": {"seq": {"highlights": [24, 45, 24]}},
+   "45": {"token": {"tok": 44}},
+   "42": {"text": {"str": "\n  -- How to unpack h?\n  "}},
+   "41":
+   {"tactics": {"startPos": 38, "info": [37], "endPos": 40, "content": 40}},
+   "40": {"seq": {"highlights": [39, 0]}},
+   "39": {"token": {"tok": 38}},
+   "36": {"seq": {"highlights": [24, 34, 3, 32, 3, 34]}},
+   "35": {"seq": {"highlights": [24, 26, 3, 28, 30, 3, 28, 3, 32, 3, 34]}},
+   "34": {"token": {"tok": 33}},
+   "32": {"token": {"tok": 31}},
+   "30": {"token": {"tok": 29}},
+   "3": {"text": {"str": " "}},
+   "28": {"token": {"tok": 27}},
+   "26": {"token": {"tok": 25}},
+   "24": {"text": {"str": ""}},
+   "23": {"token": {"tok": 22}},
+   "21": {"token": {"tok": 20}},
+   "2": {"token": {"tok": 1}},
+   "19": {"token": {"tok": 18}},
+   "17": {"token": {"tok": 16}},
+   "15": {"token": {"tok": 14}},
+   "13": {"token": {"tok": 12}},
+   "11": {"token": {"tok": 10}},
+   "0": {"seq": {"highlights": []}}}}}

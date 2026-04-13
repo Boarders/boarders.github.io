@@ -23,8 +23,8 @@ function getCookie(cname)
     return "";
 }
 
-// Restore theme from cookie
-if (getCookie('theme') === 'light') {
+// Restore theme from cookie (light is default)
+if (getCookie('theme') !== 'dark') {
     document.documentElement.classList.add('light');
 }
 

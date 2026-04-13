@@ -1,0 +1,356 @@
+/* =========================================================================
+   Lean 4 / SubVerso syntax highlighting + proof state display
+
+   Two contexts:
+     1.  body.lean-standalone  — the full proof-development page (light theme)
+     2.  .lean-embed           — code card embedded inside a dark blog post
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   1.  STANDALONE PROOF-DEVELOPMENT PAGE  (light Verso-style)
+   ------------------------------------------------------------------------- */
+
+body.lean-standalone {
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  color: #1a1a1a;
+  font-family: "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.lean-page {
+  /* No max-width — let the code breathe at full width */
+  padding: 0 2.5em 5em;
+}
+
+/* Header: module name as a breadcrumb */
+.lean-header {
+  padding: 1.2em 0 1em;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 1.5em;
+}
+
+.lean-module-name {
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  font-size: 1em;
+  color: #555;
+}
+
+.lean-crumb { color: #222; font-weight: 500; }
+.lean-dot   { color: #bbb; margin: 0 0.05em; }
+
+/* Module body: items separated by the natural whitespace in the source */
+.lean-module {
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+  font-size: 0.9em;
+  line-height: 1.65;
+}
+
+.lean-item { margin: 0; padding: 0; }
+
+pre.hl.lean {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  overflow-x: auto;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+pre.hl.lean code { background: none; padding: 0; }
+
+/* -------------------------------------------------------------------------
+   TOKEN COLOURS — light Verso-style
+   Verso philosophy: keywords bold, vars italic, tasteful colour.
+   ------------------------------------------------------------------------- */
+
+.hl.lean .keyword    { color: #0033b3; font-weight: bold; }
+.hl.lean .const      { color: #6b21a8; }
+.hl.lean .var        { color: #1a6b4a; font-style: italic; }
+.hl.lean .literal    { color: #991b1b; }
+.hl.lean .literal.string { color: #991b1b; }
+.hl.lean .sort       { color: #92400e; }
+.hl.lean .doc-comment { color: #4b5563; font-style: italic; }
+.hl.lean .option     { color: #1e40af; }
+.hl.lean .module-name { color: #1e40af; }
+.hl.lean .level-const,
+.hl.lean .level-var,
+.hl.lean .level-op   { color: #92400e; }
+.hl.lean .typed      { color: #1a1a1a; }
+.hl.lean .unknown    { color: #555; }
+
+/* -------------------------------------------------------------------------
+   TACTIC BLOCKS — light theme hover
+   ------------------------------------------------------------------------- */
+
+.hl.lean .tactic-block {
+  position: relative;
+  border-bottom: 1px dashed #aab8d0;
+  cursor: help;
+  outline: none;
+}
+
+/* Shown/positioned entirely by lean.js; position:fixed avoids the
+   inline-span percentage-height bug that caused overlapping text. */
+.lean-proof-state {
+  display: none;
+  position: fixed;
+  z-index: 200;
+  min-width: 260px;
+  max-width: 640px;
+  background: #f5f7fa;
+  border: 1px solid #c8d3e0;
+  border-radius: 4px;
+  padding: 0.75em 1.1em;
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  font-size: 0.88em;
+  line-height: 1.55;
+  color: #1a1a1a;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  white-space: normal;
+  pointer-events: none;
+}
+
+/* Goal anatomy */
+.lean-goal + .lean-goal {
+  margin-top: 0.75em;
+  border-top: 1px solid #dde4ed;
+  padding-top: 0.75em;
+}
+
+.goal-case {
+  display: block;
+  color: #7c8fa8;
+  font-size: 0.86em;
+  margin-bottom: 0.25em;
+}
+
+.hyps     { margin-bottom: 0.4em; }
+.hyp      { display: block; padding-left: 0.5em; }
+.hyp-name { color: #1a6b4a; font-style: italic; }
+.hyp-sep  { color: #999; }
+.hyp-type { color: #333; }
+
+.goal-conclusion { display: block; padding-top: 0.1em; color: #1a1a1a; }
+.goal-prefix     { color: #0033b3; font-weight: bold; }
+
+/* -------------------------------------------------------------------------
+   DIAGNOSTIC MARKERS
+   ------------------------------------------------------------------------- */
+
+.hl.lean .has-info {
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  cursor: help;
+}
+.hl.lean .has-info.error   { text-decoration-color: #cc0000; }
+.hl.lean .has-info.warning { text-decoration-color: #e7a71d; }
+.hl.lean .has-info.info    { text-decoration-color: #4777ff; }
+
+.hl.lean .point-info {
+  display: inline-block;
+  width: 0.45em; height: 0.45em;
+  border-radius: 50%;
+  vertical-align: middle;
+  margin: 0 0.15em;
+}
+.hl.lean .point-info.error   { background: #cc0000; }
+.hl.lean .point-info.warning { background: #e7a71d; }
+.hl.lean .point-info.info    { background: #4777ff; }
+
+/* -------------------------------------------------------------------------
+   2.  INLINE EMBED IN BLOG POST  (dark card, sits on dark blog background)
+   ------------------------------------------------------------------------- */
+
+.lean-embed {
+  margin: 1.5em 0;
+  background: #111620;
+  border: 1px solid #1e2738;
+  border-radius: 4px;
+  overflow: hidden;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+  font-size: 0.875em;
+  line-height: 1.7;
+  color: #cdd5e0;
+}
+
+/* Override token colours for the dark embed context */
+.lean-embed .hl.lean .keyword    { color: #c792ea; font-weight: 600; font-style: normal; }
+.lean-embed .hl.lean .const      { color: #82aaff; }
+.lean-embed .hl.lean .var        { color: #c3e88d; font-style: normal; }
+.lean-embed .hl.lean .literal    { color: #f78c6c; }
+.lean-embed .hl.lean .literal.string { color: #c3e88d; }
+.lean-embed .hl.lean .sort       { color: #ffcb6b; }
+.lean-embed .hl.lean .doc-comment { color: #546e7a; font-style: italic; }
+.lean-embed .hl.lean .option     { color: #89ddff; }
+.lean-embed .hl.lean .module-name { color: #89ddff; }
+.lean-embed .hl.lean .level-const,
+.lean-embed .hl.lean .level-var,
+.lean-embed .hl.lean .level-op   { color: #f07178; }
+.lean-embed .hl.lean .typed      { color: #a6accd; }
+.lean-embed .hl.lean .unknown    { color: #a6accd; }
+
+.lean-embed pre.hl.lean {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 1em 1.3em 0.9em;
+  margin: 0;
+  overflow-x: auto;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.lean-embed .lean-item { margin: 0; padding: 0; }
+
+/* Tactic blocks inside the embed get a dark-theme proof state panel */
+.lean-embed .lean-proof-state {
+  background: #0a0f18;
+  border-color: #2e3d5a;
+  color: #cdd5e0;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.6);
+}
+
+.lean-embed .tactic-block { border-bottom-color: #3d4a6a; }
+.lean-embed .goal-case    { color: #546e7a; }
+.lean-embed .hyp-name     { color: #c3e88d; font-style: normal; }
+.lean-embed .hyp-sep      { color: #546e7a; }
+.lean-embed .hyp-type     { color: #a6accd; }
+.lean-embed .goal-conclusion { color: #cdd5e0; }
+.lean-embed .goal-prefix  { color: #c792ea; }
+.lean-embed .lean-goal + .lean-goal { border-top-color: #1a2535; }
+
+/* Footer link */
+.lean-embed-link {
+  display: block;
+  padding: 0.32em 1.3em;
+  font-size: 0.8em;
+  color: #4a6080;
+  text-decoration: none;
+  background: #0a0f18;
+  border-top: 1px solid #1a2535;
+}
+
+.lean-embed-link::before { content: "↗ "; }
+.lean-embed-link:hover   { color: #82aaff; }
+
+/* -------------------------------------------------------------------------
+   HYPERLINKS within highlighted Lean code
+   ------------------------------------------------------------------------- */
+
+/* Inherit token colour; add a subtle dotted underline as the only indicator */
+.hl.lean a.lean-link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dotted currentColor;
+}
+
+.hl.lean a.lean-link:hover {
+  border-bottom-style: solid;
+}
+
+/* -------------------------------------------------------------------------
+   LEAN DEVELOPMENT LINK in blog post header
+   ------------------------------------------------------------------------- */
+.lean-development-link a { color: #c792ea; }
+
+html.light .lean-development-link a { color: #0033b3; }
+
+/* =========================================================================
+   LIGHT MODE — embedded Lean code blocks use the standalone palette
+   ========================================================================= */
+
+html.light .lean-embed {
+  background: #f5f7fa;
+  border-color: #c8d3e0;
+  color: #1a1a1a;
+}
+
+html.light .lean-embed .hl.lean .keyword    { color: #0033b3; font-weight: bold; font-style: normal; }
+html.light .lean-embed .hl.lean .const      { color: #6b21a8; }
+html.light .lean-embed .hl.lean .var        { color: #1a6b4a; font-style: italic; }
+html.light .lean-embed .hl.lean .literal    { color: #991b1b; }
+html.light .lean-embed .hl.lean .literal.string { color: #991b1b; }
+html.light .lean-embed .hl.lean .sort       { color: #92400e; }
+html.light .lean-embed .hl.lean .doc-comment { color: #4b5563; font-style: italic; }
+html.light .lean-embed .hl.lean .option     { color: #1e40af; }
+html.light .lean-embed .hl.lean .module-name { color: #1e40af; }
+html.light .lean-embed .hl.lean .level-const,
+html.light .lean-embed .hl.lean .level-var,
+html.light .lean-embed .hl.lean .level-op   { color: #92400e; }
+html.light .lean-embed .hl.lean .typed      { color: #1a1a1a; }
+html.light .lean-embed .hl.lean .unknown    { color: #374151; }
+
+html.light .lean-embed pre.hl.lean {
+  background: transparent;
+  color: #1a1a1a;
+}
+
+html.light .lean-embed .lean-item { margin: 0; padding: 0; }
+
+html.light .lean-embed .lean-proof-state {
+  background: #f5f7fa;
+  border-color: #c8d3e0;
+  color: #1a1a1a;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+html.light .lean-embed .tactic-block { border-bottom-color: #aab8d0; }
+html.light .lean-embed .goal-case    { color: #7c8fa8; }
+html.light .lean-embed .hyp-name     { color: #1a6b4a; font-style: italic; }
+html.light .lean-embed .hyp-sep      { color: #999; }
+html.light .lean-embed .hyp-type     { color: #333; }
+html.light .lean-embed .goal-conclusion { color: #1a1a1a; }
+html.light .lean-embed .goal-prefix  { color: #0033b3; font-weight: bold; }
+html.light .lean-embed .lean-goal + .lean-goal { border-top-color: #dde4ed; }
+
+html.light .lean-embed-link {
+  background: #e8edf3;
+  border-top-color: #c8d3e0;
+  color: #4a6080;
+}
+html.light .lean-embed-link:hover { color: #0033b3; }
+
+/* =========================================================================
+   COLLAPSIBLE PROOF BODY  (.lean-proof-toggle / .lean-proof-body)
+   ========================================================================= */
+
+.lean-proof-toggle {
+  display: inline-block;
+  background: transparent;
+  border: 1px solid rgba(100, 120, 160, 0.45);
+  border-radius: 3px;
+  color: inherit;
+  opacity: 0.65;
+  font: inherit;
+  font-size: 0.82em;
+  line-height: 1.2;
+  cursor: pointer;
+  padding: 0.05em 0.5em;
+  margin-top: 0.3em;
+  vertical-align: middle;
+  transition: opacity 0.15s;
+}
+.lean-proof-toggle:hover { opacity: 1; }
+
+/* expanded proof body is a block so newlines render correctly */
+.lean-proof-body { display: block; }
+
+/* =========================================================================
+   MOBILE — compact embed sizing
+   ========================================================================= */
+
+@media only screen and (max-width: 768px) {
+  .lean-embed {
+    font-size: 0.8em; }
+
+  .lean-embed pre.hl.lean {
+    padding: 0.75em 1em 0.6em; }
+}

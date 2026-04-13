@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kripke.Examples</title>
+  <link rel="stylesheet" href="/css/lean.css">
+  <script src="/js/lean.js" defer></script>
+</head>
+<body class="lean-standalone">
+<div class="lean-page">
+<header class="lean-header">
+  <div class="lean-module-name"><span class="lean-crumb">Kripke</span><span class="lean-dot">.</span><span class="lean-crumb">Examples</span></div>
+</header>
+<div class="lean-module">
+<div class="lean-item"><pre class="hl lean"><code><span class="keyword">import</span> <a href="/lean/kripke/Kripke.Frame.html#Kripke-Frame-val" class="lean-link"><span class="module-name">Kripke.Frame</span></a></code></pre></div>
+<div class="lean-item"><pre class="hl lean"><code>
+
+<span class="keyword">universe</span> u</code></pre></div>
+<div class="lean-item"><pre class="hl lean"><code>
+
+<span class="keyword">namespace</span> Kripke</code></pre></div>
+<div class="lean-item" id="Kripke-frameOfPreorder"><pre class="hl lean"><code>
+
+<span class="keyword">abbrev</span> <a href="/lean/kripke/Kripke.Examples.html#Kripke-frameOfPreorder" class="lean-link"><span class="const">frameOfPreorder</span></a> (<span class="var">W</span> : <span class="sort">Type</span> <span class="level-var">u</span>) [<a href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Preorder" class="lean-link"><span class="const">Preorder</span></a> <span class="var">W</span>]
+    (<span class="var">v</span>    : <span class="var">W</span> → ℕ → <span class="sort">Prop</span>)
+    (<span class="var">mono</span> : ∀ {<span class="var">w</span> <span class="var">w'</span> : <span class="var">W</span>} {<span class="var">i</span> : ℕ}, <span class="var">w</span> ≤ <span class="var">w'</span> → <span class="var">v</span> <span class="var">w</span> <span class="var">i</span> → <span class="var">v</span> <span class="var">w'</span> <span class="var">i</span>) : <a href="/lean/kripke/Kripke.Frame.html#Kripke-Frame-val" class="lean-link"><span class="const">Frame</span></a> <span class="var">W</span> <span class="keyword">where</span>
+  <a href="/lean/kripke/Kripke.Frame.html#Kripke-Frame-val" class="lean-link"><span class="const">val</span></a>    := <span class="var">v</span>
+  <a href="/lean/kripke/Kripke.Frame.html#Kripke-Frame-val" class="lean-link"><span class="const">le_val</span></a> := <span class="var">mono</span></code></pre></div>
+<div class="lean-item"><pre class="hl lean"><code>
+
+/-!
+## Example: Topological Kripke Frame
+
+For any topological space `X` and family of opens `p : ℕ → Opens X`, the
+dual of the opens lattice `(Opens X)ᵒᵈ` — ordered by **reverse** inclusion
+(`U ≤ V` iff `V ⊆ U`, i.e. `V` is a restriction of `U`) — is a
+`Kripke.Frame` via `frameOfPreorder`.
+
+The valuation `val U i = (U ⊆ p i)` says &quot;variable `i` holds on `U`&quot; means
+the entire open set `U` lies inside the extent `p i` of variable `i`.
+Monotonicity holds: if `V ⊆ U ⊆ p i` then `V ⊆ p i`.
+-/</code></pre></div>
+<div class="lean-item"><pre class="hl lean"><code>
+
+<span class="keyword">open</span> TopologicalSpace</code></pre></div>
+<div class="lean-item" id="Kripke-opensFrame"><pre class="hl lean"><code>
+
+<span class="doc-comment">/-- Kripke frame on `(Opens X)ᵒᵈ` (reverse-inclusion order).
+    Variable `i` holds on `U` iff `U ⊆ p i`. -/</span>
+<span class="keyword">abbrev</span> <a href="/lean/kripke/Kripke.Examples.html#Kripke-opensFrame" class="lean-link"><span class="const">opensFrame</span></a> (<span class="var">X</span> : <span class="sort">Type</span> <span class="level-var">u</span>) [<a href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=TopologicalSpace" class="lean-link"><span class="const">TopologicalSpace</span></a> <span class="var">X</span>]
+    (<span class="var">p</span> : ℕ → <a href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=TopologicalSpace.Opens" class="lean-link"><span class="const">Opens</span></a> <span class="var">X</span>) : <a href="/lean/kripke/Kripke.Frame.html#Kripke-Frame-val" class="lean-link"><span class="const">Frame</span></a> (<a href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=TopologicalSpace.Opens" class="lean-link"><span class="const">Opens</span></a> <span class="var">X</span>)ᵒᵈ :=
+  <a href="/lean/kripke/Kripke.Examples.html#Kripke-frameOfPreorder" class="lean-link"><span class="const">frameOfPreorder</span></a> _
+    (<span class="keyword">fun</span> <span class="var">U</span> <span class="var">i</span> =&gt; <a href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=OrderDual.ofDual" class="lean-link"><span class="const">OrderDual.ofDual</span></a> <span class="var">U</span> ≤ <span class="var">p</span> <span class="var">i</span>)
+    (<span class="keyword">fun</span> <span class="var">h</span> <span class="var">hv</span> =&gt; (<a href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=OrderDual.ofDual_le_ofDual" class="lean-link"><span class="const">OrderDual.ofDual_le_ofDual</span></a>.<a href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Iff.mpr" class="lean-link"><span class="const">mpr</span></a> <span class="var">h</span>).<a href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LE.le.trans" class="lean-link"><span class="const">trans</span></a> <span class="var">hv</span>)</code></pre></div>
+<div class="lean-item"><pre class="hl lean"><code>
+
+<span class="keyword">end</span> Kripke</code></pre></div>
+<div class="lean-item"><pre class="hl lean"><code>
+</code></pre></div>
+</div>
+
+</div>
+</body>
+</html>

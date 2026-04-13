@@ -1,0 +1,36 @@
+{"items":
+ [{"range":
+   {"start": {"line": 1, "column": 1}, "end": {"line": 1, "column": 20}},
+   "kind": "Lean.Parser.Module.header",
+   "defines": [],
+   "code": 6},
+  {"range":
+   {"start": {"line": 2, "column": 1}, "end": {"line": 2, "column": 1}},
+   "kind": "Lean.Parser.Command.eoi",
+   "defines": [],
+   "code": 10}],
+ "data":
+ {"tokens":
+  {"8": {"kind": "unknown", "content": ""},
+   "3":
+   {"kind": {"moduleName": {"name": ["Logic", "Syntax"]}},
+    "content": "Logic.Syntax"},
+   "0":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Module.import-0",
+      "name": ["Lean", "Parser", "Module", "import"],
+      "docs": null}},
+    "content": "import"}},
+  "nextKey": 11,
+  "messageContents": {},
+  "goals": {},
+  "code":
+  {"9": {"token": {"tok": 8}},
+   "7": {"text": {"str": "\n"}},
+   "6": {"seq": {"highlights": [1, 2, 4, 5]}},
+   "5": {"seq": {"highlights": []}},
+   "4": {"token": {"tok": 3}},
+   "2": {"text": {"str": " "}},
+   "10": {"seq": {"highlights": [7, 9, 5]}},
+   "1": {"token": {"tok": 0}}}}}

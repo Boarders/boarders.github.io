@@ -1,0 +1,4505 @@
+{"items":
+ [{"range":
+   {"start": {"line": 1, "column": 1}, "end": {"line": 2, "column": 20}},
+   "kind": "Lean.Parser.Module.header",
+   "defines": [],
+   "code": 11},
+  {"range":
+   {"start": {"line": 4, "column": 1}, "end": {"line": 4, "column": 11}},
+   "kind": "Lean.Parser.Command.universe",
+   "defines": [],
+   "code": 17},
+  {"range":
+   {"start": {"line": 6, "column": 1}, "end": {"line": 6, "column": 17}},
+   "kind": "Lean.Parser.Command.namespace",
+   "defines": [],
+   "code": 22},
+  {"range":
+   {"start": {"line": 8, "column": 1}, "end": {"line": 10, "column": 60}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.Frame.val", "Kripke.Frame", "Kripke.Frame.le_val"],
+   "code": 74},
+  {"range":
+   {"start": {"line": 12, "column": 1}, "end": {"line": 12, "column": 11}},
+   "kind": "Lean.Parser.Command.open",
+   "defines": [],
+   "code": 79},
+  {"range":
+   {"start": {"line": 13, "column": 1}, "end": {"line": 13, "column": 12}},
+   "kind": "Lean.Parser.Command.open",
+   "defines": [],
+   "code": 84},
+  {"range":
+   {"start": {"line": 14, "column": 1}, "end": {"line": 14, "column": 8}},
+   "kind": "Lean.Parser.Command.open",
+   "defines": [],
+   "code": 89},
+  {"range":
+   {"start": {"line": 16, "column": 1}, "end": {"line": 23, "column": 16}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.at_world"],
+   "code": 158},
+  {"range":
+   {"start": {"line": 25, "column": 1}, "end": {"line": 25, "column": 26}},
+   "kind": "Lean.Parser.Command.attribute",
+   "defines": [],
+   "code": 163},
+  {"range":
+   {"start": {"line": 27, "column": 1}, "end": {"line": 37, "column": 28}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.mono_at"],
+   "code": 252},
+  {"range":
+   {"start": {"line": 39, "column": 1}, "end": {"line": 41, "column": 50}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.all_at_world"],
+   "code": 271},
+  {"range":
+   {"start": {"line": 43, "column": 1}, "end": {"line": 43, "column": 30}},
+   "kind": "Lean.Parser.Command.attribute",
+   "defines": [],
+   "code": 276},
+  {"range":
+   {"start": {"line": 45, "column": 1}, "end": {"line": 53, "column": 19}},
+   "kind": "lemma",
+   "defines": ["Kripke.all_at_append_left"],
+   "code": 373},
+  {"range":
+   {"start": {"line": 55, "column": 1}, "end": {"line": 58, "column": 32}},
+   "kind": "lemma",
+   "defines": ["Kripke.all_at_of_suffix"],
+   "code": 418},
+  {"range":
+   {"start": {"line": 60, "column": 1}, "end": {"line": 64, "column": 62}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.mono_all"],
+   "code": 447},
+  {"range":
+   {"start": {"line": 66, "column": 1}, "end": {"line": 67, "column": 45}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.Entails"],
+   "code": 460},
+  {"range":
+   {"start": {"line": 69, "column": 1}, "end": {"line": 70, "column": 68}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.SemEntails"],
+   "code": 473},
+  {"range":
+   {"start": {"line": 72, "column": 1}, "end": {"line": 72, "column": 20}},
+   "kind": "Lean.Parser.Command.namespace",
+   "defines": [],
+   "code": 478},
+  {"range":
+   {"start": {"line": 73, "column": 1}, "end": {"line": 73, "column": 19}},
+   "kind": "Lean.Parser.Command.section",
+   "defines": [],
+   "code": 483},
+  {"range":
+   {"start": {"line": 74, "column": 3}, "end": {"line": 74, "column": 70}},
+   "kind": "Lean.Parser.Command.variable",
+   "defines": [],
+   "code": 502},
+  {"range":
+   {"start": {"line": 76, "column": 3}, "end": {"line": 76, "column": 63}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.Semantics.assumption"],
+   "code": 516},
+  {"range":
+   {"start": {"line": 78, "column": 3}, "end": {"line": 79, "column": 64}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.Semantics.wk"],
+   "code": 533},
+  {"range":
+   {"start": {"line": 81, "column": 3}, "end": {"line": 82, "column": 64}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.Semantics.and_I"],
+   "code": 554},
+  {"range":
+   {"start": {"line": 84, "column": 3}, "end": {"line": 85, "column": 45}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.Semantics.and_E₁"],
+   "code": 567},
+  {"range":
+   {"start": {"line": 87, "column": 3}, "end": {"line": 88, "column": 45}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.Semantics.and_E₂"],
+   "code": 580},
+  {"range":
+   {"start": {"line": 90, "column": 3}, "end": {"line": 91, "column": 48}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.Semantics.or_I₁"],
+   "code": 593},
+  {"range":
+   {"start": {"line": 93, "column": 3}, "end": {"line": 94, "column": 48}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.Semantics.or_I₂"],
+   "code": 606},
+  {"range":
+   {"start": {"line": 96, "column": 3}, "end": {"line": 99, "column": 49}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.Semantics.or_E"],
+   "code": 631},
+  {"range":
+   {"start": {"line": 101, "column": 3}, "end": {"line": 103, "column": 49}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.Semantics.imp_I"],
+   "code": 652},
+  {"range":
+   {"start": {"line": 105, "column": 3}, "end": {"line": 107, "column": 49}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.Semantics.imp_E"],
+   "code": 669},
+  {"range":
+   {"start": {"line": 109, "column": 3}, "end": {"line": 118, "column": 1}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.Semantics.tt_I"],
+   "code": 678},
+  {"range":
+   {"start": {"line": 111, "column": 3}, "end": {"line": 114, "column": 26}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Kripke.Semantics.ff_E"],
+   "code": 721},
+  {"range":
+   {"start": {"line": 116, "column": 1}, "end": {"line": 116, "column": 15}},
+   "kind": "Lean.Parser.Command.end",
+   "defines": [],
+   "code": 724},
+  {"range":
+   {"start": {"line": 117, "column": 1}, "end": {"line": 117, "column": 14}},
+   "kind": "Lean.Parser.Command.end",
+   "defines": [],
+   "code": 727},
+  {"range":
+   {"start": {"line": 118, "column": 1}, "end": {"line": 118, "column": 1}},
+   "kind": "Lean.Parser.Command.eoi",
+   "defines": [],
+   "code": 730}],
+ "data":
+ {"tokens":
+  {"98":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Kripke.Frame.{u} (W : Type u) : Type u",
+      "name": ["Kripke", "Frame"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Frame"},
+   "96": {"kind": "unknown", "content": "["},
+   "94":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Type u", "name": "_uniq.434"}},
+    "content": "W"},
+   "92":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.at_world.{u} {W : Type u} [Frame W] (w : W) (tm : Tm) : Prop",
+      "name": ["Kripke", "at_world"],
+      "isDef": true,
+      "docs": null}},
+    "content": "at_world"},
+   "90":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-258",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "87": {"kind": "unknown", "content": "Tm"},
+   "85":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.open-249",
+      "name": ["Lean", "Parser", "Command", "open"],
+      "docs":
+      "Makes names from other namespaces visible without writing the namespace prefix.\n\nNames that are made available with `open` are visible within the current `section` or `namespace`\nblock. This makes referring to (type) definitions and theorems easier, but note that it can also\nmake [scoped instances], notations, and attributes from a different namespace available.\n\nThe `open` command can be used in a few different ways:\n\n* `open Some.Namespace.Path1 Some.Namespace.Path2` makes all non-protected names in\n  `Some.Namespace.Path1` and `Some.Namespace.Path2` available without the prefix, so that\n  `Some.Namespace.Path1.x` and `Some.Namespace.Path2.y` can be referred to by writing only `x` and\n  `y`.\n\n* `open Some.Namespace.Path hiding def1 def2` opens all non-protected names in `Some.Namespace.Path`\n  except `def1` and `def2`.\n\n* `open Some.Namespace.Path (def1 def2)` only makes `Some.Namespace.Path.def1` and\n  `Some.Namespace.Path.def2` available without the full prefix, so `Some.Namespace.Path.def3` would\n  be unaffected.\n\n  This works even if `def1` and `def2` are `protected`.\n\n* `open Some.Namespace.Path renaming def1 → def1', def2 → def2'` same as `open Some.Namespace.Path\n  (def1 def2)` but `def1`/`def2`'s names are changed to `def1'`/`def2'`.\n\n  This works even if `def1` and `def2` are `protected`.\n\n* `open scoped Some.Namespace.Path1 Some.Namespace.Path2` **only** opens [scoped instances],\n  notations, and attributes from `Namespace1` and `Namespace2`; it does **not** make any other name\n  available.\n\n* `open <any of the open shapes above> in` makes the names `open`-ed visible only in the next\n  command or expression.\n\n[scoped instance]: https://lean-lang.org/theorem_proving_in_lean4/type_classes.html#scoped-instances\n(Scoped instances in Theorem Proving in Lean)\n\n\n## Examples\n\n```lean\n/-- SKI combinators https://en.wikipedia.org/wiki/SKI_combinator_calculus -/\nnamespace Combinator.Calculus\n  def I (a : α) : α := a\n  def K (a : α) : β → α := fun _ => a\n  def S (x : α → β → γ) (y : α → β) (z : α) : γ := x z (y z)\nend Combinator.Calculus\n\nsection\n  -- open everything under `Combinator.Calculus`, *i.e.* `I`, `K` and `S`,\n  -- until the section ends\n  open Combinator.Calculus\n\n  theorem SKx_eq_K : S K x = I := rfl\nend\n\n-- open everything under `Combinator.Calculus` only for the next command (the next `theorem`, here)\nopen Combinator.Calculus in\ntheorem SKx_eq_K' : S K x = I := rfl\n\nsection\n  -- open only `S` and `K` under `Combinator.Calculus`\n  open Combinator.Calculus (S K)\n\n  theorem SKxy_eq_y : S K x y = y := rfl\n\n  -- `I` is not in scope, we have to use its full path\n  theorem SKxy_eq_Iy : S K x y = Combinator.Calculus.I y := rfl\nend\n\nsection\n  open Combinator.Calculus\n    renaming\n      I → identity,\n      K → konstant\n\n  #check identity\n  #check konstant\nend\n\nsection\n  open Combinator.Calculus\n    hiding S\n\n  #check I\n  #check K\nend\n\nsection\n  namespace Demo\n    inductive MyType\n    | val\n\n    namespace N1\n      scoped infix:68 \" ≋ \" => BEq.beq\n\n      scoped instance : BEq MyType where\n        beq _ _ := true\n\n      def Alias := MyType\n    end N1\n  end Demo\n\n  -- bring `≋` and the instance in scope, but not `Alias`\n  open scoped Demo.N1\n\n  #check Demo.MyType.val == Demo.MyType.val\n  #check Demo.MyType.val ≋ Demo.MyType.val\n  -- #check Alias -- unknown identifier 'Alias'\nend\n```\n"}},
+    "content": "open"},
+   "82": {"kind": "unknown", "content": "Syntax"},
+   "80":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.open-237",
+      "name": ["Lean", "Parser", "Command", "open"],
+      "docs":
+      "Makes names from other namespaces visible without writing the namespace prefix.\n\nNames that are made available with `open` are visible within the current `section` or `namespace`\nblock. This makes referring to (type) definitions and theorems easier, but note that it can also\nmake [scoped instances], notations, and attributes from a different namespace available.\n\nThe `open` command can be used in a few different ways:\n\n* `open Some.Namespace.Path1 Some.Namespace.Path2` makes all non-protected names in\n  `Some.Namespace.Path1` and `Some.Namespace.Path2` available without the prefix, so that\n  `Some.Namespace.Path1.x` and `Some.Namespace.Path2.y` can be referred to by writing only `x` and\n  `y`.\n\n* `open Some.Namespace.Path hiding def1 def2` opens all non-protected names in `Some.Namespace.Path`\n  except `def1` and `def2`.\n\n* `open Some.Namespace.Path (def1 def2)` only makes `Some.Namespace.Path.def1` and\n  `Some.Namespace.Path.def2` available without the full prefix, so `Some.Namespace.Path.def3` would\n  be unaffected.\n\n  This works even if `def1` and `def2` are `protected`.\n\n* `open Some.Namespace.Path renaming def1 → def1', def2 → def2'` same as `open Some.Namespace.Path\n  (def1 def2)` but `def1`/`def2`'s names are changed to `def1'`/`def2'`.\n\n  This works even if `def1` and `def2` are `protected`.\n\n* `open scoped Some.Namespace.Path1 Some.Namespace.Path2` **only** opens [scoped instances],\n  notations, and attributes from `Namespace1` and `Namespace2`; it does **not** make any other name\n  available.\n\n* `open <any of the open shapes above> in` makes the names `open`-ed visible only in the next\n  command or expression.\n\n[scoped instance]: https://lean-lang.org/theorem_proving_in_lean4/type_classes.html#scoped-instances\n(Scoped instances in Theorem Proving in Lean)\n\n\n## Examples\n\n```lean\n/-- SKI combinators https://en.wikipedia.org/wiki/SKI_combinator_calculus -/\nnamespace Combinator.Calculus\n  def I (a : α) : α := a\n  def K (a : α) : β → α := fun _ => a\n  def S (x : α → β → γ) (y : α → β) (z : α) : γ := x z (y z)\nend Combinator.Calculus\n\nsection\n  -- open everything under `Combinator.Calculus`, *i.e.* `I`, `K` and `S`,\n  -- until the section ends\n  open Combinator.Calculus\n\n  theorem SKx_eq_K : S K x = I := rfl\nend\n\n-- open everything under `Combinator.Calculus` only for the next command (the next `theorem`, here)\nopen Combinator.Calculus in\ntheorem SKx_eq_K' : S K x = I := rfl\n\nsection\n  -- open only `S` and `K` under `Combinator.Calculus`\n  open Combinator.Calculus (S K)\n\n  theorem SKxy_eq_y : S K x y = y := rfl\n\n  -- `I` is not in scope, we have to use its full path\n  theorem SKxy_eq_Iy : S K x y = Combinator.Calculus.I y := rfl\nend\n\nsection\n  open Combinator.Calculus\n    renaming\n      I → identity,\n      K → konstant\n\n  #check identity\n  #check konstant\nend\n\nsection\n  open Combinator.Calculus\n    hiding S\n\n  #check I\n  #check K\nend\n\nsection\n  namespace Demo\n    inductive MyType\n    | val\n\n    namespace N1\n      scoped infix:68 \" ≋ \" => BEq.beq\n\n      scoped instance : BEq MyType where\n        beq _ _ := true\n\n      def Alias := MyType\n    end N1\n  end Demo\n\n  -- bring `≋` and the instance in scope, but not `Alias`\n  open scoped Demo.N1\n\n  #check Demo.MyType.val == Demo.MyType.val\n  #check Demo.MyType.val ≋ Demo.MyType.val\n  -- #check Alias -- unknown identifier 'Alias'\nend\n```\n"}},
+    "content": "open"},
+   "8":
+   {"kind": {"moduleName": {"name": ["Logic", "Syntax"]}},
+    "content": "Logic.Syntax"},
+   "77": {"kind": "unknown", "content": "Frame"},
+   "75":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.open-226",
+      "name": ["Lean", "Parser", "Command", "open"],
+      "docs":
+      "Makes names from other namespaces visible without writing the namespace prefix.\n\nNames that are made available with `open` are visible within the current `section` or `namespace`\nblock. This makes referring to (type) definitions and theorems easier, but note that it can also\nmake [scoped instances], notations, and attributes from a different namespace available.\n\nThe `open` command can be used in a few different ways:\n\n* `open Some.Namespace.Path1 Some.Namespace.Path2` makes all non-protected names in\n  `Some.Namespace.Path1` and `Some.Namespace.Path2` available without the prefix, so that\n  `Some.Namespace.Path1.x` and `Some.Namespace.Path2.y` can be referred to by writing only `x` and\n  `y`.\n\n* `open Some.Namespace.Path hiding def1 def2` opens all non-protected names in `Some.Namespace.Path`\n  except `def1` and `def2`.\n\n* `open Some.Namespace.Path (def1 def2)` only makes `Some.Namespace.Path.def1` and\n  `Some.Namespace.Path.def2` available without the full prefix, so `Some.Namespace.Path.def3` would\n  be unaffected.\n\n  This works even if `def1` and `def2` are `protected`.\n\n* `open Some.Namespace.Path renaming def1 → def1', def2 → def2'` same as `open Some.Namespace.Path\n  (def1 def2)` but `def1`/`def2`'s names are changed to `def1'`/`def2'`.\n\n  This works even if `def1` and `def2` are `protected`.\n\n* `open scoped Some.Namespace.Path1 Some.Namespace.Path2` **only** opens [scoped instances],\n  notations, and attributes from `Namespace1` and `Namespace2`; it does **not** make any other name\n  available.\n\n* `open <any of the open shapes above> in` makes the names `open`-ed visible only in the next\n  command or expression.\n\n[scoped instance]: https://lean-lang.org/theorem_proving_in_lean4/type_classes.html#scoped-instances\n(Scoped instances in Theorem Proving in Lean)\n\n\n## Examples\n\n```lean\n/-- SKI combinators https://en.wikipedia.org/wiki/SKI_combinator_calculus -/\nnamespace Combinator.Calculus\n  def I (a : α) : α := a\n  def K (a : α) : β → α := fun _ => a\n  def S (x : α → β → γ) (y : α → β) (z : α) : γ := x z (y z)\nend Combinator.Calculus\n\nsection\n  -- open everything under `Combinator.Calculus`, *i.e.* `I`, `K` and `S`,\n  -- until the section ends\n  open Combinator.Calculus\n\n  theorem SKx_eq_K : S K x = I := rfl\nend\n\n-- open everything under `Combinator.Calculus` only for the next command (the next `theorem`, here)\nopen Combinator.Calculus in\ntheorem SKx_eq_K' : S K x = I := rfl\n\nsection\n  -- open only `S` and `K` under `Combinator.Calculus`\n  open Combinator.Calculus (S K)\n\n  theorem SKxy_eq_y : S K x y = y := rfl\n\n  -- `I` is not in scope, we have to use its full path\n  theorem SKxy_eq_Iy : S K x y = Combinator.Calculus.I y := rfl\nend\n\nsection\n  open Combinator.Calculus\n    renaming\n      I → identity,\n      K → konstant\n\n  #check identity\n  #check konstant\nend\n\nsection\n  open Combinator.Calculus\n    hiding S\n\n  #check I\n  #check K\nend\n\nsection\n  namespace Demo\n    inductive MyType\n    | val\n\n    namespace N1\n      scoped infix:68 \" ≋ \" => BEq.beq\n\n      scoped instance : BEq MyType where\n        beq _ _ := true\n\n      def Alias := MyType\n    end N1\n  end Demo\n\n  -- bring `≋` and the instance in scope, but not `Alias`\n  open scoped Demo.N1\n\n  #check Demo.MyType.val == Demo.MyType.val\n  #check Demo.MyType.val ≋ Demo.MyType.val\n  -- #check Alias -- unknown identifier 'Alias'\nend\n```\n"}},
+    "content": "open"},
+   "728": {"kind": "unknown", "content": ""},
+   "725":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.end-3879",
+      "name": ["Lean", "Parser", "Command", "end"],
+      "docs":
+      "`end` closes a `section` or `namespace` scope. If the scope is named `<id>`, it has to be closed\nwith `end <id>`. The `end` command is optional at the end of a file.\n"}},
+    "content": "end"},
+   "722":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.end-3864",
+      "name": ["Lean", "Parser", "Command", "end"],
+      "docs":
+      "`end` closes a `section` or `namespace` scope. If the scope is named `<id>`, it has to be closed\nwith `end <id>`. The `end` command is optional at the end of a file.\n"}},
+    "content": "end"},
+   "72":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "W → ℕ → Prop", "name": "_uniq.43"}},
+    "content": "val"},
+   "717":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-3841",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "713":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.tacticExfalso-3829",
+      "name": ["Lean", "Parser", "Tactic", "tacticExfalso"],
+      "docs":
+      "`exfalso` converts a goal `⊢ tgt` into `⊢ False` by applying `False.elim`. "}},
+    "content": "exfalso"},
+   "704":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "all_at_world w Γ", "name": "_uniq.13376"}},
+    "content": "all_w"},
+   "70": {"kind": "unknown", "content": "≤"},
+   "698":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.13373"}},
+    "content": "w"},
+   "696":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.13280"}},
+    "content": "w✝"},
+   "694":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "Entails W Γ ff", "name": "_uniq.13370"}},
+    "content": "ff_at_w"},
+   "692":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.intro-3803",
+      "name": ["Lean", "Parser", "Tactic", "intro"],
+      "docs":
+      "Introduces one or more hypotheses, optionally naming and/or pattern-matching them.\nFor each hypothesis to be introduced, the remaining main goal's target type must\nbe a `let` or function type.\n\n* `intro` by itself introduces one anonymous hypothesis, which can be accessed\n  by e.g. `assumption`. It is equivalent to `intro _`.\n* `intro x y` introduces two hypotheses and names them. Individual hypotheses\n  can be anonymized via `_`, given a type ascription, or matched against a pattern:\n  ```lean\n  -- ... ⊢ α × β → ...\n  intro (a, b)\n  -- ..., a : α, b : β ⊢ ...\n  ```\n* `intro rfl` is short for `intro h; subst h`, if `h` is an equality where the left-hand or right-hand side\n  is a variable.\n* Alternatively, `intro` can be combined with pattern matching much like `fun`:\n  ```lean\n  intro\n  | n + 1, 0 => tac\n  | ...\n  ```\n"}},
+    "content": "intro"},
+   "688":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.byTactic-3796",
+      "name": ["Lean", "Parser", "Term", "byTactic"],
+      "docs":
+      "`by tac` constructs a term of the expected type by running the tactic(s) `tac`. "}},
+    "content": "by"},
+   "683":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Frame W", "name": "_uniq.13344"}},
+    "content": "inst✝"},
+   "681":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Semantics.ff_E.{u} {W : Type u} [Frame W] (p : Tm) (Γ : Ctxt) : Entails W Γ ff → Entails W Γ p",
+      "name": ["Kripke", "Semantics", "ff_E"],
+      "isDef": true,
+      "docs": null}},
+    "content": "ff_E"},
+   "68": {"kind": "unknown", "content": ","},
+   "679":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-3747",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "676": {"kind": "unknown", "content": "trivial"},
+   "674":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.fun-3725",
+      "name": ["Lean", "Parser", "Term", "fun"],
+      "docs": null}},
+    "content": "fun"},
+   "672":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Semantics.tt_I.{u} {W : Type u} [Frame W] (Γ : Ctxt) : Entails W Γ tt",
+      "name": ["Kripke", "Semantics", "tt_I"],
+      "isDef": true,
+      "docs": null}},
+    "content": "tt_I"},
+   "670":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-3695",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "667":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "le_refl.{u_1} {α : Type u_1} [Preorder α] (a : α) : a ≤ a",
+      "name": ["le_refl"],
+      "isDef": false,
+      "docs": "The relation `≤` on a preorder is reflexive. "}},
+    "content": "le_refl"},
+   "665":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "all_at_world w Γ", "name": "_uniq.13162"}},
+    "content": "all"},
+   "663":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.13159"}},
+    "content": "w"},
+   "661":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "Entails W Γ p", "name": "_uniq.13156"}},
+    "content": "p_holds"},
+   "66":
+   {"kind": {"var": {"typeFormat": null, "type": "ℕ", "name": "_uniq.50"}},
+    "content": "i"},
+   "659":
+   {"kind":
+    {"var":
+     {"typeFormat": null,
+      "type": "Entails W Γ (p ⇒ q)",
+      "name": "_uniq.13153"}},
+    "content": "q_if_p"},
+   "657":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.fun-3615",
+      "name": ["Lean", "Parser", "Term", "fun"],
+      "docs": null}},
+    "content": "fun"},
+   "655":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Semantics.imp_E.{u} {W : Type u} [Frame W] (p q : Tm) (Γ : Ctxt) :\n  Entails W Γ (p ⇒ q) → Entails W Γ p → Entails W Γ q",
+      "name": ["Kripke", "Semantics", "imp_E"],
+      "isDef": true,
+      "docs": null}},
+    "content": "imp_E"},
+   "653":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-3535",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "650":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "at_world w' p", "name": "_uniq.13018"}},
+    "content": "p_at_w'"},
+   "648":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "_w ≤ w'", "name": "_uniq.13015"}},
+    "content": "w_le_w'"},
+   "646":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.12998"}},
+    "content": "w'"},
+   "644":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "all_at_world _w Γ", "name": "_uniq.12995"}},
+    "content": "all"},
+   "642":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.12992"}},
+    "content": "_w"},
+   "640":
+   {"kind":
+    {"var":
+     {"typeFormat": null,
+      "type": "Entails W (p :: Γ) q",
+      "name": "_uniq.12989"}},
+    "content": "q_ass_p"},
+   "64": {"kind": "unknown", "content": "}"},
+   "638":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.fun-3438",
+      "name": ["Lean", "Parser", "Term", "fun"],
+      "docs": null}},
+    "content": "fun"},
+   "636": {"kind": "unknown", "content": "⇒"},
+   "634":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Semantics.imp_I.{u} {W : Type u} [Frame W] (p q : Tm) (Γ : Ctxt) : Entails W (p :: Γ) q → Entails W Γ (p ⇒ q)",
+      "name": ["Kripke", "Semantics", "imp_I"],
+      "isDef": true,
+      "docs": null}},
+    "content": "imp_I"},
+   "632":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-3370",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "629":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "at_world w q", "name": "_uniq.12722"}},
+    "content": "q_at_w"},
+   "627":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "at_world w p", "name": "_uniq.12638"}},
+    "content": "p_at_w"},
+   "625":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.match-3237",
+      "name": ["Lean", "Parser", "Term", "match"],
+      "docs":
+      "Pattern matching. `match e, ... with | p, ... => f | ...` matches each given\nterm `e` against each pattern `p` of a match alternative. When all patterns\nof an alternative match, the `match` term evaluates to the value of the\ncorresponding right-hand side `f` with the pattern variables bound to the\nrespective matched values.\nIf used as `match h : e, ... with | p, ... => f | ...`, `h : e = p` is available\nwithin `f`.\n\nWhen not constructing a proof, `match` does not automatically substitute variables\nmatched on in dependent variables' types. Use `match (generalizing := true) ...` to\nenforce this.\n\nSyntax quotations can also be used in a pattern match.\nThis matches a `Syntax` value against quotations, pattern variables, or `_`.\n\nQuoted identifiers only match identical identifiers - custom matching such as by the preresolved\nnames only should be done explicitly.\n\n`Syntax.atom`s are ignored during matching by default except when part of a built-in literal.\nFor users introducing new atoms, we recommend wrapping them in dedicated syntax kinds if they\nshould participate in matching.\nFor example, in\n```lean\nsyntax \"c\" (\"foo\" <|> \"bar\") ...\n```\n`foo` and `bar` are indistinguishable during matching, but in\n```lean\nsyntax foo := \"foo\"\nsyntax \"c\" (foo <|> \"bar\") ...\n```\nthey are not.\n"}},
+    "content": "with"},
+   "623":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.match-3237",
+      "name": ["Lean", "Parser", "Term", "match"],
+      "docs":
+      "Pattern matching. `match e, ... with | p, ... => f | ...` matches each given\nterm `e` against each pattern `p` of a match alternative. When all patterns\nof an alternative match, the `match` term evaluates to the value of the\ncorresponding right-hand side `f` with the pattern variables bound to the\nrespective matched values.\nIf used as `match h : e, ... with | p, ... => f | ...`, `h : e = p` is available\nwithin `f`.\n\nWhen not constructing a proof, `match` does not automatically substitute variables\nmatched on in dependent variables' types. Use `match (generalizing := true) ...` to\nenforce this.\n\nSyntax quotations can also be used in a pattern match.\nThis matches a `Syntax` value against quotations, pattern variables, or `_`.\n\nQuoted identifiers only match identical identifiers - custom matching such as by the preresolved\nnames only should be done explicitly.\n\n`Syntax.atom`s are ignored during matching by default except when part of a built-in literal.\nFor users introducing new atoms, we recommend wrapping them in dedicated syntax kinds if they\nshould participate in matching.\nFor example, in\n```lean\nsyntax \"c\" (\"foo\" <|> \"bar\") ...\n```\n`foo` and `bar` are indistinguishable during matching, but in\n```lean\nsyntax foo := \"foo\"\nsyntax \"c\" (foo <|> \"bar\") ...\n```\nthey are not.\n"}},
+    "content": "match"},
+   "621":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "all_at_world w Γ", "name": "_uniq.12565"}},
+    "content": "all"},
+   "62":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.48"}},
+    "content": "w'"},
+   "619":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.12562"}},
+    "content": "w"},
+   "617":
+   {"kind":
+    {"var":
+     {"typeFormat": null,
+      "type": "Entails W (q :: Γ) c",
+      "name": "_uniq.12559"}},
+    "content": "c_ass_q"},
+   "615":
+   {"kind":
+    {"var":
+     {"typeFormat": null,
+      "type": "Entails W (p :: Γ) c",
+      "name": "_uniq.12556"}},
+    "content": "c_ass_p"},
+   "613":
+   {"kind":
+    {"var":
+     {"typeFormat": null,
+      "type": "Entails W Γ (p ∨ q)",
+      "name": "_uniq.12553"}},
+    "content": "p_or_q"},
+   "611":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.fun-3201",
+      "name": ["Lean", "Parser", "Term", "fun"],
+      "docs": null}},
+    "content": "fun"},
+   "609":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Semantics.or_E.{u} {W : Type u} [Frame W] (p q c : Tm) (Γ : Ctxt) :\n  Entails W Γ (p ∨ q) → Entails W (p :: Γ) c → Entails W (q :: Γ) c → Entails W Γ c",
+      "name": ["Kripke", "Semantics", "or_E"],
+      "isDef": true,
+      "docs": null}},
+    "content": "or_E"},
+   "607":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-3089",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "604":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "all_at_world w Γ", "name": "_uniq.11565"}},
+    "content": "all"},
+   "602":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.11562"}},
+    "content": "w"},
+   "600":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "Entails W Γ q", "name": "_uniq.11559"}},
+    "content": "q_holds"},
+   "60":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.46"}},
+    "content": "w"},
+   "6":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Module.import-27",
+      "name": ["Lean", "Parser", "Module", "import"],
+      "docs": null}},
+    "content": "import"},
+   "598":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.fun-3042",
+      "name": ["Lean", "Parser", "Term", "fun"],
+      "docs": null}},
+    "content": "fun"},
+   "596":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Semantics.or_I₂.{u} {W : Type u} [Frame W] (p q : Tm) (Γ : Ctxt) : Entails W Γ q → Entails W Γ (p ∨ q)",
+      "name": ["Kripke", "Semantics", "or_I₂"],
+      "isDef": true,
+      "docs": null}},
+    "content": "or_I₂"},
+   "594":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-2979",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "591":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "all_at_world w Γ", "name": "_uniq.10585"}},
+    "content": "all"},
+   "589":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.10582"}},
+    "content": "w"},
+   "587":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "Entails W Γ p", "name": "_uniq.10579"}},
+    "content": "p_holds"},
+   "585":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.fun-2932",
+      "name": ["Lean", "Parser", "Term", "fun"],
+      "docs": null}},
+    "content": "fun"},
+   "583":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Semantics.or_I₁.{u} {W : Type u} [Frame W] (p q : Tm) (Γ : Ctxt) : Entails W Γ p → Entails W Γ (p ∨ q)",
+      "name": ["Kripke", "Semantics", "or_I₁"],
+      "isDef": true,
+      "docs": null}},
+    "content": "or_I₁"},
+   "581":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-2869",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "58": {"kind": "unknown", "content": "{"},
+   "578":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "all_at_world w Γ", "name": "_uniq.9625"}},
+    "content": "all"},
+   "576":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.9622"}},
+    "content": "w"},
+   "574":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "Entails W Γ (p ∧ q)", "name": "_uniq.9619"}},
+    "content": "pq_holds"},
+   "572":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.fun-2825",
+      "name": ["Lean", "Parser", "Term", "fun"],
+      "docs": null}},
+    "content": "fun"},
+   "570":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Semantics.and_E₂.{u} {W : Type u} [Frame W] (p q : Tm) (Γ : Ctxt) : Entails W Γ (p ∧ q) → Entails W Γ q",
+      "name": ["Kripke", "Semantics", "and_E₂"],
+      "isDef": true,
+      "docs": null}},
+    "content": "and_E₂"},
+   "568":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-2761",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "565":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "all_at_world w Γ", "name": "_uniq.8665"}},
+    "content": "all"},
+   "563":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.8662"}},
+    "content": "w"},
+   "561":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "Entails W Γ (p ∧ q)", "name": "_uniq.8659"}},
+    "content": "pq_holds"},
+   "56": {"kind": "unknown", "content": "∀"},
+   "559":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.fun-2717",
+      "name": ["Lean", "Parser", "Term", "fun"],
+      "docs": null}},
+    "content": "fun"},
+   "557":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Semantics.and_E₁.{u} {W : Type u} [Frame W] (p q : Tm) (Γ : Ctxt) : Entails W Γ (p ∧ q) → Entails W Γ p",
+      "name": ["Kripke", "Semantics", "and_E₁"],
+      "isDef": true,
+      "docs": null}},
+    "content": "and_E₁"},
+   "555":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-2653",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "552":
+   {"kind":
+    {"anonCtor":
+     {"signatureFormat": null,
+      "signature": "And.intro {a b : Prop} (left : a) (right : b) : a ∧ b",
+      "name": ["And", "intro"],
+      "docs":
+      "`And.intro : a → b → a ∧ b` is the constructor for the And operation. "}},
+    "content": "⟩"},
+   "550":
+   {"kind":
+    {"anonCtor":
+     {"signatureFormat": null,
+      "signature": "And.intro {a b : Prop} (left : a) (right : b) : a ∧ b",
+      "name": ["And", "intro"],
+      "docs":
+      "`And.intro : a → b → a ∧ b` is the constructor for the And operation. "}},
+    "content": ","},
+   "548":
+   {"kind":
+    {"anonCtor":
+     {"signatureFormat": null,
+      "signature": "And.intro {a b : Prop} (left : a) (right : b) : a ∧ b",
+      "name": ["And", "intro"],
+      "docs":
+      "`And.intro : a → b → a ∧ b` is the constructor for the And operation. "}},
+    "content": "⟨"},
+   "546":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "all_at_world w Γ", "name": "_uniq.7644"}},
+    "content": "all"},
+   "544":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.7641"}},
+    "content": "w"},
+   "542":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "Entails W Γ q", "name": "_uniq.7638"}},
+    "content": "q_holds"},
+   "540":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "Entails W Γ p", "name": "_uniq.7635"}},
+    "content": "p_holds"},
+   "54":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Frame.le_val.{u} {W : Type u} [self : Frame W] {w w' : W} {i : ℕ} : w ≤ w' → Frame.val w i → Frame.val w' i",
+      "name": ["Kripke", "Frame", "le_val"],
+      "isDef": true,
+      "docs": null}},
+    "content": "le_val"},
+   "538":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.fun-2586",
+      "name": ["Lean", "Parser", "Term", "fun"],
+      "docs": null}},
+    "content": "fun"},
+   "536":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Semantics.and_I.{u} {W : Type u} [Frame W] (p q : Tm) (Γ : Ctxt) :\n  Entails W Γ p → Entails W Γ q → Entails W Γ (p ∧ q)",
+      "name": ["Kripke", "Semantics", "and_I"],
+      "isDef": true,
+      "docs": null}},
+    "content": "and_I"},
+   "534":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-2506",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "531":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.all_at_of_suffix.{u} {W : Type u} [Frame W] {w : W} {Γ Δ : Ctxt} (h : Γ ≤ Δ) :\n  all_at_world w Δ → all_at_world w Γ",
+      "name": ["Kripke", "all_at_of_suffix"],
+      "isDef": false,
+      "docs": null}},
+    "content": "all_at_of_suffix"},
+   "529":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "all_at_world w Δ", "name": "_uniq.6663"}},
+    "content": "all"},
+   "527":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.6660"}},
+    "content": "w"},
+   "525":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "Entails W Γ t", "name": "_uniq.6657"}},
+    "content": "Γ_to_t"},
+   "523":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Γ ≤ Δ", "name": "_uniq.6654"}},
+    "content": "hΓΔ"},
+   "521":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.fun-2437",
+      "name": ["Lean", "Parser", "Term", "fun"],
+      "docs": null}},
+    "content": "fun"},
+   "52":
+   {"kind":
+    {"sort":
+     {"doc?":
+      "The universe of propositions. `Prop ≡ Sort 0`.\n\nEvery proposition is propositionally equal to either `True` or `False`. "}},
+    "content": "Prop"},
+   "519":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Semantics.wk.{u} {W : Type u} [Frame W] (t : Tm) (Γ Δ : Ctxt) : Γ ≤ Δ → Entails W Γ t → Entails W Δ t",
+      "name": ["Kripke", "Semantics", "wk"],
+      "isDef": true,
+      "docs": null}},
+    "content": "wk"},
+   "517":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-2373",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "514":
+   {"kind":
+    {"var":
+     {"typeFormat": null,
+      "type": "all_at_world _w (p :: Γ)",
+      "name": "_uniq.6579"}},
+    "content": "all"},
+   "512":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.6576"}},
+    "content": "_w"},
+   "510":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.fun-2350",
+      "name": ["Lean", "Parser", "Term", "fun"],
+      "docs": null}},
+    "content": "fun"},
+   "508":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Entails.{u} (W : Type u) [Frame W] (Γ : Ctxt) (t : Tm) : Prop",
+      "name": ["Kripke", "Entails"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Entails"},
+   "506":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Semantics.assumption.{u} {W : Type u} [Frame W] (p : Tm) (Γ : Ctxt) : Entails W (p :: Γ) p",
+      "name": ["Kripke", "Semantics", "assumption"],
+      "isDef": true,
+      "docs": null}},
+    "content": "assumption"},
+   "504":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-2308",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "500":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.13292"}},
+    "content": "Δ"},
+   "50": {"kind": "unknown", "content": "ℕ"},
+   "498":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.13290"}},
+    "content": "Γ"},
+   "496":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.13288"}},
+    "content": "c"},
+   "494":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.13286"}},
+    "content": "q"},
+   "492":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.13284"}},
+    "content": "p"},
+   "490":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.13282"}},
+    "content": "t"},
+   "488":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.13280"}},
+    "content": "w"},
+   "486":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Type u", "name": "_uniq.13275"}},
+    "content": "W"},
+   "484":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.variable-2235",
+      "name": ["Lean", "Parser", "Command", "variable"],
+      "docs":
+      "Declares one or more typed variables, or modifies whether already-declared variables are\n  implicit.\n\nIntroduces variables that can be used in definitions within the same `namespace` or `section` block.\nWhen a definition mentions a variable, Lean will add it as an argument of the definition. This is\nuseful in particular when writing many definitions that have parameters in common (see below for an\nexample).\n\nVariable declarations have the same flexibility as regular function parameters. In particular they\ncan be [explicit, implicit][binder docs], or [instance implicit][tpil classes] (in which case they\ncan be anonymous). This can be changed, for instance one can turn explicit variable `x` into an\nimplicit one with `variable {x}`. Note that currently, you should avoid changing how variables are\nbound and declare new variables at the same time; see [issue 2789] for more on this topic.\n\nIn *theorem bodies* (i.e. proofs), variables are not included based on usage in order to ensure that\nchanges to the proof cannot change the statement of the overall theorem. Instead, variables are only\navailable to the proof if they have been mentioned in the theorem header or in an `include` command\nor are instance implicit and depend only on such variables.\n\nSee [*Variables and Sections* from Theorem Proving in Lean][tpil vars] for a more detailed\ndiscussion.\n\n[tpil vars]:\nhttps://lean-lang.org/theorem_proving_in_lean4/dependent_type_theory.html#variables-and-sections\n(Variables and Sections on Theorem Proving in Lean) [tpil classes]:\nhttps://lean-lang.org/theorem_proving_in_lean4/type_classes.html (Type classes on Theorem Proving in\nLean) [binder docs]:\nhttps://leanprover-community.github.io/mathlib4_docs/Lean/Expr.html#Lean.BinderInfo (Documentation\nfor the BinderInfo type) [issue 2789]: https://github.com/leanprover/lean4/issues/2789 (Issue 2789\non github)\n\n## Examples\n\n```lean\nsection\n  variable\n    {α : Type u}      -- implicit\n    (a : α)           -- explicit\n    [instBEq : BEq α] -- instance implicit, named\n    [Hashable α]      -- instance implicit, anonymous\n\n  def isEqual (b : α) : Bool :=\n    a == b\n\n  #check isEqual\n  -- isEqual.{u} {α : Type u} (a : α) [instBEq : BEq α] (b : α) : Bool\n\n  variable\n    {a} -- `a` is implicit now\n\n  def eqComm {b : α} := a == b ↔ b == a\n\n  #check eqComm\n  -- eqComm.{u} {α : Type u} {a : α} [instBEq : BEq α] {b : α} : Prop\nend\n```\n\nThe following shows a typical use of `variable` to factor out definition arguments:\n\n```lean\nvariable (Src : Type)\n\nstructure Logger where\n  trace : List (Src × String)\n#check Logger\n-- Logger (Src : Type) : Type\n\nnamespace Logger\n  -- switch `Src : Type` to be implicit until the `end Logger`\n  variable {Src}\n\n  def empty : Logger Src where\n    trace := []\n  #check empty\n  -- Logger.empty {Src : Type} : Logger Src\n\n  variable (log : Logger Src)\n\n  def len :=\n    log.trace.length\n  #check len\n  -- Logger.len {Src : Type} (log : Logger Src) : Nat\n\n  variable (src : Src) [BEq Src]\n\n  -- at this point all of `log`, `src`, `Src` and the `BEq` instance can all become arguments\n\n  def filterSrc :=\n    log.trace.filterMap\n      fun (src', str') => if src' == src then some str' else none\n  #check filterSrc\n  -- Logger.filterSrc {Src : Type} (log : Logger Src) (src : Src) [inst✝ : BEq Src] : List String\n\n  def lenSrc :=\n    log.filterSrc src |>.length\n  #check lenSrc\n  -- Logger.lenSrc {Src : Type} (log : Logger Src) (src : Src) [inst✝ : BEq Src] : Nat\nend Logger\n```\n\nThe following example demonstrates availability of variables in proofs:\n```lean\nvariable\n  {α : Type}    -- available in the proof as indirectly mentioned through `a`\n  [ToString α]  -- available in the proof as `α` is included\n  (a : α)       -- available in the proof as mentioned in the header\n  {β : Type}    -- not available in the proof\n  [ToString β]  -- not available in the proof\n\ntheorem ex : a = a := rfl\n```\nAfter elaboration of the proof, the following warning will be generated to highlight the unused\nhypothesis:\n```\nincluded section variable '[ToString α]' is not used in 'ex', consider excluding it\n```\nIn such cases, the offending variable declaration should be moved down or into a section so that\nonly theorems that do depend on it follow it until the end of the section.\n"}},
+    "content": "variable"},
+   "481": {"kind": "unknown", "content": "ProofRules"},
+   "48": {"kind": "unknown", "content": "→"},
+   "479":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.section-2214",
+      "name": ["Lean", "Parser", "Command", "section"],
+      "docs":
+      "A `section`/`end` pair delimits the scope of `variable`, `include`, `open`, `set_option`, and `local`\ncommands. Sections can be nested. `section <id>` provides a label to the section that has to appear\nwith the matching `end`. In either case, the `end` can be omitted, in which case the section is\nclosed at the end of the file.\n"}},
+    "content": "section"},
+   "476": {"kind": "unknown", "content": "Semantics"},
+   "474":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.namespace-2194",
+      "name": ["Lean", "Parser", "Command", "namespace"],
+      "docs":
+      "`namespace <id>` opens a section with label `<id>` that influences naming and name resolution inside\nthe section:\n* Declarations names are prefixed: `def seventeen : ℕ := 17` inside a namespace `Nat` is given the\n  full name `Nat.seventeen`.\n* Names introduced by `export` declarations are also prefixed by the identifier.\n* All names starting with `<id>.` become available in the namespace without the prefix. These names\n  are preferred over names introduced by outer namespaces or `open`.\n* Within a namespace, declarations can be `protected`, which excludes them from the effects of\n  opening the namespace.\n\nAs with `section`, namespaces can be nested and the scope of a namespace is terminated by a\ncorresponding `end <id>` or the end of the file.\n\n`namespace` also acts like `section` in delimiting the scope of `variable`, `open`, and other scoped commands.\n"}},
+    "content": "namespace"},
+   "471":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.6504"}},
+    "content": "w"},
+   "469":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Type u", "name": "_uniq.6499"}},
+    "content": "W"},
+   "467":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.6493"}},
+    "content": "t"},
+   "465":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.6491"}},
+    "content": "Γ"},
+   "463":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Kripke.SemEntails.{u} (Γ : Ctxt) (t : Tm) : Prop",
+      "name": ["Kripke", "SemEntails"],
+      "isDef": true,
+      "docs": null}},
+    "content": "SemEntails"},
+   "461":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-2074",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "46":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Frame.val.{u} {W : Type u} [self : Frame W] : W → ℕ → Prop",
+      "name": ["Kripke", "Frame", "val"],
+      "isDef": true,
+      "docs": null}},
+    "content": "val"},
+   "458":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.6467"}},
+    "content": "w"},
+   "456":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.6459"}},
+    "content": "t"},
+   "454":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.6457"}},
+    "content": "Γ"},
+   "452":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Type u", "name": "_uniq.6452"}},
+    "content": "W"},
+   "450":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Entails.{u} (W : Type u) [Frame W] (Γ : Ctxt) (t : Tm) : Prop",
+      "name": ["Kripke", "Entails"],
+      "isDef": true,
+      "docs": null}},
+    "content": "Entails"},
+   "448":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-1957",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "445":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.mono_all.{u} {W : Type u} [Frame W] {w w' : W} {Γ : Ctxt} (w_le_w' : w ≤ w') (Γ_at_w : all_at_world w Γ) :\n  all_at_world w' Γ",
+      "name": ["Kripke", "mono_all"],
+      "isDef": false,
+      "docs": null}},
+    "content": "mono_all"},
+   "443":
+   {"kind":
+    {"var":
+     {"typeFormat": null,
+      "type": "all_at_world w tail✝",
+      "name": "_uniq.6083"}},
+    "content": "t"},
+   "441":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "at_world w head✝", "name": "_uniq.6082"}},
+    "content": "h"},
+   "439": {"kind": "unknown", "content": "_"},
+   "437":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.match-1842",
+      "name": ["Lean", "Parser", "Term", "match"],
+      "docs":
+      "Pattern matching. `match e, ... with | p, ... => f | ...` matches each given\nterm `e` against each pattern `p` of a match alternative. When all patterns\nof an alternative match, the `match` term evaluates to the value of the\ncorresponding right-hand side `f` with the pattern variables bound to the\nrespective matched values.\nIf used as `match h : e, ... with | p, ... => f | ...`, `h : e = p` is available\nwithin `f`.\n\nWhen not constructing a proof, `match` does not automatically substitute variables\nmatched on in dependent variables' types. Use `match (generalizing := true) ...` to\nenforce this.\n\nSyntax quotations can also be used in a pattern match.\nThis matches a `Syntax` value against quotations, pattern variables, or `_`.\n\nQuoted identifiers only match identical identifiers - custom matching such as by the preresolved\nnames only should be done explicitly.\n\n`Syntax.atom`s are ignored during matching by default except when part of a built-in literal.\nFor users introducing new atoms, we recommend wrapping them in dedicated syntax kinds if they\nshould participate in matching.\nFor example, in\n```lean\nsyntax \"c\" (\"foo\" <|> \"bar\") ...\n```\n`foo` and `bar` are indistinguishable during matching, but in\n```lean\nsyntax foo := \"foo\"\nsyntax \"c\" (foo <|> \"bar\") ...\n```\nthey are not.\n"}},
+    "content": "with"},
+   "435":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.match-1842",
+      "name": ["Lean", "Parser", "Term", "match"],
+      "docs":
+      "Pattern matching. `match e, ... with | p, ... => f | ...` matches each given\nterm `e` against each pattern `p` of a match alternative. When all patterns\nof an alternative match, the `match` term evaluates to the value of the\ncorresponding right-hand side `f` with the pattern variables bound to the\nrespective matched values.\nIf used as `match h : e, ... with | p, ... => f | ...`, `h : e = p` is available\nwithin `f`.\n\nWhen not constructing a proof, `match` does not automatically substitute variables\nmatched on in dependent variables' types. Use `match (generalizing := true) ...` to\nenforce this.\n\nSyntax quotations can also be used in a pattern match.\nThis matches a `Syntax` value against quotations, pattern variables, or `_`.\n\nQuoted identifiers only match identical identifiers - custom matching such as by the preresolved\nnames only should be done explicitly.\n\n`Syntax.atom`s are ignored during matching by default except when part of a built-in literal.\nFor users introducing new atoms, we recommend wrapping them in dedicated syntax kinds if they\nshould participate in matching.\nFor example, in\n```lean\nsyntax \"c\" (\"foo\" <|> \"bar\") ...\n```\n`foo` and `bar` are indistinguishable during matching, but in\n```lean\nsyntax foo := \"foo\"\nsyntax \"c\" (foo <|> \"bar\") ...\n```\nthey are not.\n"}},
+    "content": "match"},
+   "433":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "all_at_world w Γ", "name": "_uniq.5979"}},
+    "content": "Γ_at_w"},
+   "431":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "w ≤ w'", "name": "_uniq.5971"}},
+    "content": "w_le_w'"},
+   "43":
+   {"kind":
+    {"keyword": {"occurrence": "null-122", "name": ["null"], "docs": null}},
+    "content": "where"},
+   "429":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.5957"}},
+    "content": "Γ"},
+   "427":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.5955"}},
+    "content": "w'"},
+   "425":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.5953"}},
+    "content": "w"},
+   "423":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Type u", "name": "_uniq.5948"}},
+    "content": "W"},
+   "421":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.mono_all.{u} {W : Type u} [Frame W] {w w' : W} {Γ : Ctxt} (w_le_w' : w ≤ w') (Γ_at_w : all_at_world w Γ) :\n  all_at_world w' Γ",
+      "name": ["Kripke", "mono_all"],
+      "isDef": true,
+      "docs": null}},
+    "content": "mono_all"},
+   "419":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-1702",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "414":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.all_at_append_left.{u} {W : Type u} [Frame W] {w : W} (Δ Γ : Ctxt) : all_at_world w (Δ ++ Γ) → all_at_world w Γ",
+      "name": ["Kripke", "all_at_append_left"],
+      "isDef": false,
+      "docs": null}},
+    "content": "all_at_append_left"},
+   "412":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.exact-1670",
+      "name": ["Lean", "Parser", "Tactic", "exact"],
+      "docs":
+      "`exact e` closes the main goal if its target type matches that of `e`.\n"}},
+    "content": "exact"},
+   "41":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Preorder.{u_2} (α : Type u_2) : Type u_2",
+      "name": ["Preorder"],
+      "isDef": false,
+      "docs":
+      "A preorder is a reflexive, transitive relation `≤`.\nIn a preorder, `a < b` means `a ≤ b ∧ ¬b ≤ a`, and `<` is defined this way by default.\nYou can override this definition to set a better def-eq.\n"}},
+    "content": "Preorder"},
+   "408":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "xs ++ Γ = Δ", "name": "_uniq.5918"}},
+    "content": "rfl"},
+   "406":
+   {"kind":
+    {"keyword": {"occurrence": "null-1649", "name": ["null"], "docs": null}},
+    "content": "with"},
+   "404":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.rcases-1640",
+      "name": ["Lean", "Parser", "Tactic", "rcases"],
+      "docs":
+      "`rcases` is a tactic that will perform `cases` recursively, according to a pattern. It is used to\ndestructure hypotheses or expressions composed of inductive types like `h1 : a ∧ b ∧ c ∨ d` or\n`h2 : ∃ x y, trans_rel R x y`. Usual usage might be `rcases h1 with ⟨ha, hb, hc⟩ | hd` or\n`rcases h2 with ⟨x, y, _ | ⟨z, hxz, hzy⟩⟩` for these examples.\n\nEach element of an `rcases` pattern is matched against a particular local hypothesis (most of which\nare generated during the execution of `rcases` and represent individual elements destructured from\nthe input expression). An `rcases` pattern has the following grammar:\n\n* A name like `x`, which names the active hypothesis as `x`.\n* A blank `_`, which does nothing (letting the automatic naming system used by `cases` name the\n  hypothesis).\n* A hyphen `-`, which clears the active hypothesis and any dependents.\n* The keyword `rfl`, which expects the hypothesis to be `h : a = b`, and calls `subst` on the\n  hypothesis (which has the effect of replacing `b` with `a` everywhere or vice versa).\n* A type ascription `p : ty`, which sets the type of the hypothesis to `ty` and then matches it\n  against `p`. (Of course, `ty` must unify with the actual type of `h` for this to work.)\n* A tuple pattern `⟨p1, p2, p3⟩`, which matches a constructor with many arguments, or a series\n  of nested conjunctions or existentials. For example if the active hypothesis is `a ∧ b ∧ c`,\n  then the conjunction will be destructured, and `p1` will be matched against `a`, `p2` against `b`\n  and so on.\n* A `@` before a tuple pattern as in `@⟨p1, p2, p3⟩` will bind all arguments in the constructor,\n  while leaving the `@` off will only use the patterns on the explicit arguments.\n* An alternation pattern `p1 | p2 | p3`, which matches an inductive type with multiple constructors,\n  or a nested disjunction like `a ∨ b ∨ c`.\n\nA pattern like `⟨a, b, c⟩ | ⟨d, e⟩` will do a split over the inductive datatype,\nnaming the first three parameters of the first constructor as `a,b,c` and the\nfirst two of the second constructor `d,e`. If the list is not as long as the\nnumber of arguments to the constructor or the number of constructors, the\nremaining variables will be automatically named. If there are nested brackets\nsuch as `⟨⟨a⟩, b | c⟩ | d` then these will cause more case splits as necessary.\nIf there are too many arguments, such as `⟨a, b, c⟩` for splitting on\n`∃ x, ∃ y, p x`, then it will be treated as `⟨a, ⟨b, c⟩⟩`, splitting the last\nparameter as necessary.\n\n`rcases` also has special support for quotient types: quotient induction into Prop works like\nmatching on the constructor `quot.mk`.\n\n`rcases h : e with PAT` will do the same as `rcases e with PAT` with the exception that an\nassumption `h : e = PAT` will be added to the context.\n"}},
+    "content": "rcases"},
+   "400":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "List Tm", "name": "_uniq.5917"}},
+    "content": "xs"},
+   "396":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.byTactic-1635",
+      "name": ["Lean", "Parser", "Term", "byTactic"],
+      "docs":
+      "`by tac` constructs a term of the expected type by running the tactic(s) `tac`. "}},
+    "content": "by"},
+   "391":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "LE.le.{u} {α : Type u} [self : LE α] : α → α → Prop",
+      "name": ["LE", "le"],
+      "isDef": false,
+      "docs":
+      "The less-equal relation: `x ≤ y` \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `≤` in identifiers is `le`.\n\n * The recommended spelling of `<=` in identifiers is `le` (prefer `≤` over `<=`)."}},
+    "content": "≤"},
+   "39":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.extends-103",
+      "name": ["Lean", "Parser", "Command", "extends"],
+      "docs": null}},
+    "content": "extends"},
+   "388":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Frame W", "name": "_uniq.5894"}},
+    "content": "inst✝"},
+   "386":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Γ ≤ Δ", "name": "_uniq.5870"}},
+    "content": "h"},
+   "384":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.5860"}},
+    "content": "Δ"},
+   "382":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.5858"}},
+    "content": "Γ"},
+   "380":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.5856"}},
+    "content": "w"},
+   "378":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Type u", "name": "_uniq.5851"}},
+    "content": "W"},
+   "376":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.all_at_of_suffix.{u} {W : Type u} [Frame W] {w : W} {Γ Δ : Ctxt} (h : Γ ≤ Δ) :\n  all_at_world w Δ → all_at_world w Γ",
+      "name": ["Kripke", "all_at_of_suffix"],
+      "isDef": true,
+      "docs": null}},
+    "content": "all_at_of_suffix"},
+   "374":
+   {"kind":
+    {"keyword": {"occurrence": "group-1501", "name": ["group"], "docs": null}},
+    "content": "lemma"},
+   "37": {"kind": "unknown", "content": ")"},
+   "368":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.exact-1487",
+      "name": ["Lean", "Parser", "Tactic", "exact"],
+      "docs":
+      "`exact e` closes the main goal if its target type matches that of `e`.\n"}},
+    "content": "exact"},
+   "364":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.location-1476",
+      "name": ["Lean", "Parser", "Tactic", "location"],
+      "docs":
+      "Location specifications are used by many tactics that can operate on either the\nhypotheses or the goal. It can have one of the forms:\n* 'empty' is not actually present in this syntax, but most tactics use\n  `(location)?` matchers. It means to target the goal only.\n* `at h₁ ... hₙ`: target the hypotheses `h₁`, ..., `hₙ`\n* `at h₁ h₂ ⊢`: target the hypotheses `h₁` and `h₂`, and the goal\n* `at *`: target all hypotheses and the goal\n"}},
+    "content": "at"},
+   "362":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.simp-1456",
+      "name": ["Lean", "Parser", "Tactic", "simp"],
+      "docs":
+      "The `simp` tactic uses lemmas and hypotheses to simplify the main goal target or\nnon-dependent hypotheses. It has many variants:\n- `simp` simplifies the main goal target using lemmas tagged with the attribute `[simp]`.\n- `simp [h₁, h₂, ..., hₙ]` simplifies the main goal target using the lemmas tagged\n  with the attribute `[simp]` and the given `hᵢ`'s, where the `hᵢ`'s are expressions.-\n- If an `hᵢ` is a defined constant `f`, then `f` is unfolded. If `f` has equational lemmas associated\n  with it (and is not a projection or a `reducible` definition), these are used to rewrite with `f`.\n- `simp [*]` simplifies the main goal target using the lemmas tagged with the\n  attribute `[simp]` and all hypotheses.\n- `simp only [h₁, h₂, ..., hₙ]` is like `simp [h₁, h₂, ..., hₙ]` but does not use `[simp]` lemmas.\n- `simp [-id₁, ..., -idₙ]` simplifies the main goal target using the lemmas tagged\n  with the attribute `[simp]`, but removes the ones named `idᵢ`.\n- `simp at h₁ h₂ ... hₙ` simplifies the hypotheses `h₁ : T₁` ... `hₙ : Tₙ`. If\n  the target or another hypothesis depends on `hᵢ`, a new simplified hypothesis\n  `hᵢ` is introduced, but the old one remains in the local context.\n- `simp at *` simplifies all the hypotheses and the target.\n- `simp [*] at *` simplifies target and all (propositional) hypotheses using the\n  other hypotheses.\n"}},
+    "content": "simp"},
+   "358":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "And (a b : Prop) : Prop",
+      "name": ["And"],
+      "isDef": false,
+      "docs":
+      "`And a b`, or `a ∧ b`, is the conjunction of propositions. It can be\nconstructed and destructed like a pair: if `ha : a` and `hb : b` then\n`⟨ha, hb⟩ : a ∧ b`, and if `h : a ∧ b` then `h.left : a` and `h.right : b`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `∧` in identifiers is `and`.\n\n * The recommended spelling of `/\\` in identifiers is `and` (prefer `∧` over `/\\`)."}},
+    "content": "∧"},
+   "357":
+   {"kind":
+    {"var":
+     {"typeFormat": null,
+      "type": "at_world w t ∧ all_at_world w (Δ ++ Γ)",
+      "name": "_uniq.5748"}},
+    "content": "h"},
+   "352":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.intro-1442",
+      "name": ["Lean", "Parser", "Tactic", "intro"],
+      "docs":
+      "Introduces one or more hypotheses, optionally naming and/or pattern-matching them.\nFor each hypothesis to be introduced, the remaining main goal's target type must\nbe a `let` or function type.\n\n* `intro` by itself introduces one anonymous hypothesis, which can be accessed\n  by e.g. `assumption`. It is equivalent to `intro _`.\n* `intro x y` introduces two hypotheses and names them. Individual hypotheses\n  can be anonymized via `_`, given a type ascription, or matched against a pattern:\n  ```lean\n  -- ... ⊢ α × β → ...\n  intro (a, b)\n  -- ..., a : α, b : β ⊢ ...\n  ```\n* `intro rfl` is short for `intro h; subst h`, if `h` is an equality where the left-hand or right-hand side\n  is a variable.\n* Alternatively, `intro` can be combined with pattern matching much like `fun`:\n  ```lean\n  intro\n  | n + 1, 0 => tac\n  | ...\n  ```\n"}},
+    "content": "intro"},
+   "35": {"kind": {"levelVar": {"name": ["u"]}}, "content": "u"},
+   "348":
+   {"kind":
+    {"var":
+     {"typeFormat": null,
+      "type": "all_at_world w (t :: Δ ++ Γ)",
+      "name": "_uniq.5748"}},
+    "content": "h"},
+   "343":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "List.cons.{u} {α : Type u} (head : α) (tail : List α) : List α",
+      "name": ["List", "cons"],
+      "isDef": false,
+      "docs":
+      "The list whose first element is `head`, where `tail` is the rest of the list.\nUsually written `head :: tail`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `::` in identifiers is `cons`.\n\n * The recommended spelling of `[a]` in identifiers is `singleton`."}},
+    "content": "cons"},
+   "339":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "List.cons.{u} {α : Type u} (head : α) (tail : List α) : List α",
+      "name": ["List", "cons"],
+      "isDef": false,
+      "docs":
+      "The list whose first element is `head`, where `tail` is the rest of the list.\nUsually written `head :: tail`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `::` in identifiers is `cons`.\n\n * The recommended spelling of `[a]` in identifiers is `singleton`."}},
+    "content": "::"},
+   "335":
+   {"kind":
+    {"var":
+     {"typeFormat": null,
+      "type": "all_at_world w (Δ ++ Γ) → all_at_world w Γ",
+      "name": "_uniq.5743"}},
+    "content": "ih"},
+   "332":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "List.{u} (α : Type u) : Type u",
+      "name": ["List"],
+      "isDef": false,
+      "docs":
+      "Linked lists: ordered lists, in which each element has a reference to the next element.\n\nMost operations on linked lists take time proportional to the length of the list, because each\nelement must be traversed to find the next element.\n\n`List α` is isomorphic to `Array α`, but they are useful for different things:\n* `List α` is easier for reasoning, and `Array α` is modeled as a wrapper around `List α`.\n* `List α` works well as a persistent data structure, when many copies of the tail are shared. When\n  the value is not shared, `Array α` will have better performance because it can do destructive\n  updates.\n"}},
+    "content": "List"},
+   "331":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "List Tm", "name": "_uniq.5742"}},
+    "content": "Δ"},
+   "33":
+   {"kind":
+    {"sort":
+     {"doc?": "A type universe. `Type ≡ Type 0`, `Type u ≡ Sort (u + 1)`. "}},
+    "content": "Type"},
+   "329":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.5741"}},
+    "content": "t"},
+   "325":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.simp-1411",
+      "name": ["Lean", "Parser", "Tactic", "simp"],
+      "docs":
+      "The `simp` tactic uses lemmas and hypotheses to simplify the main goal target or\nnon-dependent hypotheses. It has many variants:\n- `simp` simplifies the main goal target using lemmas tagged with the attribute `[simp]`.\n- `simp [h₁, h₂, ..., hₙ]` simplifies the main goal target using the lemmas tagged\n  with the attribute `[simp]` and the given `hᵢ`'s, where the `hᵢ`'s are expressions.-\n- If an `hᵢ` is a defined constant `f`, then `f` is unfolded. If `f` has equational lemmas associated\n  with it (and is not a projection or a `reducible` definition), these are used to rewrite with `f`.\n- `simp [*]` simplifies the main goal target using the lemmas tagged with the\n  attribute `[simp]` and all hypotheses.\n- `simp only [h₁, h₂, ..., hₙ]` is like `simp [h₁, h₂, ..., hₙ]` but does not use `[simp]` lemmas.\n- `simp [-id₁, ..., -idₙ]` simplifies the main goal target using the lemmas tagged\n  with the attribute `[simp]`, but removes the ones named `idᵢ`.\n- `simp at h₁ h₂ ... hₙ` simplifies the hypotheses `h₁ : T₁` ... `hₙ : Tₙ`. If\n  the target or another hypothesis depends on `hᵢ`, a new simplified hypothesis\n  `hᵢ` is introduced, but the old one remains in the local context.\n- `simp at *` simplifies all the hypotheses and the target.\n- `simp [*] at *` simplifies target and all (propositional) hypotheses using the\n  other hypotheses.\n"}},
+    "content": "simp"},
+   "321":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "List.nil.{u} {α : Type u} : List α",
+      "name": ["List", "nil"],
+      "isDef": false,
+      "docs":
+      "The empty list, usually written `[]`. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `[]` in identifiers is `nil`."}},
+    "content": "nil"},
+   "317":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "List.nil.{u} {α : Type u} : List α",
+      "name": ["List", "nil"],
+      "isDef": false,
+      "docs":
+      "The empty list, usually written `[]`. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `[]` in identifiers is `nil`."}},
+    "content": "]"},
+   "315":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "List.nil.{u} {α : Type u} : List α",
+      "name": ["List", "nil"],
+      "isDef": false,
+      "docs":
+      "The empty list, usually written `[]`. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `[]` in identifiers is `nil`."}},
+    "content": "["},
+   "313":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.inductionAlts-1389",
+      "name": ["Lean", "Parser", "Tactic", "inductionAlts"],
+      "docs":
+      "After `with`, there is an optional tactic that runs on all branches, and\nthen a list of alternatives.\n"}},
+    "content": "with"},
+   "311":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.induction-1376",
+      "name": ["Lean", "Parser", "Tactic", "induction"],
+      "docs":
+      "Assuming `x` is a variable in the local context with an inductive type,\n`induction x` applies induction on `x` to the main goal,\nproducing one goal for each constructor of the inductive type,\nin which the target is replaced by a general instance of that constructor\nand an inductive hypothesis is added for each recursive argument to the constructor.\nIf the type of an element in the local context depends on `x`,\nthat element is reverted and reintroduced afterward,\nso that the inductive hypothesis incorporates that hypothesis as well.\n\nFor example, given `n : Nat` and a goal with a hypothesis `h : P n` and target `Q n`,\n`induction n` produces one goal with hypothesis `h : P 0` and target `Q 0`,\nand one goal with hypotheses `h : P (Nat.succ a)` and `ih₁ : P a → Q a` and target `Q (Nat.succ a)`.\nHere the names `a` and `ih₁` are chosen automatically and are not accessible.\nYou can use `with` to provide the variables names for each constructor.\n- `induction e`, where `e` is an expression instead of a variable,\n  generalizes `e` in the goal, and then performs induction on the resulting variable.\n- `induction e using r` allows the user to specify the principle of induction that should be used.\n  Here `r` should be a term whose result type must be of the form `C t`,\n  where `C` is a bound variable and `t` is a (possibly empty) sequence of bound variables\n- `induction e generalizing z₁ ... zₙ`, where `z₁ ... zₙ` are variables in the local context,\n  generalizes over `z₁ ... zₙ` before applying the induction but then introduces them in each goal.\n  In other words, the net effect is that each inductive hypothesis is generalized.\n- Given `x : Nat`, `induction x with | zero => tac₁ | succ x' ih => tac₂`\n  uses tactic `tac₁` for the `zero` case, and `tac₂` for the `succ` case.\n"}},
+    "content": "induction"},
+   "31": {"kind": "unknown", "content": ":"},
+   "307":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.byTactic-1371",
+      "name": ["Lean", "Parser", "Term", "byTactic"],
+      "docs":
+      "`by tac` constructs a term of the expected type by running the tactic(s) `tac`. "}},
+    "content": "by"},
+   "303":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "HAppend.hAppend.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HAppend α β γ] : α → β → γ",
+      "name": ["HAppend", "hAppend"],
+      "isDef": false,
+      "docs":
+      "`a ++ b` is the result of concatenation of `a` and `b`, usually read \"append\".\nThe meaning of this notation is type-dependent. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `++` in identifiers is `append`."}},
+    "content": ")"},
+   "301":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "HAppend.hAppend.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HAppend α β γ] : α → β → γ",
+      "name": ["HAppend", "hAppend"],
+      "isDef": false,
+      "docs":
+      "`a ++ b` is the result of concatenation of `a` and `b`, usually read \"append\".\nThe meaning of this notation is type-dependent. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `++` in identifiers is `append`."}},
+    "content": "++"},
+   "3":
+   {"kind": {"moduleName": {"name": ["Mathlib", "Order", "Basic"]}},
+    "content": "Mathlib.Order.Basic"},
+   "299":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "HAppend.hAppend.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HAppend α β γ] : α → β → γ",
+      "name": ["HAppend", "hAppend"],
+      "isDef": false,
+      "docs":
+      "`a ++ b` is the result of concatenation of `a` and `b`, usually read \"append\".\nThe meaning of this notation is type-dependent. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `++` in identifiers is `append`."}},
+    "content": "("},
+   "295":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Frame W", "name": "_uniq.5684"}},
+    "content": "inst✝"},
+   "292":
+   {"kind":
+    {"sort":
+     {"doc?": "A type universe. `Type ≡ Type 0`, `Type u ≡ Sort (u + 1)`. "}},
+    "content": "Type u"},
+   "29":
+   {"kind": {"var": {"typeFormat": null, "type": "Type u", "name": "_uniq.2"}},
+    "content": "W"},
+   "289": {"kind": "unknown", "content": "++"},
+   "287":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.5626"}},
+    "content": "Γ"},
+   "285":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.5624"}},
+    "content": "Δ"},
+   "283":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.5622"}},
+    "content": "w"},
+   "281":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Type u", "name": "_uniq.5617"}},
+    "content": "W"},
+   "279":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.all_at_append_left.{u} {W : Type u} [Frame W] {w : W} (Δ Γ : Ctxt) : all_at_world w (Δ ++ Γ) → all_at_world w Γ",
+      "name": ["Kripke", "all_at_append_left"],
+      "isDef": true,
+      "docs": null}},
+    "content": "all_at_append_left"},
+   "277":
+   {"kind":
+    {"keyword": {"occurrence": "group-1243", "name": ["group"], "docs": null}},
+    "content": "lemma"},
+   "274":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Attr.simp-1223",
+      "name": ["Lean", "Parser", "Attr", "simp"],
+      "docs":
+      "Theorems tagged with the `simp` attribute are used by the simplifier\n(i.e., the `simp` tactic, and its variants) to simplify expressions occurring in your goals.\nWe call theorems tagged with the `simp` attribute \"simp theorems\" or \"simp lemmas\".\nLean maintains a database/index containing all active simp theorems.\nHere is an example of a simp theorem.\n```lean\n@[simp] theorem ne_eq (a b : α) : (a ≠ b) = Not (a = b) := rfl\n```\nThis simp theorem instructs the simplifier to replace instances of the term\n`a ≠ b` (e.g. `x + 0 ≠ y`) with `Not (a = b)` (e.g., `Not (x + 0 = y)`).\nThe simplifier applies simp theorems in one direction only:\nif `A = B` is a simp theorem, then `simp` replaces `A`s with `B`s,\nbut it doesn't replace `B`s with `A`s. Hence a simp theorem should have the\nproperty that its right-hand side is \"simpler\" than its left-hand side.\nIn particular, `=` and `↔` should not be viewed as symmetric operators in this situation.\nThe following would be a terrible simp theorem (if it were even allowed):\n```lean\n@[simp] lemma mul_right_inv_bad (a : G) : 1 = a * a⁻¹ := ...\n```\nReplacing 1 with a * a⁻¹ is not a sensible default direction to travel.\nEven worse would be a theorem that causes expressions to grow without bound,\ncausing simp to loop forever.\n\nBy default the simplifier applies `simp` theorems to an expression `e`\nafter its sub-expressions have been simplified.\nWe say it performs a bottom-up simplification.\nYou can instruct the simplifier to apply a theorem before its sub-expressions\nhave been simplified by using the modifier `↓`. Here is an example\n```lean\n@[simp↓] theorem not_and_eq (p q : Prop) : (¬ (p ∧ q)) = (¬p ∨ ¬q) :=\n```\n\nYou can instruct the simplifier to rewrite the lemma from right-to-left:\n```lean\nattribute @[simp ←] and_assoc\n```\n\nWhen multiple simp theorems are applicable, the simplifier uses the one with highest priority.\nThe equational theorems of functions are applied at very low priority (100 and below).\nIf there are several with the same priority, it is uses the \"most recent one\". Example:\n```lean\n@[simp high] theorem cond_true (a b : α) : cond true a b = a := rfl\n@[simp low+1] theorem or_true (p : Prop) : (p ∨ True) = True :=\n  propext <| Iff.intro (fun _ => trivial) (fun _ => Or.inr trivial)\n@[simp 100] theorem ite_self {d : Decidable c} (a : α) : ite c a a = a := by\n  cases d <;> rfl\n```\n"}},
+    "content": "simp"},
+   "272":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.attribute-1212",
+      "name": ["Lean", "Parser", "Command", "attribute"],
+      "docs": null}},
+    "content": "attribute"},
+   "27": {"kind": "unknown", "content": "("},
+   "269":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.all_at_world.{u} {W : Type u} [Frame W] (w : W) : Ctxt → Prop",
+      "name": ["Kripke", "all_at_world"],
+      "isDef": false,
+      "docs": null}},
+    "content": "all_at_world"},
+   "267":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "List Tm", "name": "_uniq.4466"}},
+    "content": "ts"},
+   "265": {"kind": "unknown", "content": "::"},
+   "263":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.4465"}},
+    "content": "t"},
+   "261":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Ctxt : Type",
+      "name": ["Syntax", "Ctxt"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Ctxt"},
+   "259":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.4423"}},
+    "content": "w"},
+   "257":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Type u", "name": "_uniq.4418"}},
+    "content": "W"},
+   "255":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.all_at_world.{u} {W : Type u} [Frame W] (w : W) : Ctxt → Prop",
+      "name": ["Kripke", "all_at_world"],
+      "isDef": true,
+      "docs": null}},
+    "content": "all_at_world"},
+   "253":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-1080",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "250":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "at_world w ff", "name": "_uniq.2947"}},
+    "content": "t_at_w"},
+   "25":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Kripke.Frame.{u} (W : Type u) : Type u",
+      "name": ["Kripke", "Frame"],
+      "isDef": true,
+      "docs": null}},
+    "content": "Frame"},
+   "248":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "False.elim.{u} {C : Sort u} (h : False) : C",
+      "name": ["False", "elim"],
+      "isDef": false,
+      "docs":
+      "`False.elim : False → C` says that from `False`, any desired proposition\n`C` holds. Also known as ex falso quodlibet (EFQ) or the principle of explosion.\n\nThe target type is actually `C : Sort u` which means it works for both\npropositions and types. When executed, this acts like an \"unreachable\"\ninstruction: it is **undefined behavior** to run, but it will probably print\n\"unreachable code\". (You would need to construct a proof of false to run it\nanyway, which you can only do using `sorry` or unsound axioms.)\n"}},
+    "content": "False.elim"},
+   "246":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "trivial : True",
+      "name": ["trivial"],
+      "isDef": false,
+      "docs":
+      "`True` is true, and `True.intro` (or more commonly, `trivial`)\nis the proof. "}},
+    "content": "trivial"},
+   "244":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "le_trans.{u_1} {α : Type u_1} [Preorder α] {a b c : α} : a ≤ b → b ≤ c → a ≤ c",
+      "name": ["le_trans"],
+      "isDef": false,
+      "docs": "The relation `≤` on a preorder is transitive. "}},
+    "content": "le_trans"},
+   "242":
+   {"kind":
+    {"var":
+     {"typeFormat": null,
+      "type": "at_world w (_p ⇒ _q)",
+      "name": "_uniq.2947"}},
+    "content": "t_at_w"},
+   "240":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "at_world w'' _p", "name": "_uniq.3673"}},
+    "content": "p_at_w''"},
+   "238":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "w' ≤ w''", "name": "_uniq.3670"}},
+    "content": "w'_le_w''"},
+   "236":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.3661"}},
+    "content": "w''"},
+   "234":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.fun-959",
+      "name": ["Lean", "Parser", "Term", "fun"],
+      "docs": null}},
+    "content": "fun"},
+   "232":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.3643"}},
+    "content": "_q"},
+   "230":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.3642"}},
+    "content": "_p"},
+   "23":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.classTk-78",
+      "name": ["Lean", "Parser", "Command", "classTk"],
+      "docs": null}},
+    "content": "class"},
+   "228":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm.imp : Tm → Tm → Tm",
+      "name": ["Syntax", "Tm", "imp"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Tm.imp"},
+   "226":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "at_world w _q", "name": "_uniq.3398"}},
+    "content": "r"},
+   "224":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Or.inr {a b : Prop} (h : b) : a ∨ b",
+      "name": ["Or", "inr"],
+      "isDef": false,
+      "docs":
+      "`Or.inr` is \"right injection\" into an `Or`. If `h : b` then `Or.inr h : a ∨ b`. "}},
+    "content": "Or.inr"},
+   "222":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "at_world w _p", "name": "_uniq.3304"}},
+    "content": "l"},
+   "220":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Or.inl {a b : Prop} (h : a) : a ∨ b",
+      "name": ["Or", "inl"],
+      "isDef": false,
+      "docs":
+      "`Or.inl` is \"left injection\" into an `Or`. If `h : a` then `Or.inl h : a ∨ b`. "}},
+    "content": "Or.inl"},
+   "217":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.match-837",
+      "name": ["Lean", "Parser", "Term", "match"],
+      "docs":
+      "Pattern matching. `match e, ... with | p, ... => f | ...` matches each given\nterm `e` against each pattern `p` of a match alternative. When all patterns\nof an alternative match, the `match` term evaluates to the value of the\ncorresponding right-hand side `f` with the pattern variables bound to the\nrespective matched values.\nIf used as `match h : e, ... with | p, ... => f | ...`, `h : e = p` is available\nwithin `f`.\n\nWhen not constructing a proof, `match` does not automatically substitute variables\nmatched on in dependent variables' types. Use `match (generalizing := true) ...` to\nenforce this.\n\nSyntax quotations can also be used in a pattern match.\nThis matches a `Syntax` value against quotations, pattern variables, or `_`.\n\nQuoted identifiers only match identical identifiers - custom matching such as by the preresolved\nnames only should be done explicitly.\n\n`Syntax.atom`s are ignored during matching by default except when part of a built-in literal.\nFor users introducing new atoms, we recommend wrapping them in dedicated syntax kinds if they\nshould participate in matching.\nFor example, in\n```lean\nsyntax \"c\" (\"foo\" <|> \"bar\") ...\n```\n`foo` and `bar` are indistinguishable during matching, but in\n```lean\nsyntax foo := \"foo\"\nsyntax \"c\" (foo <|> \"bar\") ...\n```\nthey are not.\n"}},
+    "content": "with"},
+   "215":
+   {"kind":
+    {"var":
+     {"typeFormat": null,
+      "type": "at_world w (_p ∨ _q)",
+      "name": "_uniq.2947"}},
+    "content": "t_at_w"},
+   "213":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.match-837",
+      "name": ["Lean", "Parser", "Term", "match"],
+      "docs":
+      "Pattern matching. `match e, ... with | p, ... => f | ...` matches each given\nterm `e` against each pattern `p` of a match alternative. When all patterns\nof an alternative match, the `match` term evaluates to the value of the\ncorresponding right-hand side `f` with the pattern variables bound to the\nrespective matched values.\nIf used as `match h : e, ... with | p, ... => f | ...`, `h : e = p` is available\nwithin `f`.\n\nWhen not constructing a proof, `match` does not automatically substitute variables\nmatched on in dependent variables' types. Use `match (generalizing := true) ...` to\nenforce this.\n\nSyntax quotations can also be used in a pattern match.\nThis matches a `Syntax` value against quotations, pattern variables, or `_`.\n\nQuoted identifiers only match identical identifiers - custom matching such as by the preresolved\nnames only should be done explicitly.\n\n`Syntax.atom`s are ignored during matching by default except when part of a built-in literal.\nFor users introducing new atoms, we recommend wrapping them in dedicated syntax kinds if they\nshould participate in matching.\nFor example, in\n```lean\nsyntax \"c\" (\"foo\" <|> \"bar\") ...\n```\n`foo` and `bar` are indistinguishable during matching, but in\n```lean\nsyntax foo := \"foo\"\nsyntax \"c\" (foo <|> \"bar\") ...\n```\nthey are not.\n"}},
+    "content": "match"},
+   "211":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.3253"}},
+    "content": "_q"},
+   "209":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.3252"}},
+    "content": "_p"},
+   "207": {"kind": "unknown", "content": "⟩"},
+   "205": {"kind": "unknown", "content": "2"},
+   "203": {"kind": "unknown", "content": "1"},
+   "201": {"kind": "unknown", "content": "."},
+   "20": {"kind": "unknown", "content": "Kripke"},
+   "199":
+   {"kind":
+    {"var":
+     {"typeFormat": null,
+      "type": "at_world w (_p ∧ _q)",
+      "name": "_uniq.2947"}},
+    "content": "t_at_w"},
+   "197":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.mono_at.{u} {W : Type u} [Frame W] {w w' : W} {t : Tm} (le : w ≤ w') (t_at_w : at_world w t) : at_world w' t",
+      "name": ["Kripke", "mono_at"],
+      "isDef": false,
+      "docs": null}},
+    "content": "mono_at"},
+   "195": {"kind": "unknown", "content": "⟨"},
+   "193":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.3086"}},
+    "content": "_q"},
+   "191":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.3085"}},
+    "content": "_p"},
+   "189":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "at_world w (var _n)", "name": "_uniq.2947"}},
+    "content": "t_at_w"},
+   "187":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Frame.le_val.{u} {W : Type u} [self : Frame W] {w w' : W} {i : ℕ} : w ≤ w' → Frame.val w i → Frame.val w' i",
+      "name": ["Kripke", "Frame", "le_val"],
+      "isDef": false,
+      "docs": null}},
+    "content": "le_val"},
+   "185":
+   {"kind": {"var": {"typeFormat": null, "type": "ℕ", "name": "_uniq.3010"}},
+    "content": "_n"},
+   "183":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.match-707",
+      "name": ["Lean", "Parser", "Term", "match"],
+      "docs":
+      "Pattern matching. `match e, ... with | p, ... => f | ...` matches each given\nterm `e` against each pattern `p` of a match alternative. When all patterns\nof an alternative match, the `match` term evaluates to the value of the\ncorresponding right-hand side `f` with the pattern variables bound to the\nrespective matched values.\nIf used as `match h : e, ... with | p, ... => f | ...`, `h : e = p` is available\nwithin `f`.\n\nWhen not constructing a proof, `match` does not automatically substitute variables\nmatched on in dependent variables' types. Use `match (generalizing := true) ...` to\nenforce this.\n\nSyntax quotations can also be used in a pattern match.\nThis matches a `Syntax` value against quotations, pattern variables, or `_`.\n\nQuoted identifiers only match identical identifiers - custom matching such as by the preresolved\nnames only should be done explicitly.\n\n`Syntax.atom`s are ignored during matching by default except when part of a built-in literal.\nFor users introducing new atoms, we recommend wrapping them in dedicated syntax kinds if they\nshould participate in matching.\nFor example, in\n```lean\nsyntax \"c\" (\"foo\" <|> \"bar\") ...\n```\n`foo` and `bar` are indistinguishable during matching, but in\n```lean\nsyntax foo := \"foo\"\nsyntax \"c\" (foo <|> \"bar\") ...\n```\nthey are not.\n"}},
+    "content": "with"},
+   "181":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.match-707",
+      "name": ["Lean", "Parser", "Term", "match"],
+      "docs":
+      "Pattern matching. `match e, ... with | p, ... => f | ...` matches each given\nterm `e` against each pattern `p` of a match alternative. When all patterns\nof an alternative match, the `match` term evaluates to the value of the\ncorresponding right-hand side `f` with the pattern variables bound to the\nrespective matched values.\nIf used as `match h : e, ... with | p, ... => f | ...`, `h : e = p` is available\nwithin `f`.\n\nWhen not constructing a proof, `match` does not automatically substitute variables\nmatched on in dependent variables' types. Use `match (generalizing := true) ...` to\nenforce this.\n\nSyntax quotations can also be used in a pattern match.\nThis matches a `Syntax` value against quotations, pattern variables, or `_`.\n\nQuoted identifiers only match identical identifiers - custom matching such as by the preresolved\nnames only should be done explicitly.\n\n`Syntax.atom`s are ignored during matching by default except when part of a built-in literal.\nFor users introducing new atoms, we recommend wrapping them in dedicated syntax kinds if they\nshould participate in matching.\nFor example, in\n```lean\nsyntax \"c\" (\"foo\" <|> \"bar\") ...\n```\n`foo` and `bar` are indistinguishable during matching, but in\n```lean\nsyntax foo := \"foo\"\nsyntax \"c\" (foo <|> \"bar\") ...\n```\nthey are not.\n"}},
+    "content": "match"},
+   "18":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.namespace-60",
+      "name": ["Lean", "Parser", "Command", "namespace"],
+      "docs":
+      "`namespace <id>` opens a section with label `<id>` that influences naming and name resolution inside\nthe section:\n* Declarations names are prefixed: `def seventeen : ℕ := 17` inside a namespace `Nat` is given the\n  full name `Nat.seventeen`.\n* Names introduced by `export` declarations are also prefixed by the identifier.\n* All names starting with `<id>.` become available in the namespace without the prefix. These names\n  are preferred over names introduced by outer namespaces or `open`.\n* Within a namespace, declarations can be `protected`, which excludes them from the effects of\n  opening the namespace.\n\nAs with `section`, namespaces can be nested and the scope of a namespace is terminated by a\ncorresponding `end <id>` or the end of the file.\n\n`namespace` also acts like `section` in delimiting the scope of `variable`, `open`, and other scoped commands.\n"}},
+    "content": "namespace"},
+   "178":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "at_world w t", "name": "_uniq.2947"}},
+    "content": "t_at_w"},
+   "176":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "w ≤ w'", "name": "_uniq.2939"}},
+    "content": "le"},
+   "174":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.2925"}},
+    "content": "t"},
+   "172":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.2923"}},
+    "content": "w'"},
+   "170":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.2921"}},
+    "content": "w"},
+   "168":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Type u", "name": "_uniq.2916"}},
+    "content": "W"},
+   "166":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.mono_at.{u} {W : Type u} [Frame W] {w w' : W} {t : Tm} (le : w ≤ w') (t_at_w : at_world w t) : at_world w' t",
+      "name": ["Kripke", "mono_at"],
+      "isDef": true,
+      "docs": null}},
+    "content": "mono_at"},
+   "164":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-587",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "161":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Attr.simp-571",
+      "name": ["Lean", "Parser", "Attr", "simp"],
+      "docs":
+      "Theorems tagged with the `simp` attribute are used by the simplifier\n(i.e., the `simp` tactic, and its variants) to simplify expressions occurring in your goals.\nWe call theorems tagged with the `simp` attribute \"simp theorems\" or \"simp lemmas\".\nLean maintains a database/index containing all active simp theorems.\nHere is an example of a simp theorem.\n```lean\n@[simp] theorem ne_eq (a b : α) : (a ≠ b) = Not (a = b) := rfl\n```\nThis simp theorem instructs the simplifier to replace instances of the term\n`a ≠ b` (e.g. `x + 0 ≠ y`) with `Not (a = b)` (e.g., `Not (x + 0 = y)`).\nThe simplifier applies simp theorems in one direction only:\nif `A = B` is a simp theorem, then `simp` replaces `A`s with `B`s,\nbut it doesn't replace `B`s with `A`s. Hence a simp theorem should have the\nproperty that its right-hand side is \"simpler\" than its left-hand side.\nIn particular, `=` and `↔` should not be viewed as symmetric operators in this situation.\nThe following would be a terrible simp theorem (if it were even allowed):\n```lean\n@[simp] lemma mul_right_inv_bad (a : G) : 1 = a * a⁻¹ := ...\n```\nReplacing 1 with a * a⁻¹ is not a sensible default direction to travel.\nEven worse would be a theorem that causes expressions to grow without bound,\ncausing simp to loop forever.\n\nBy default the simplifier applies `simp` theorems to an expression `e`\nafter its sub-expressions have been simplified.\nWe say it performs a bottom-up simplification.\nYou can instruct the simplifier to apply a theorem before its sub-expressions\nhave been simplified by using the modifier `↓`. Here is an example\n```lean\n@[simp↓] theorem not_and_eq (p q : Prop) : (¬ (p ∧ q)) = (¬p ∨ ¬q) :=\n```\n\nYou can instruct the simplifier to rewrite the lemma from right-to-left:\n```lean\nattribute @[simp ←] and_assoc\n```\n\nWhen multiple simp theorems are applicable, the simplifier uses the one with highest priority.\nThe equational theorems of functions are applied at very low priority (100 and below).\nIf there are several with the same priority, it is uses the \"most recent one\". Example:\n```lean\n@[simp high] theorem cond_true (a b : α) : cond true a b = a := rfl\n@[simp low+1] theorem or_true (p : Prop) : (p ∨ True) = True :=\n  propext <| Iff.intro (fun _ => trivial) (fun _ => Or.inr trivial)\n@[simp 100] theorem ite_self {d : Decidable c} (a : α) : ite c a a = a := by\n  cases d <;> rfl\n```\n"}},
+    "content": "simp"},
+   "159":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.attribute-560",
+      "name": ["Lean", "Parser", "Command", "attribute"],
+      "docs": null}},
+    "content": "attribute"},
+   "156":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "False : Prop",
+      "name": ["False"],
+      "isDef": false,
+      "docs":
+      "`False` is the empty proposition. Thus, it has no introduction rules.\nIt represents a contradiction. `False` elimination rule, `False.rec`,\nexpresses the fact that anything follows from a contradiction.\nThis rule is sometimes called ex falso (short for ex falso sequitur quodlibet),\nor the principle of explosion.\nFor more information: [Propositional Logic](https://lean-lang.org/theorem_proving_in_lean4/propositions_and_proofs.html#propositional-logic)\n"}},
+    "content": "False"},
+   "154":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm.ff : Tm",
+      "name": ["Syntax", "Tm", "ff"],
+      "isDef": false,
+      "docs": null}},
+    "content": "ff"},
+   "152":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "True : Prop",
+      "name": ["True"],
+      "isDef": false,
+      "docs":
+      "`True` is a proposition and has only an introduction rule, `True.intro : True`.\nIn other words, `True` is simply true, and has a canonical proof, `True.intro`\nFor more information: [Propositional Logic](https://lean-lang.org/theorem_proving_in_lean4/propositions_and_proofs.html#propositional-logic)\n"}},
+    "content": "True"},
+   "150":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm.tt : Tm",
+      "name": ["Syntax", "Tm", "tt"],
+      "isDef": false,
+      "docs": null}},
+    "content": "tt"},
+   "15": {"kind": "unknown", "content": "u"},
+   "148":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.2227"}},
+    "content": "w'"},
+   "146":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.2225"}},
+    "content": "q"},
+   "144":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.2224"}},
+    "content": "p"},
+   "142":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm.imp : Tm → Tm → Tm",
+      "name": ["Syntax", "Tm", "imp"],
+      "isDef": false,
+      "docs": null}},
+    "content": "imp"},
+   "140": {"kind": "unknown", "content": "∨"},
+   "138":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.1351"}},
+    "content": "q"},
+   "136":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.1350"}},
+    "content": "p"},
+   "134":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm.or : Tm → Tm → Tm",
+      "name": ["Syntax", "Tm", "or"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Tm.or"},
+   "132": {"kind": "unknown", "content": "∧"},
+   "130":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.at_world.{u} {W : Type u} [Frame W] (w : W) (tm : Tm) : Prop",
+      "name": ["Kripke", "at_world"],
+      "isDef": false,
+      "docs": null}},
+    "content": "at_world"},
+   "13":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.universe-48",
+      "name": ["Lean", "Parser", "Command", "universe"],
+      "docs":
+      "Declares one or more universe variables.\n\n`universe u v`\n\n`Prop`, `Type`, `Type u` and `Sort u` are types that classify other types, also known as\n*universes*. In `Type u` and `Sort u`, the variable `u` stands for the universe's *level*, and a\nuniverse at level `u` can only classify universes that are at levels lower than `u`. For more\ndetails on type universes, please refer to [the relevant chapter of Theorem Proving in Lean][tpil\nuniverses].\n\nJust as type arguments allow polymorphic definitions to be used at many different types, universe\nparameters, represented by universe variables, allow a definition to be used at any required level.\nWhile Lean mostly handles universe levels automatically, declaring them explicitly can provide more\ncontrol when writing signatures. The `universe` keyword allows the declared universe variables to be\nused in a collection of definitions, and Lean will ensure that these definitions use them\nconsistently.\n\n[tpil universes]: https://lean-lang.org/theorem_proving_in_lean4/dependent_type_theory.html#types-as-objects\n(Type universes on Theorem Proving in Lean)\n\n```lean\n/- Explicit type-universe parameter. -/\ndef id₁.{u} (α : Type u) (a : α) := a\n\n/- Implicit type-universe parameter, equivalent to `id₁`.\n  Requires option `autoImplicit true`, which is the default. -/\ndef id₂ (α : Type u) (a : α) := a\n\n/- Explicit standalone universe variable declaration, equivalent to `id₁` and `id₂`. -/\nuniverse u\ndef id₃ (α : Type u) (a : α) := a\n```\n\nOn a more technical note, using a universe variable only in the right-hand side of a definition\ncauses an error if the universe has not been declared previously.\n\n```lean\ndef L₁.{u} := List (Type u)\n\n-- def L₂ := List (Type u) -- error: `unknown universe level 'u'`\n\nuniverse u\ndef L₃ := List (Type u)\n```\n\n## Examples\n\n```lean\nuniverse u v w\n\nstructure Pair (α : Type u) (β : Type v) : Type (max u v) where\n  a : α\n  b : β\n\n#check Pair.{v, w}\n-- Pair : Type v → Type w → Type (max v w)\n```\n"}},
+    "content": "universe"},
+   "128":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.477"}},
+    "content": "q"},
+   "126":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.476"}},
+    "content": "p"},
+   "124":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm.and : Tm → Tm → Tm",
+      "name": ["Syntax", "Tm", "and"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Tm.and"},
+   "122":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Kripke.Frame.val.{u} {W : Type u} [self : Frame W] : W → ℕ → Prop",
+      "name": ["Kripke", "Frame", "val"],
+      "isDef": false,
+      "docs": null}},
+    "content": "val"},
+   "120": {"kind": "unknown", "content": "=>"},
+   "118":
+   {"kind": {"var": {"typeFormat": null, "type": "ℕ", "name": "_uniq.457"}},
+    "content": "v"},
+   "116":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm.var : ℕ → Tm",
+      "name": ["Syntax", "Tm", "var"],
+      "isDef": false,
+      "docs": null}},
+    "content": "var"},
+   "114": {"kind": "unknown", "content": "|"},
+   "112":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.match-324",
+      "name": ["Lean", "Parser", "Term", "match"],
+      "docs":
+      "Pattern matching. `match e, ... with | p, ... => f | ...` matches each given\nterm `e` against each pattern `p` of a match alternative. When all patterns\nof an alternative match, the `match` term evaluates to the value of the\ncorresponding right-hand side `f` with the pattern variables bound to the\nrespective matched values.\nIf used as `match h : e, ... with | p, ... => f | ...`, `h : e = p` is available\nwithin `f`.\n\nWhen not constructing a proof, `match` does not automatically substitute variables\nmatched on in dependent variables' types. Use `match (generalizing := true) ...` to\nenforce this.\n\nSyntax quotations can also be used in a pattern match.\nThis matches a `Syntax` value against quotations, pattern variables, or `_`.\n\nQuoted identifiers only match identical identifiers - custom matching such as by the preresolved\nnames only should be done explicitly.\n\n`Syntax.atom`s are ignored during matching by default except when part of a built-in literal.\nFor users introducing new atoms, we recommend wrapping them in dedicated syntax kinds if they\nshould participate in matching.\nFor example, in\n```lean\nsyntax \"c\" (\"foo\" <|> \"bar\") ...\n```\n`foo` and `bar` are indistinguishable during matching, but in\n```lean\nsyntax foo := \"foo\"\nsyntax \"c\" (foo <|> \"bar\") ...\n```\nthey are not.\n"}},
+    "content": "with"},
+   "110":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.match-324",
+      "name": ["Lean", "Parser", "Term", "match"],
+      "docs":
+      "Pattern matching. `match e, ... with | p, ... => f | ...` matches each given\nterm `e` against each pattern `p` of a match alternative. When all patterns\nof an alternative match, the `match` term evaluates to the value of the\ncorresponding right-hand side `f` with the pattern variables bound to the\nrespective matched values.\nIf used as `match h : e, ... with | p, ... => f | ...`, `h : e = p` is available\nwithin `f`.\n\nWhen not constructing a proof, `match` does not automatically substitute variables\nmatched on in dependent variables' types. Use `match (generalizing := true) ...` to\nenforce this.\n\nSyntax quotations can also be used in a pattern match.\nThis matches a `Syntax` value against quotations, pattern variables, or `_`.\n\nQuoted identifiers only match identical identifiers - custom matching such as by the preresolved\nnames only should be done explicitly.\n\n`Syntax.atom`s are ignored during matching by default except when part of a built-in literal.\nFor users introducing new atoms, we recommend wrapping them in dedicated syntax kinds if they\nshould participate in matching.\nFor example, in\n```lean\nsyntax \"c\" (\"foo\" <|> \"bar\") ...\n```\n`foo` and `bar` are indistinguishable during matching, but in\n```lean\nsyntax foo := \"foo\"\nsyntax \"c\" (foo <|> \"bar\") ...\n```\nthey are not.\n"}},
+    "content": "match"},
+   "108": {"kind": "unknown", "content": ":="},
+   "106":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm : Type",
+      "name": ["Syntax", "Tm"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Tm"},
+   "104":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.441"}},
+    "content": "tm"},
+   "102":
+   {"kind": {"var": {"typeFormat": null, "type": "W", "name": "_uniq.439"}},
+    "content": "w"},
+   "100": {"kind": "unknown", "content": "]"},
+   "0":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Module.import-0",
+      "name": ["Lean", "Parser", "Module", "import"],
+      "docs": null}},
+    "content": "import"}},
+  "nextKey": 731,
+  "messageContents": {},
+  "goals":
+  {"712":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 294, "ppType": null, "names": [486]},
+     {"typeAndVal": 684, "ppType": null, "names": [683]},
+     {"typeAndVal": 685, "ppType": null, "names": [696]},
+     {"typeAndVal": 330, "ppType": null, "names": [490]},
+     {"typeAndVal": 330, "ppType": null, "names": [492]},
+     {"typeAndVal": 330, "ppType": null, "names": [494]},
+     {"typeAndVal": 330, "ppType": null, "names": [496]},
+     {"typeAndVal": 298, "ppType": null, "names": [498]},
+     {"typeAndVal": 298, "ppType": null, "names": [500]},
+     {"typeAndVal": 697, "ppType": null, "names": [694]},
+     {"typeAndVal": 685, "ppType": null, "names": [698]},
+     {"typeAndVal": 705, "ppType": null, "names": [704]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 711},
+   "707":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 294, "ppType": null, "names": [486]},
+     {"typeAndVal": 684, "ppType": null, "names": [683]},
+     {"typeAndVal": 685, "ppType": null, "names": [696]},
+     {"typeAndVal": 330, "ppType": null, "names": [490]},
+     {"typeAndVal": 330, "ppType": null, "names": [492]},
+     {"typeAndVal": 330, "ppType": null, "names": [494]},
+     {"typeAndVal": 330, "ppType": null, "names": [496]},
+     {"typeAndVal": 298, "ppType": null, "names": [498]},
+     {"typeAndVal": 298, "ppType": null, "names": [500]},
+     {"typeAndVal": 697, "ppType": null, "names": [694]},
+     {"typeAndVal": 685, "ppType": null, "names": [698]},
+     {"typeAndVal": 705, "ppType": null, "names": [704]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 706},
+   "701":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 294, "ppType": null, "names": [486]},
+     {"typeAndVal": 684, "ppType": null, "names": [683]},
+     {"typeAndVal": 685, "ppType": null, "names": [696]},
+     {"typeAndVal": 330, "ppType": null, "names": [490]},
+     {"typeAndVal": 330, "ppType": null, "names": [492]},
+     {"typeAndVal": 330, "ppType": null, "names": [494]},
+     {"typeAndVal": 330, "ppType": null, "names": [496]},
+     {"typeAndVal": 298, "ppType": null, "names": [498]},
+     {"typeAndVal": 298, "ppType": null, "names": [500]},
+     {"typeAndVal": 697, "ppType": null, "names": [694]},
+     {"typeAndVal": 685, "ppType": null, "names": [698]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 700},
+   "687":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 294, "ppType": null, "names": [486]},
+     {"typeAndVal": 684, "ppType": null, "names": [683]},
+     {"typeAndVal": 685, "ppType": null, "names": [488]},
+     {"typeAndVal": 330, "ppType": null, "names": [490]},
+     {"typeAndVal": 330, "ppType": null, "names": [492]},
+     {"typeAndVal": 330, "ppType": null, "names": [494]},
+     {"typeAndVal": 330, "ppType": null, "names": [496]},
+     {"typeAndVal": 298, "ppType": null, "names": [498]},
+     {"typeAndVal": 298, "ppType": null, "names": [500]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 686},
+   "403":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 294, "ppType": null, "names": [378]},
+     {"typeAndVal": 389, "ppType": null, "names": [388]},
+     {"typeAndVal": 390, "ppType": null, "names": [380]},
+     {"typeAndVal": 298, "ppType": null, "names": [382]},
+     {"typeAndVal": 334, "ppType": null, "names": [400]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 402},
+   "395":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 294, "ppType": null, "names": [378]},
+     {"typeAndVal": 389, "ppType": null, "names": [388]},
+     {"typeAndVal": 390, "ppType": null, "names": [380]},
+     {"typeAndVal": 298, "ppType": null, "names": [382]},
+     {"typeAndVal": 298, "ppType": null, "names": [384]},
+     {"typeAndVal": 393, "ppType": null, "names": [386]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 394},
+   "361":
+   {"ppConclusion": null,
+    "name": "cons",
+    "hypotheses":
+    [{"typeAndVal": 294, "ppType": null, "names": [281]},
+     {"typeAndVal": 296, "ppType": null, "names": [295]},
+     {"typeAndVal": 297, "ppType": null, "names": [283]},
+     {"typeAndVal": 298, "ppType": null, "names": [287]},
+     {"typeAndVal": 330, "ppType": null, "names": [329]},
+     {"typeAndVal": 334, "ppType": null, "names": [331]},
+     {"typeAndVal": 337, "ppType": null, "names": [335]},
+     {"typeAndVal": 360, "ppType": null, "names": [357]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 350},
+   "351":
+   {"ppConclusion": null,
+    "name": "cons",
+    "hypotheses":
+    [{"typeAndVal": 294, "ppType": null, "names": [281]},
+     {"typeAndVal": 296, "ppType": null, "names": [295]},
+     {"typeAndVal": 297, "ppType": null, "names": [283]},
+     {"typeAndVal": 298, "ppType": null, "names": [287]},
+     {"typeAndVal": 330, "ppType": null, "names": [329]},
+     {"typeAndVal": 334, "ppType": null, "names": [331]},
+     {"typeAndVal": 337, "ppType": null, "names": [335]},
+     {"typeAndVal": 349, "ppType": null, "names": [348]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 350},
+   "342":
+   {"ppConclusion": null,
+    "name": "cons",
+    "hypotheses":
+    [{"typeAndVal": 294, "ppType": null, "names": [281]},
+     {"typeAndVal": 296, "ppType": null, "names": [295]},
+     {"typeAndVal": 297, "ppType": null, "names": [283]},
+     {"typeAndVal": 298, "ppType": null, "names": [287]},
+     {"typeAndVal": 330, "ppType": null, "names": [329]},
+     {"typeAndVal": 334, "ppType": null, "names": [331]},
+     {"typeAndVal": 337, "ppType": null, "names": [335]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 341},
+   "320":
+   {"ppConclusion": null,
+    "name": "nil",
+    "hypotheses":
+    [{"typeAndVal": 294, "ppType": null, "names": [281]},
+     {"typeAndVal": 296, "ppType": null, "names": [295]},
+     {"typeAndVal": 297, "ppType": null, "names": [283]},
+     {"typeAndVal": 298, "ppType": null, "names": [287]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 319},
+   "306":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 294, "ppType": null, "names": [281]},
+     {"typeAndVal": 296, "ppType": null, "names": [295]},
+     {"typeAndVal": 297, "ppType": null, "names": [283]},
+     {"typeAndVal": 298, "ppType": null, "names": [285]},
+     {"typeAndVal": 298, "ppType": null, "names": [287]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 305}},
+  "code":
+  {"99": {"token": {"tok": 98}},
+   "97": {"token": {"tok": 96}},
+   "95": {"token": {"tok": 94}},
+   "93": {"token": {"tok": 92}},
+   "91": {"token": {"tok": 90}},
+   "9": {"token": {"tok": 8}},
+   "89": {"seq": {"highlights": [5, 86, 2, 88, 10]}},
+   "88": {"token": {"tok": 87}},
+   "86": {"token": {"tok": 85}},
+   "84": {"seq": {"highlights": [5, 81, 2, 83, 10]}},
+   "83": {"token": {"tok": 82}},
+   "81": {"token": {"tok": 80}},
+   "79": {"seq": {"highlights": [12, 76, 2, 78, 10]}},
+   "78": {"token": {"tok": 77}},
+   "76": {"token": {"tok": 75}},
+   "74":
+   {"seq":
+    {"highlights":
+     [12,
+      24,
+      2,
+      26,
+      2,
+      28,
+      30,
+      2,
+      32,
+      2,
+      34,
+      2,
+      36,
+      38,
+      2,
+      40,
+      2,
+      42,
+      2,
+      30,
+      2,
+      44,
+      45,
+      47,
+      2,
+      32,
+      2,
+      30,
+      2,
+      49,
+      2,
+      51,
+      2,
+      49,
+      2,
+      53,
+      45,
+      55,
+      2,
+      32,
+      2,
+      57,
+      2,
+      59,
+      61,
+      2,
+      63,
+      2,
+      32,
+      2,
+      30,
+      65,
+      59,
+      67,
+      2,
+      32,
+      2,
+      51,
+      65,
+      69,
+      2,
+      61,
+      2,
+      71,
+      2,
+      63,
+      2,
+      49,
+      2,
+      73,
+      2,
+      61,
+      2,
+      67,
+      2,
+      49,
+      2,
+      73,
+      2,
+      63,
+      2,
+      67,
+      10]}},
+   "730": {"seq": {"highlights": [5, 729, 10]}},
+   "73": {"token": {"tok": 72}},
+   "729": {"token": {"tok": 728}},
+   "727": {"seq": {"highlights": [5, 726, 2, 477, 10]}},
+   "726": {"token": {"tok": 725}},
+   "724": {"seq": {"highlights": [12, 723, 2, 482, 10]}},
+   "723": {"token": {"tok": 722}},
+   "721":
+   {"seq":
+    {"highlights":
+     [503,
+      680,
+      2,
+      682,
+      2,
+      32,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      155,
+      2,
+      49,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      493,
+      2,
+      109,
+      2,
+      691,
+      180,
+      693,
+      2,
+      695,
+      2,
+      703,
+      2,
+      710,
+      180,
+      716,
+      180,
+      720,
+      10]}},
+   "720":
+   {"tactics": {"startPos": 3841, "info": [], "endPos": 3862, "content": 719}},
+   "719": {"seq": {"highlights": [718, 2, 695, 2, 699, 2, 708, 10]}},
+   "718": {"token": {"tok": 717}},
+   "716":
+   {"tactics":
+    {"startPos": 3829, "info": [712], "endPos": 3836, "content": 715}},
+   "715": {"seq": {"highlights": [714, 10]}},
+   "714": {"token": {"tok": 713}},
+   "711": {"seq": {"highlights": [291, 157, 291]}},
+   "710":
+   {"tactics":
+    {"startPos": 3819, "info": [707], "endPos": 3824, "content": 709}},
+   "71": {"token": {"tok": 70}},
+   "709": {"seq": {"highlights": [708, 10]}},
+   "708": {"token": {"tok": 704}},
+   "706": {"seq": {"highlights": [291, 131, 2, 699, 2, 493]}},
+   "705": {"seq": {"highlights": [291, 270, 2, 699, 2, 499]}},
+   "703":
+   {"tactics":
+    {"startPos": 3817, "info": [701], "endPos": 3818, "content": 702}},
+   "702": {"seq": {"highlights": [699, 10]}},
+   "700":
+   {"seq":
+    {"highlights": [291, 270, 2, 699, 2, 499, 2, 49, 2, 131, 2, 699, 2, 493]}},
+   "7": {"token": {"tok": 6}},
+   "699": {"token": {"tok": 698}},
+   "697": {"seq": {"highlights": [291, 509, 2, 487, 2, 499, 2, 155]}},
+   "695": {"token": {"tok": 694}},
+   "693": {"token": {"tok": 692}},
+   "691":
+   {"tactics":
+    {"startPos": 3796, "info": [687], "endPos": 3798, "content": 690}},
+   "690": {"seq": {"highlights": [689, 10]}},
+   "69": {"token": {"tok": 68}},
+   "689": {"token": {"tok": 688}},
+   "686":
+   {"seq":
+    {"highlights":
+     [291,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      155,
+      2,
+      49,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      493]}},
+   "685": {"seq": {"highlights": [291, 487, 291]}},
+   "684": {"seq": {"highlights": [291, 99, 2, 487]}},
+   "682": {"token": {"tok": 681}},
+   "680": {"token": {"tok": 679}},
+   "678":
+   {"seq":
+    {"highlights":
+     [503,
+      671,
+      2,
+      673,
+      2,
+      32,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      151,
+      2,
+      109,
+      2,
+      675,
+      2,
+      440,
+      2,
+      440,
+      2,
+      121,
+      2,
+      677,
+      10]}},
+   "677": {"token": {"tok": 676}},
+   "675": {"token": {"tok": 674}},
+   "673": {"token": {"tok": 672}},
+   "671": {"token": {"tok": 670}},
+   "67": {"token": {"tok": 66}},
+   "669":
+   {"seq":
+    {"highlights":
+     [503,
+      654,
+      2,
+      656,
+      2,
+      32,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      28,
+      493,
+      2,
+      637,
+      2,
+      495,
+      38,
+      2,
+      49,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      493,
+      2,
+      49,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      495,
+      2,
+      109,
+      180,
+      658,
+      2,
+      660,
+      2,
+      662,
+      2,
+      664,
+      2,
+      666,
+      2,
+      121,
+      219,
+      660,
+      2,
+      664,
+      2,
+      666,
+      2,
+      664,
+      2,
+      28,
+      668,
+      2,
+      664,
+      38,
+      2,
+      28,
+      662,
+      2,
+      664,
+      2,
+      666,
+      38,
+      10]}},
+   "668": {"token": {"tok": 667}},
+   "666": {"token": {"tok": 665}},
+   "664": {"token": {"tok": 663}},
+   "662": {"token": {"tok": 661}},
+   "660": {"token": {"tok": 659}},
+   "658": {"token": {"tok": 657}},
+   "656": {"token": {"tok": 655}},
+   "654": {"token": {"tok": 653}},
+   "652":
+   {"seq":
+    {"highlights":
+     [503,
+      633,
+      2,
+      635,
+      2,
+      32,
+      2,
+      509,
+      2,
+      487,
+      2,
+      28,
+      493,
+      2,
+      266,
+      2,
+      499,
+      38,
+      2,
+      495,
+      2,
+      49,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      28,
+      493,
+      2,
+      637,
+      2,
+      495,
+      38,
+      2,
+      109,
+      180,
+      639,
+      2,
+      641,
+      2,
+      643,
+      2,
+      645,
+      2,
+      647,
+      2,
+      649,
+      2,
+      651,
+      2,
+      121,
+      219,
+      641,
+      2,
+      647,
+      2,
+      549,
+      651,
+      551,
+      2,
+      446,
+      2,
+      649,
+      2,
+      645,
+      553,
+      10]}},
+   "651": {"token": {"tok": 650}},
+   "65": {"token": {"tok": 64}},
+   "649": {"token": {"tok": 648}},
+   "647": {"token": {"tok": 646}},
+   "645": {"token": {"tok": 644}},
+   "643": {"token": {"tok": 642}},
+   "641": {"token": {"tok": 640}},
+   "639": {"token": {"tok": 638}},
+   "637": {"token": {"tok": 636}},
+   "635": {"token": {"tok": 634}},
+   "633": {"token": {"tok": 632}},
+   "631":
+   {"seq":
+    {"highlights":
+     [503,
+      608,
+      2,
+      610,
+      2,
+      32,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      28,
+      493,
+      2,
+      141,
+      2,
+      495,
+      38,
+      2,
+      49,
+      2,
+      509,
+      2,
+      487,
+      2,
+      28,
+      493,
+      2,
+      266,
+      2,
+      499,
+      38,
+      2,
+      497,
+      2,
+      49,
+      2,
+      509,
+      2,
+      487,
+      2,
+      28,
+      495,
+      2,
+      266,
+      2,
+      499,
+      38,
+      2,
+      497,
+      2,
+      49,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      497,
+      2,
+      109,
+      180,
+      612,
+      2,
+      614,
+      2,
+      616,
+      2,
+      618,
+      2,
+      620,
+      2,
+      622,
+      2,
+      121,
+      2,
+      624,
+      2,
+      614,
+      2,
+      620,
+      2,
+      622,
+      2,
+      626,
+      219,
+      115,
+      2,
+      221,
+      2,
+      628,
+      2,
+      121,
+      2,
+      616,
+      2,
+      620,
+      2,
+      549,
+      628,
+      551,
+      2,
+      622,
+      553,
+      219,
+      115,
+      2,
+      225,
+      2,
+      630,
+      2,
+      121,
+      2,
+      618,
+      2,
+      620,
+      2,
+      549,
+      630,
+      551,
+      2,
+      622,
+      553,
+      10]}},
+   "630": {"token": {"tok": 629}},
+   "63": {"token": {"tok": 62}},
+   "628": {"token": {"tok": 627}},
+   "626": {"token": {"tok": 625}},
+   "624": {"token": {"tok": 623}},
+   "622": {"token": {"tok": 621}},
+   "620": {"token": {"tok": 619}},
+   "618": {"token": {"tok": 617}},
+   "616": {"token": {"tok": 615}},
+   "614": {"token": {"tok": 613}},
+   "612": {"token": {"tok": 611}},
+   "610": {"token": {"tok": 609}},
+   "61": {"token": {"tok": 60}},
+   "608": {"token": {"tok": 607}},
+   "606":
+   {"seq":
+    {"highlights":
+     [503,
+      595,
+      2,
+      597,
+      2,
+      32,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      495,
+      2,
+      49,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      28,
+      493,
+      2,
+      141,
+      2,
+      495,
+      38,
+      2,
+      109,
+      180,
+      599,
+      2,
+      601,
+      2,
+      603,
+      2,
+      605,
+      2,
+      121,
+      2,
+      225,
+      2,
+      28,
+      601,
+      2,
+      603,
+      2,
+      605,
+      38,
+      10]}},
+   "605": {"token": {"tok": 604}},
+   "603": {"token": {"tok": 602}},
+   "601": {"token": {"tok": 600}},
+   "599": {"token": {"tok": 598}},
+   "597": {"token": {"tok": 596}},
+   "595": {"token": {"tok": 594}},
+   "593":
+   {"seq":
+    {"highlights":
+     [503,
+      582,
+      2,
+      584,
+      2,
+      32,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      493,
+      2,
+      49,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      28,
+      493,
+      2,
+      141,
+      2,
+      495,
+      38,
+      2,
+      109,
+      180,
+      586,
+      2,
+      588,
+      2,
+      590,
+      2,
+      592,
+      2,
+      121,
+      2,
+      221,
+      2,
+      28,
+      588,
+      2,
+      590,
+      2,
+      592,
+      38,
+      10]}},
+   "592": {"token": {"tok": 591}},
+   "590": {"token": {"tok": 589}},
+   "59": {"token": {"tok": 58}},
+   "588": {"token": {"tok": 587}},
+   "586": {"token": {"tok": 585}},
+   "584": {"token": {"tok": 583}},
+   "582": {"token": {"tok": 581}},
+   "580":
+   {"seq":
+    {"highlights":
+     [503,
+      569,
+      2,
+      571,
+      2,
+      32,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      28,
+      493,
+      2,
+      133,
+      2,
+      495,
+      38,
+      2,
+      49,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      495,
+      2,
+      109,
+      180,
+      573,
+      2,
+      575,
+      2,
+      577,
+      2,
+      579,
+      2,
+      121,
+      2,
+      28,
+      575,
+      2,
+      577,
+      2,
+      579,
+      38,
+      202,
+      206,
+      10]}},
+   "579": {"token": {"tok": 578}},
+   "577": {"token": {"tok": 576}},
+   "575": {"token": {"tok": 574}},
+   "573": {"token": {"tok": 572}},
+   "571": {"token": {"tok": 570}},
+   "57": {"token": {"tok": 56}},
+   "569": {"token": {"tok": 568}},
+   "567":
+   {"seq":
+    {"highlights":
+     [503,
+      556,
+      2,
+      558,
+      2,
+      32,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      28,
+      493,
+      2,
+      133,
+      2,
+      495,
+      38,
+      2,
+      49,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      493,
+      2,
+      109,
+      180,
+      560,
+      2,
+      562,
+      2,
+      564,
+      2,
+      566,
+      2,
+      121,
+      2,
+      28,
+      562,
+      2,
+      564,
+      2,
+      566,
+      38,
+      202,
+      204,
+      10]}},
+   "566": {"token": {"tok": 565}},
+   "564": {"token": {"tok": 563}},
+   "562": {"token": {"tok": 561}},
+   "560": {"token": {"tok": 559}},
+   "558": {"token": {"tok": 557}},
+   "556": {"token": {"tok": 555}},
+   "554":
+   {"seq":
+    {"highlights":
+     [503,
+      535,
+      2,
+      537,
+      2,
+      32,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      493,
+      2,
+      49,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      495,
+      2,
+      49,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      28,
+      493,
+      2,
+      133,
+      2,
+      495,
+      38,
+      2,
+      109,
+      180,
+      539,
+      2,
+      541,
+      2,
+      543,
+      2,
+      545,
+      2,
+      547,
+      2,
+      121,
+      2,
+      549,
+      541,
+      2,
+      545,
+      2,
+      547,
+      551,
+      2,
+      543,
+      2,
+      545,
+      2,
+      547,
+      553,
+      10]}},
+   "553": {"token": {"tok": 552}},
+   "551": {"token": {"tok": 550}},
+   "55": {"token": {"tok": 54}},
+   "549": {"token": {"tok": 548}},
+   "547": {"token": {"tok": 546}},
+   "545": {"token": {"tok": 544}},
+   "543": {"token": {"tok": 542}},
+   "541": {"token": {"tok": 540}},
+   "539": {"token": {"tok": 538}},
+   "537": {"token": {"tok": 536}},
+   "535": {"token": {"tok": 534}},
+   "533":
+   {"seq":
+    {"highlights":
+     [503,
+      518,
+      2,
+      520,
+      2,
+      32,
+      2,
+      499,
+      2,
+      71,
+      2,
+      501,
+      2,
+      49,
+      2,
+      509,
+      2,
+      487,
+      2,
+      499,
+      2,
+      491,
+      2,
+      49,
+      2,
+      509,
+      2,
+      487,
+      2,
+      501,
+      2,
+      491,
+      2,
+      109,
+      180,
+      522,
+      2,
+      524,
+      2,
+      526,
+      2,
+      528,
+      2,
+      530,
+      2,
+      121,
+      2,
+      526,
+      2,
+      528,
+      2,
+      28,
+      532,
+      2,
+      524,
+      2,
+      530,
+      38,
+      10]}},
+   "532": {"token": {"tok": 531}},
+   "530": {"token": {"tok": 529}},
+   "53": {"token": {"tok": 52}},
+   "528": {"token": {"tok": 527}},
+   "526": {"token": {"tok": 525}},
+   "524": {"token": {"tok": 523}},
+   "522": {"token": {"tok": 521}},
+   "520": {"token": {"tok": 519}},
+   "518": {"token": {"tok": 517}},
+   "516":
+   {"seq":
+    {"highlights":
+     [503,
+      505,
+      2,
+      507,
+      2,
+      32,
+      2,
+      509,
+      2,
+      487,
+      2,
+      28,
+      493,
+      2,
+      266,
+      2,
+      499,
+      38,
+      2,
+      493,
+      2,
+      109,
+      2,
+      511,
+      2,
+      513,
+      2,
+      515,
+      2,
+      121,
+      2,
+      515,
+      202,
+      204,
+      10]}},
+   "515": {"token": {"tok": 514}},
+   "513": {"token": {"tok": 512}},
+   "511": {"token": {"tok": 510}},
+   "51": {"token": {"tok": 50}},
+   "509": {"token": {"tok": 508}},
+   "507": {"token": {"tok": 506}},
+   "505": {"token": {"tok": 504}},
+   "503": {"text": {"str": "\n\n  "}},
+   "502":
+   {"seq":
+    {"highlights":
+     [45,
+      485,
+      2,
+      59,
+      487,
+      2,
+      32,
+      2,
+      34,
+      2,
+      36,
+      65,
+      2,
+      97,
+      99,
+      2,
+      487,
+      101,
+      2,
+      28,
+      489,
+      2,
+      32,
+      2,
+      487,
+      38,
+      2,
+      28,
+      491,
+      2,
+      493,
+      2,
+      495,
+      2,
+      497,
+      2,
+      32,
+      2,
+      107,
+      38,
+      2,
+      28,
+      499,
+      2,
+      501,
+      2,
+      32,
+      2,
+      262,
+      38,
+      10]}},
+   "501": {"token": {"tok": 500}},
+   "5": {"text": {"str": "\n"}},
+   "499": {"token": {"tok": 498}},
+   "497": {"token": {"tok": 496}},
+   "495": {"token": {"tok": 494}},
+   "493": {"token": {"tok": 492}},
+   "491": {"token": {"tok": 490}},
+   "49": {"token": {"tok": 48}},
+   "489": {"token": {"tok": 488}},
+   "487": {"token": {"tok": 486}},
+   "485": {"token": {"tok": 484}},
+   "483": {"seq": {"highlights": [5, 480, 2, 482, 10]}},
+   "482": {"token": {"tok": 481}},
+   "480": {"token": {"tok": 479}},
+   "478": {"seq": {"highlights": [12, 475, 2, 477, 10]}},
+   "477": {"token": {"tok": 476}},
+   "475": {"token": {"tok": 474}},
+   "473":
+   {"seq":
+    {"highlights":
+     [12,
+      462,
+      2,
+      464,
+      2,
+      28,
+      466,
+      2,
+      32,
+      2,
+      262,
+      38,
+      2,
+      28,
+      468,
+      2,
+      32,
+      2,
+      107,
+      38,
+      2,
+      32,
+      2,
+      53,
+      2,
+      109,
+      45,
+      57,
+      2,
+      28,
+      470,
+      2,
+      32,
+      2,
+      34,
+      2,
+      36,
+      38,
+      2,
+      97,
+      99,
+      2,
+      470,
+      101,
+      2,
+      28,
+      472,
+      2,
+      32,
+      2,
+      470,
+      38,
+      69,
+      2,
+      270,
+      2,
+      472,
+      2,
+      466,
+      2,
+      49,
+      2,
+      131,
+      2,
+      472,
+      2,
+      468,
+      10]}},
+   "472": {"token": {"tok": 471}},
+   "470": {"token": {"tok": 469}},
+   "47": {"token": {"tok": 46}},
+   "468": {"token": {"tok": 467}},
+   "466": {"token": {"tok": 465}},
+   "464": {"token": {"tok": 463}},
+   "462": {"token": {"tok": 461}},
+   "460":
+   {"seq":
+    {"highlights":
+     [12,
+      449,
+      2,
+      451,
+      2,
+      28,
+      453,
+      2,
+      32,
+      2,
+      34,
+      2,
+      36,
+      38,
+      2,
+      97,
+      99,
+      2,
+      453,
+      101,
+      2,
+      28,
+      455,
+      2,
+      32,
+      2,
+      262,
+      38,
+      2,
+      28,
+      457,
+      2,
+      32,
+      2,
+      107,
+      38,
+      2,
+      32,
+      2,
+      53,
+      2,
+      109,
+      45,
+      57,
+      2,
+      28,
+      459,
+      2,
+      32,
+      2,
+      453,
+      38,
+      69,
+      2,
+      270,
+      2,
+      459,
+      2,
+      455,
+      2,
+      49,
+      2,
+      131,
+      2,
+      459,
+      2,
+      457,
+      10]}},
+   "459": {"token": {"tok": 458}},
+   "457": {"token": {"tok": 456}},
+   "455": {"token": {"tok": 454}},
+   "453": {"token": {"tok": 452}},
+   "451": {"token": {"tok": 450}},
+   "45": {"text": {"str": "\n  "}},
+   "449": {"token": {"tok": 448}},
+   "447":
+   {"seq":
+    {"highlights":
+     [12,
+      420,
+      2,
+      422,
+      2,
+      59,
+      424,
+      2,
+      32,
+      2,
+      34,
+      2,
+      36,
+      65,
+      2,
+      97,
+      99,
+      2,
+      424,
+      101,
+      2,
+      59,
+      426,
+      2,
+      428,
+      2,
+      32,
+      2,
+      424,
+      65,
+      2,
+      59,
+      430,
+      2,
+      32,
+      2,
+      262,
+      65,
+      2,
+      28,
+      432,
+      2,
+      32,
+      2,
+      426,
+      2,
+      71,
+      2,
+      428,
+      38,
+      180,
+      28,
+      434,
+      2,
+      32,
+      2,
+      270,
+      2,
+      426,
+      2,
+      430,
+      38,
+      2,
+      32,
+      2,
+      270,
+      2,
+      428,
+      2,
+      430,
+      2,
+      109,
+      45,
+      436,
+      2,
+      430,
+      69,
+      2,
+      434,
+      2,
+      438,
+      45,
+      115,
+      2,
+      97,
+      101,
+      69,
+      2,
+      440,
+      2,
+      121,
+      2,
+      247,
+      45,
+      115,
+      2,
+      440,
+      2,
+      266,
+      2,
+      440,
+      69,
+      2,
+      196,
+      442,
+      69,
+      2,
+      444,
+      208,
+      2,
+      121,
+      2,
+      196,
+      198,
+      2,
+      432,
+      2,
+      442,
+      69,
+      2,
+      446,
+      2,
+      432,
+      2,
+      444,
+      208,
+      10]}},
+   "446": {"token": {"tok": 445}},
+   "444": {"token": {"tok": 443}},
+   "442": {"token": {"tok": 441}},
+   "440": {"token": {"tok": 439}},
+   "44": {"token": {"tok": 43}},
+   "438": {"token": {"tok": 437}},
+   "436": {"token": {"tok": 435}},
+   "434": {"token": {"tok": 433}},
+   "432": {"token": {"tok": 431}},
+   "430": {"token": {"tok": 429}},
+   "428": {"token": {"tok": 427}},
+   "426": {"token": {"tok": 425}},
+   "424": {"token": {"tok": 423}},
+   "422": {"token": {"tok": 421}},
+   "420": {"token": {"tok": 419}},
+   "42": {"token": {"tok": 41}},
+   "418":
+   {"seq":
+    {"highlights":
+     [12,
+      375,
+      2,
+      377,
+      2,
+      59,
+      379,
+      2,
+      32,
+      2,
+      34,
+      2,
+      36,
+      65,
+      2,
+      97,
+      99,
+      2,
+      379,
+      101,
+      2,
+      59,
+      381,
+      2,
+      32,
+      2,
+      379,
+      65,
+      2,
+      59,
+      383,
+      2,
+      385,
+      2,
+      32,
+      2,
+      262,
+      65,
+      2,
+      28,
+      387,
+      2,
+      32,
+      2,
+      383,
+      2,
+      71,
+      2,
+      385,
+      38,
+      2,
+      32,
+      180,
+      270,
+      2,
+      381,
+      2,
+      385,
+      2,
+      49,
+      2,
+      270,
+      2,
+      381,
+      2,
+      383,
+      2,
+      109,
+      2,
+      399,
+      45,
+      411,
+      45,
+      417,
+      10]}},
+   "417":
+   {"tactics": {"startPos": 1670, "info": [], "endPos": 1700, "content": 416}},
+   "416": {"seq": {"highlights": [413, 2, 415, 2, 401, 2, 383, 10]}},
+   "415": {"token": {"tok": 414}},
+   "413": {"token": {"tok": 412}},
+   "411":
+   {"tactics":
+    {"startPos": 1640, "info": [403], "endPos": 1667, "content": 410}},
+   "410":
+   {"seq":
+    {"highlights": [405, 2, 387, 2, 407, 2, 196, 401, 69, 2, 409, 208, 10]}},
+   "409": {"token": {"tok": 408}},
+   "407": {"token": {"tok": 406}},
+   "405": {"token": {"tok": 404}},
+   "402":
+   {"seq":
+    {"highlights":
+     [291,
+      270,
+      2,
+      381,
+      2,
+      300,
+      401,
+      2,
+      302,
+      2,
+      383,
+      304,
+      2,
+      49,
+      2,
+      270,
+      2,
+      381,
+      2,
+      383]}},
+   "401": {"token": {"tok": 400}},
+   "40": {"token": {"tok": 39}},
+   "4": {"token": {"tok": 3}},
+   "399":
+   {"tactics":
+    {"startPos": 1635, "info": [395], "endPos": 1637, "content": 398}},
+   "398": {"seq": {"highlights": [397, 10]}},
+   "397": {"token": {"tok": 396}},
+   "394":
+   {"seq":
+    {"highlights": [291, 270, 2, 381, 2, 385, 2, 49, 2, 270, 2, 381, 2, 383]}},
+   "393": {"seq": {"highlights": [291, 383, 2, 392, 2, 385]}},
+   "392": {"token": {"tok": 391}},
+   "390": {"seq": {"highlights": [291, 379, 291]}},
+   "389": {"seq": {"highlights": [291, 99, 2, 379]}},
+   "387": {"token": {"tok": 386}},
+   "385": {"token": {"tok": 384}},
+   "383": {"token": {"tok": 382}},
+   "381": {"token": {"tok": 380}},
+   "38": {"token": {"tok": 37}},
+   "379": {"token": {"tok": 378}},
+   "377": {"token": {"tok": 376}},
+   "375": {"token": {"tok": 374}},
+   "373":
+   {"seq":
+    {"highlights":
+     [12,
+      278,
+      2,
+      280,
+      2,
+      59,
+      282,
+      2,
+      32,
+      2,
+      34,
+      2,
+      36,
+      65,
+      2,
+      97,
+      99,
+      2,
+      282,
+      101,
+      2,
+      59,
+      284,
+      2,
+      32,
+      2,
+      282,
+      65,
+      2,
+      28,
+      286,
+      2,
+      288,
+      2,
+      32,
+      2,
+      262,
+      38,
+      2,
+      32,
+      180,
+      270,
+      2,
+      284,
+      2,
+      28,
+      286,
+      2,
+      290,
+      2,
+      288,
+      38,
+      2,
+      49,
+      2,
+      270,
+      2,
+      284,
+      2,
+      288,
+      2,
+      109,
+      2,
+      310,
+      45,
+      312,
+      2,
+      286,
+      2,
+      314,
+      45,
+      324,
+      219,
+      328,
+      45,
+      347,
+      219,
+      356,
+      219,
+      367,
+      219,
+      372,
+      10]}},
+   "372":
+   {"tactics": {"startPos": 1487, "info": [], "endPos": 1499, "content": 371}},
+   "371": {"seq": {"highlights": [369, 2, 345, 2, 370, 202, 206, 10]}},
+   "370": {"token": {"tok": 357}},
+   "369": {"token": {"tok": 368}},
+   "367":
+   {"tactics":
+    {"startPos": 1456, "info": [361], "endPos": 1480, "content": 366}},
+   "366": {"seq": {"highlights": [363, 2, 97, 270, 101, 2, 365, 2, 354, 10]}},
+   "365": {"token": {"tok": 364}},
+   "363": {"token": {"tok": 362}},
+   "360":
+   {"seq":
+    {"highlights":
+     [291,
+      131,
+      2,
+      284,
+      2,
+      338,
+      2,
+      359,
+      2,
+      270,
+      2,
+      284,
+      2,
+      300,
+      336,
+      2,
+      302,
+      2,
+      288,
+      304]}},
+   "36": {"token": {"tok": 35}},
+   "359": {"token": {"tok": 358}},
+   "356":
+   {"tactics":
+    {"startPos": 1442, "info": [351], "endPos": 1449, "content": 355}},
+   "355": {"seq": {"highlights": [353, 2, 354, 10]}},
+   "354": {"token": {"tok": 348}},
+   "353": {"token": {"tok": 352}},
+   "350": {"seq": {"highlights": [291, 270, 2, 284, 2, 288]}},
+   "349":
+   {"seq":
+    {"highlights":
+     [291, 270, 2, 284, 2, 300, 338, 2, 340, 2, 336, 2, 302, 2, 288, 304]}},
+   "347":
+   {"tactics":
+    {"startPos": 1418, "info": [342], "endPos": 1435, "content": 346}},
+   "346":
+   {"seq": {"highlights": [115, 2, 344, 2, 338, 2, 336, 2, 345, 2, 121, 10]}},
+   "345": {"token": {"tok": 335}},
+   "344": {"token": {"tok": 343}},
+   "341":
+   {"seq":
+    {"highlights":
+     [291,
+      270,
+      2,
+      284,
+      2,
+      300,
+      338,
+      2,
+      340,
+      2,
+      336,
+      2,
+      302,
+      2,
+      288,
+      304,
+      2,
+      49,
+      2,
+      270,
+      2,
+      284,
+      2,
+      288]}},
+   "340": {"token": {"tok": 339}},
+   "34": {"token": {"tok": 33}},
+   "338": {"token": {"tok": 329}},
+   "337":
+   {"seq":
+    {"highlights":
+     [291,
+      270,
+      2,
+      284,
+      2,
+      300,
+      336,
+      2,
+      302,
+      2,
+      288,
+      304,
+      2,
+      49,
+      2,
+      270,
+      2,
+      284,
+      2,
+      288]}},
+   "336": {"token": {"tok": 331}},
+   "334": {"seq": {"highlights": [291, 333, 2, 107]}},
+   "333": {"token": {"tok": 332}},
+   "330": {"seq": {"highlights": [291, 107, 291]}},
+   "328":
+   {"tactics": {"startPos": 1411, "info": [], "endPos": 1415, "content": 327}},
+   "327": {"seq": {"highlights": [326, 10]}},
+   "326": {"token": {"tok": 325}},
+   "324":
+   {"tactics":
+    {"startPos": 1396, "info": [320], "endPos": 1404, "content": 323}},
+   "323": {"seq": {"highlights": [115, 2, 322, 2, 121, 10]}},
+   "322": {"token": {"tok": 321}},
+   "32": {"token": {"tok": 31}},
+   "319":
+   {"seq":
+    {"highlights":
+     [291,
+      270,
+      2,
+      284,
+      2,
+      300,
+      316,
+      318,
+      2,
+      302,
+      2,
+      288,
+      304,
+      2,
+      49,
+      2,
+      270,
+      2,
+      284,
+      2,
+      288]}},
+   "318": {"token": {"tok": 317}},
+   "316": {"token": {"tok": 315}},
+   "314": {"token": {"tok": 313}},
+   "312": {"token": {"tok": 311}},
+   "310":
+   {"tactics":
+    {"startPos": 1371, "info": [306], "endPos": 1373, "content": 309}},
+   "309": {"seq": {"highlights": [308, 10]}},
+   "308": {"token": {"tok": 307}},
+   "305":
+   {"seq":
+    {"highlights":
+     [291,
+      270,
+      2,
+      284,
+      2,
+      300,
+      286,
+      2,
+      302,
+      2,
+      288,
+      304,
+      2,
+      49,
+      2,
+      270,
+      2,
+      284,
+      2,
+      288]}},
+   "304": {"token": {"tok": 303}},
+   "302": {"token": {"tok": 301}},
+   "300": {"token": {"tok": 299}},
+   "30": {"token": {"tok": 29}},
+   "298": {"seq": {"highlights": [291, 262, 291]}},
+   "297": {"seq": {"highlights": [291, 282, 291]}},
+   "296": {"seq": {"highlights": [291, 99, 2, 282]}},
+   "294": {"seq": {"highlights": [291, 293, 291]}},
+   "293": {"token": {"tok": 292}},
+   "291": {"text": {"str": ""}},
+   "290": {"token": {"tok": 289}},
+   "288": {"token": {"tok": 287}},
+   "286": {"token": {"tok": 285}},
+   "284": {"token": {"tok": 283}},
+   "282": {"token": {"tok": 281}},
+   "280": {"token": {"tok": 279}},
+   "28": {"token": {"tok": 27}},
+   "278": {"token": {"tok": 277}},
+   "276": {"seq": {"highlights": [12, 273, 2, 97, 275, 101, 2, 270, 10]}},
+   "275": {"token": {"tok": 274}},
+   "273": {"token": {"tok": 272}},
+   "271":
+   {"seq":
+    {"highlights":
+     [12,
+      254,
+      2,
+      256,
+      2,
+      59,
+      258,
+      2,
+      32,
+      2,
+      34,
+      2,
+      36,
+      65,
+      2,
+      97,
+      99,
+      2,
+      258,
+      101,
+      2,
+      28,
+      260,
+      2,
+      32,
+      2,
+      258,
+      38,
+      2,
+      32,
+      2,
+      262,
+      2,
+      49,
+      2,
+      53,
+      45,
+      115,
+      2,
+      97,
+      101,
+      2,
+      121,
+      2,
+      153,
+      45,
+      115,
+      2,
+      28,
+      264,
+      2,
+      266,
+      2,
+      268,
+      38,
+      2,
+      121,
+      2,
+      131,
+      2,
+      260,
+      2,
+      264,
+      2,
+      133,
+      2,
+      270,
+      2,
+      260,
+      2,
+      268,
+      10]}},
+   "270": {"token": {"tok": 269}},
+   "268": {"token": {"tok": 267}},
+   "266": {"token": {"tok": 265}},
+   "264": {"token": {"tok": 263}},
+   "262": {"token": {"tok": 261}},
+   "260": {"token": {"tok": 259}},
+   "26": {"token": {"tok": 25}},
+   "258": {"token": {"tok": 257}},
+   "256": {"token": {"tok": 255}},
+   "254": {"token": {"tok": 253}},
+   "252":
+   {"seq":
+    {"highlights":
+     [12,
+      165,
+      2,
+      167,
+      2,
+      59,
+      169,
+      2,
+      32,
+      2,
+      34,
+      2,
+      36,
+      65,
+      2,
+      97,
+      99,
+      2,
+      169,
+      101,
+      2,
+      59,
+      171,
+      2,
+      173,
+      2,
+      32,
+      2,
+      169,
+      65,
+      2,
+      59,
+      175,
+      2,
+      32,
+      2,
+      107,
+      65,
+      2,
+      28,
+      177,
+      2,
+      32,
+      2,
+      171,
+      2,
+      71,
+      2,
+      173,
+      38,
+      2,
+      28,
+      179,
+      2,
+      32,
+      2,
+      131,
+      2,
+      171,
+      2,
+      175,
+      38,
+      180,
+      32,
+      2,
+      131,
+      2,
+      173,
+      2,
+      175,
+      2,
+      109,
+      45,
+      182,
+      2,
+      175,
+      2,
+      184,
+      45,
+      115,
+      2,
+      117,
+      2,
+      186,
+      2,
+      121,
+      2,
+      188,
+      2,
+      177,
+      2,
+      190,
+      45,
+      115,
+      2,
+      125,
+      2,
+      192,
+      2,
+      194,
+      2,
+      121,
+      2,
+      196,
+      198,
+      2,
+      177,
+      2,
+      200,
+      202,
+      204,
+      69,
+      2,
+      198,
+      2,
+      177,
+      2,
+      200,
+      202,
+      206,
+      208,
+      45,
+      115,
+      2,
+      135,
+      2,
+      210,
+      2,
+      212,
+      2,
+      121,
+      2,
+      214,
+      2,
+      216,
+      2,
+      218,
+      219,
+      115,
+      2,
+      221,
+      2,
+      223,
+      2,
+      121,
+      2,
+      221,
+      2,
+      28,
+      198,
+      2,
+      177,
+      2,
+      223,
+      38,
+      219,
+      115,
+      2,
+      225,
+      2,
+      227,
+      2,
+      121,
+      2,
+      225,
+      2,
+      28,
+      198,
+      2,
+      177,
+      2,
+      227,
+      38,
+      45,
+      115,
+      2,
+      229,
+      2,
+      231,
+      2,
+      233,
+      2,
+      121,
+      2,
+      235,
+      2,
+      237,
+      2,
+      239,
+      2,
+      241,
+      2,
+      121,
+      2,
+      243,
+      2,
+      237,
+      2,
+      28,
+      245,
+      2,
+      177,
+      2,
+      239,
+      38,
+      2,
+      241,
+      45,
+      115,
+      2,
+      151,
+      2,
+      121,
+      2,
+      247,
+      45,
+      115,
+      2,
+      155,
+      2,
+      121,
+      2,
+      249,
+      2,
+      251,
+      10]}},
+   "251": {"token": {"tok": 250}},
+   "249": {"token": {"tok": 248}},
+   "247": {"token": {"tok": 246}},
+   "245": {"token": {"tok": 244}},
+   "243": {"token": {"tok": 242}},
+   "241": {"token": {"tok": 240}},
+   "24": {"token": {"tok": 23}},
+   "239": {"token": {"tok": 238}},
+   "237": {"token": {"tok": 236}},
+   "235": {"token": {"tok": 234}},
+   "233": {"token": {"tok": 232}},
+   "231": {"token": {"tok": 230}},
+   "229": {"token": {"tok": 228}},
+   "227": {"token": {"tok": 226}},
+   "225": {"token": {"tok": 224}},
+   "223": {"token": {"tok": 222}},
+   "221": {"token": {"tok": 220}},
+   "22": {"seq": {"highlights": [12, 19, 2, 21, 10]}},
+   "219": {"text": {"str": "\n      "}},
+   "218": {"token": {"tok": 217}},
+   "216": {"token": {"tok": 215}},
+   "214": {"token": {"tok": 213}},
+   "212": {"token": {"tok": 211}},
+   "210": {"token": {"tok": 209}},
+   "21": {"token": {"tok": 20}},
+   "208": {"token": {"tok": 207}},
+   "206": {"token": {"tok": 205}},
+   "204": {"token": {"tok": 203}},
+   "202": {"token": {"tok": 201}},
+   "200": {"token": {"tok": 199}},
+   "2": {"text": {"str": " "}},
+   "198": {"token": {"tok": 197}},
+   "196": {"token": {"tok": 195}},
+   "194": {"token": {"tok": 193}},
+   "192": {"token": {"tok": 191}},
+   "190": {"token": {"tok": 189}},
+   "19": {"token": {"tok": 18}},
+   "188": {"token": {"tok": 187}},
+   "186": {"token": {"tok": 185}},
+   "184": {"token": {"tok": 183}},
+   "182": {"token": {"tok": 181}},
+   "180": {"text": {"str": "\n    "}},
+   "179": {"token": {"tok": 178}},
+   "177": {"token": {"tok": 176}},
+   "175": {"token": {"tok": 174}},
+   "173": {"token": {"tok": 172}},
+   "171": {"token": {"tok": 170}},
+   "17": {"seq": {"highlights": [12, 14, 2, 16, 10]}},
+   "169": {"token": {"tok": 168}},
+   "167": {"token": {"tok": 166}},
+   "165": {"token": {"tok": 164}},
+   "163": {"seq": {"highlights": [12, 160, 2, 97, 162, 101, 2, 131, 10]}},
+   "162": {"token": {"tok": 161}},
+   "160": {"token": {"tok": 159}},
+   "16": {"token": {"tok": 15}},
+   "158":
+   {"seq":
+    {"highlights":
+     [12,
+      91,
+      2,
+      93,
+      2,
+      59,
+      95,
+      2,
+      32,
+      2,
+      34,
+      2,
+      36,
+      65,
+      2,
+      97,
+      99,
+      2,
+      95,
+      101,
+      2,
+      28,
+      103,
+      2,
+      32,
+      2,
+      95,
+      38,
+      2,
+      28,
+      105,
+      2,
+      32,
+      2,
+      107,
+      38,
+      2,
+      32,
+      2,
+      53,
+      2,
+      109,
+      45,
+      111,
+      2,
+      105,
+      2,
+      113,
+      45,
+      115,
+      2,
+      117,
+      2,
+      119,
+      2,
+      121,
+      2,
+      123,
+      2,
+      103,
+      2,
+      119,
+      45,
+      115,
+      2,
+      125,
+      2,
+      127,
+      2,
+      129,
+      2,
+      121,
+      2,
+      131,
+      2,
+      103,
+      2,
+      127,
+      2,
+      133,
+      2,
+      131,
+      2,
+      103,
+      2,
+      129,
+      45,
+      115,
+      2,
+      135,
+      2,
+      137,
+      2,
+      139,
+      2,
+      121,
+      2,
+      131,
+      2,
+      103,
+      2,
+      137,
+      2,
+      141,
+      2,
+      131,
+      2,
+      103,
+      2,
+      139,
+      45,
+      115,
+      2,
+      143,
+      2,
+      145,
+      2,
+      147,
+      2,
+      121,
+      2,
+      57,
+      2,
+      28,
+      149,
+      2,
+      32,
+      2,
+      95,
+      38,
+      69,
+      2,
+      103,
+      2,
+      71,
+      2,
+      149,
+      2,
+      49,
+      2,
+      131,
+      2,
+      149,
+      2,
+      145,
+      2,
+      49,
+      2,
+      131,
+      2,
+      149,
+      2,
+      147,
+      45,
+      115,
+      2,
+      151,
+      2,
+      121,
+      2,
+      153,
+      45,
+      115,
+      2,
+      155,
+      2,
+      121,
+      2,
+      157,
+      10]}},
+   "157": {"token": {"tok": 156}},
+   "155": {"token": {"tok": 154}},
+   "153": {"token": {"tok": 152}},
+   "151": {"token": {"tok": 150}},
+   "149": {"token": {"tok": 148}},
+   "147": {"token": {"tok": 146}},
+   "145": {"token": {"tok": 144}},
+   "143": {"token": {"tok": 142}},
+   "141": {"token": {"tok": 140}},
+   "14": {"token": {"tok": 13}},
+   "139": {"token": {"tok": 138}},
+   "137": {"token": {"tok": 136}},
+   "135": {"token": {"tok": 134}},
+   "133": {"token": {"tok": 132}},
+   "131": {"token": {"tok": 130}},
+   "129": {"token": {"tok": 128}},
+   "127": {"token": {"tok": 126}},
+   "125": {"token": {"tok": 124}},
+   "123": {"token": {"tok": 122}},
+   "121": {"token": {"tok": 120}},
+   "12": {"text": {"str": "\n\n"}},
+   "119": {"token": {"tok": 118}},
+   "117": {"token": {"tok": 116}},
+   "115": {"token": {"tok": 114}},
+   "113": {"token": {"tok": 112}},
+   "111": {"token": {"tok": 110}},
+   "11": {"seq": {"highlights": [1, 2, 4, 5, 7, 2, 9, 10]}},
+   "109": {"token": {"tok": 108}},
+   "107": {"token": {"tok": 106}},
+   "105": {"token": {"tok": 104}},
+   "103": {"token": {"tok": 102}},
+   "101": {"token": {"tok": 100}},
+   "10": {"seq": {"highlights": []}},
+   "1": {"token": {"tok": 0}}}}}

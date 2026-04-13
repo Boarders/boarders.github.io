@@ -1,0 +1,2088 @@
+{"items":
+ [{"range":
+   {"start": {"line": 1, "column": 1}, "end": {"line": 2, "column": 22}},
+   "kind": "Lean.Parser.Module.header",
+   "defines": [],
+   "code": 11},
+  {"range":
+   {"start": {"line": 4, "column": 1}, "end": {"line": 4, "column": 11}},
+   "kind": "Lean.Parser.Command.universe",
+   "defines": [],
+   "code": 17},
+  {"range":
+   {"start": {"line": 6, "column": 1}, "end": {"line": 49, "column": 1}},
+   "kind": "Lean.Parser.Command.namespace",
+   "defines": [],
+   "code": 22},
+  {"range":
+   {"start": {"line": 7, "column": 1}, "end": {"line": 7, "column": 12}},
+   "kind": "Lean.Parser.Command.open",
+   "defines": [],
+   "code": 27},
+  {"range":
+   {"start": {"line": 8, "column": 1}, "end": {"line": 8, "column": 8}},
+   "kind": "Lean.Parser.Command.open",
+   "defines": [],
+   "code": 32},
+  {"range":
+   {"start": {"line": 10, "column": 1}, "end": {"line": 48, "column": 25}},
+   "kind": "Lean.Parser.Command.declaration",
+   "defines": ["Beth.soundness"],
+   "code": 510},
+  {"range":
+   {"start": {"line": 49, "column": 1}, "end": {"line": 49, "column": 1}},
+   "kind": "Lean.Parser.Command.eoi",
+   "defines": [],
+   "code": 513}],
+ "data":
+ {"tokens":
+  {"96": {"kind": "unknown", "content": "=>"},
+   "94":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Pf.assume {Γ : Ctxt} {P : Tm} : Pf (P :: Γ) P",
+      "name": ["Syntax", "Pf", "assume"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Pf.assume"},
+   "92": {"kind": "unknown", "content": "|"},
+   "88":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "List.cons.{u} {α : Type u} (head : α) (tail : List α) : List α",
+      "name": ["List", "cons"],
+      "isDef": false,
+      "docs":
+      "The list whose first element is `head`, where `tail` is the rest of the list.\nUsually written `head :: tail`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `::` in identifiers is `cons`.\n\n * The recommended spelling of `[a]` in identifiers is `singleton`."}},
+    "content": ")"},
+   "85":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "List.cons.{u} {α : Type u} (head : α) (tail : List α) : List α",
+      "name": ["List", "cons"],
+      "isDef": false,
+      "docs":
+      "The list whose first element is `head`, where `tail` is the rest of the list.\nUsually written `head :: tail`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `::` in identifiers is `cons`.\n\n * The recommended spelling of `[a]` in identifiers is `singleton`."}},
+    "content": "::"},
+   "82":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "List.cons.{u} {α : Type u} (head : α) (tail : List α) : List α",
+      "name": ["List", "cons"],
+      "isDef": false,
+      "docs":
+      "The list whose first element is `head`, where `tail` is the rest of the list.\nUsually written `head :: tail`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `::` in identifiers is `cons`.\n\n * The recommended spelling of `[a]` in identifiers is `singleton`."}},
+    "content": "("},
+   "81":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.671"}},
+    "content": "Γ✝"},
+   "80":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.670"}},
+    "content": "tm"},
+   "8":
+   {"kind": {"moduleName": {"name": ["Beth", "Semantics"]}},
+    "content": "Beth.Semantics"},
+   "78":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.9"}},
+    "content": "tm✝"},
+   "75":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "BethFrame W", "name": "_uniq.44"}},
+    "content": "inst✝"},
+   "72":
+   {"kind":
+    {"sort":
+     {"doc?": "A type universe. `Type ≡ Type 0`, `Type u ≡ Sort (u + 1)`. "}},
+    "content": "Type u"},
+   "68":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Beth.Entails.{u} (W : Type u) [BethFrame W] (Γ : Ctxt) (t : Tm) : Prop",
+      "name": ["Beth", "Entails"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Entails"},
+   "66": {"kind": "unknown", "content": "→"},
+   "63":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Pf (Γ : Ctxt) : Tm → Prop",
+      "name": ["Syntax", "Pf"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Pf"},
+   "61":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm : Type",
+      "name": ["Syntax", "Tm"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Tm"},
+   "6":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Module.import-20",
+      "name": ["Lean", "Parser", "Module", "import"],
+      "docs": null}},
+    "content": "import"},
+   "59":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.9"}},
+    "content": "tm"},
+   "57":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Ctxt : Type",
+      "name": ["Syntax", "Ctxt"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Ctxt"},
+   "55":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.7"}},
+    "content": "Γ"},
+   "53": {"kind": "unknown", "content": "]"},
+   "511": {"kind": "unknown", "content": ""},
+   "51":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Beth.BethFrame.{u} (W : Type u) : Type u",
+      "name": ["Beth", "BethFrame"],
+      "isDef": false,
+      "docs": null}},
+    "content": "BethFrame"},
+   "506":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-1143",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "502":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Beth.Semantics.ff_E.{u} {W : Type u} [BethFrame W] (p : Tm) (Γ : Ctxt) : Entails W Γ Tm.ff → Entails W Γ p",
+      "name": ["Beth", "Semantics", "ff_E"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Semantics.ff_E"},
+   "500":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-1116",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "494":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.byTactic-1107",
+      "name": ["Lean", "Parser", "Term", "byTactic"],
+      "docs":
+      "`by tac` constructs a term of the expected type by running the tactic(s) `tac`. "}},
+    "content": "by"},
+   "49": {"kind": "unknown", "content": "["},
+   "489":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Pf.ff_E {Γ : Ctxt} {P : Tm} : Pf Γ Tm.ff → Pf Γ P",
+      "name": ["Syntax", "Pf", "ff_E"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Pf.ff_E"},
+   "483":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm.ff : Tm",
+      "name": ["Syntax", "Tm", "ff"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Tm.ff"},
+   "481":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Pf Γ Tm.ff", "name": "_uniq.9"}},
+    "content": "pf"},
+   "480":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.1152"}},
+    "content": "Γ"},
+   "479":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.1151"}},
+    "content": "tm"},
+   "477":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "trivial : True",
+      "name": ["trivial"],
+      "isDef": false,
+      "docs":
+      "`True` is true, and `True.intro` (or more commonly, `trivial`)\nis the proof. "}},
+    "content": "trivial"},
+   "475": {"kind": "unknown", "content": "_"},
+   "473":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.fun-1070",
+      "name": ["Lean", "Parser", "Term", "fun"],
+      "docs": null}},
+    "content": "fun"},
+   "471":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Pf.tt_I {Γ : Ctxt} : Pf Γ Tm.tt",
+      "name": ["Syntax", "Pf", "tt_I"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Pf.tt_I"},
+   "47": {"kind": "unknown", "content": "}"},
+   "467":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-1037",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "463":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-1013",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "459":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Beth.Semantics.imp_E.{u} {W : Type u} [BethFrame W] (p q : Tm) (Γ : Ctxt) :\n  Entails W Γ (p ⇒ q) → Entails W Γ p → Entails W Γ q",
+      "name": ["Beth", "Semantics", "imp_E"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Semantics.imp_E"},
+   "457":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-985",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "45": {"kind": {"levelVar": {"name": ["u"]}}, "content": "u"},
+   "448":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.byTactic-976",
+      "name": ["Lean", "Parser", "Term", "byTactic"],
+      "docs":
+      "`by tac` constructs a term of the expected type by running the tactic(s) `tac`. "}},
+    "content": "by"},
+   "442":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Syntax.Pf.imp_E {Γ : Ctxt} {P Q : Tm} : Pf Γ (P ⇒ Q) → Pf Γ P → Pf Γ Q",
+      "name": ["Syntax", "Pf", "imp_E"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Pf.imp_E"},
+   "438":
+   {"kind": {"var": {"typeFormat": null, "type": "Pf Γ P✝", "name": "_uniq.9"}},
+    "content": "q"},
+   "433":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Pf Γ (P✝ ⇒ tm)", "name": "_uniq.7"}},
+    "content": "p"},
+   "432":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.1068"}},
+    "content": "P✝"},
+   "431":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.1067"}},
+    "content": "Γ"},
+   "430":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.1066"}},
+    "content": "tm"},
+   "43":
+   {"kind":
+    {"sort":
+     {"doc?": "A type universe. `Type ≡ Type 0`, `Type u ≡ Sort (u + 1)`. "}},
+    "content": "Type"},
+   "426":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-938",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "422":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Beth.Semantics.imp_I.{u} {W : Type u} [BethFrame W] (p q : Tm) (Γ : Ctxt) : Entails W (p :: Γ) q → Entails W Γ (p ⇒ q)",
+      "name": ["Beth", "Semantics", "imp_I"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Semantics.imp_I"},
+   "420":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-910",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "414":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.byTactic-901",
+      "name": ["Lean", "Parser", "Term", "byTactic"],
+      "docs":
+      "`by tac` constructs a term of the expected type by running the tactic(s) `tac`. "}},
+    "content": "by"},
+   "41": {"kind": "unknown", "content": ":"},
+   "409":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Syntax.Pf.imp_I {Γ : Ctxt} {P Q : Tm} : Pf (P :: Γ) Q → Pf Γ (P ⇒ Q)",
+      "name": ["Syntax", "Pf", "imp_I"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Pf.imp_I"},
+   "405":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm.imp : Tm → Tm → Tm",
+      "name": ["Syntax", "Tm", "imp"],
+      "isDef": false,
+      "docs": null}},
+    "content": ")"},
+   "403":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm.imp : Tm → Tm → Tm",
+      "name": ["Syntax", "Tm", "imp"],
+      "isDef": false,
+      "docs": null}},
+    "content": "⇒"},
+   "401":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm.imp : Tm → Tm → Tm",
+      "name": ["Syntax", "Tm", "imp"],
+      "isDef": false,
+      "docs": null}},
+    "content": "("},
+   "396":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Pf (P✝ :: Γ) Q✝", "name": "_uniq.9"}},
+    "content": "p"},
+   "395":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.1024"}},
+    "content": "Q✝"},
+   "394":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.1023"}},
+    "content": "P✝"},
+   "393":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.1022"}},
+    "content": "Γ"},
+   "39":
+   {"kind": {"var": {"typeFormat": null, "type": "Type u", "name": "_uniq.2"}},
+    "content": "W"},
+   "389":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-859",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "385":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-829",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "381":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-800",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "377":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Beth.Semantics.or_E.{u} {W : Type u} [BethFrame W] (p q c : Tm) (Γ : Ctxt) :\n  Entails W Γ (p ∨ q) → Entails W (p :: Γ) c → Entails W (q :: Γ) c → Entails W Γ c",
+      "name": ["Beth", "Semantics", "or_E"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Semantics.or_E"},
+   "375":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-773",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "37": {"kind": "unknown", "content": "{"},
+   "363":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.byTactic-764",
+      "name": ["Lean", "Parser", "Term", "byTactic"],
+      "docs":
+      "`by tac` constructs a term of the expected type by running the tactic(s) `tac`. "}},
+    "content": "by"},
+   "356":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Syntax.Pf.or_E {Γ : Ctxt} {P Q C : Tm} : Pf Γ (P ∨ Q) → Pf (P :: Γ) C → Pf (Q :: Γ) C → Pf Γ C",
+      "name": ["Syntax", "Pf", "or_E"],
+      "isDef": false,
+      "docs": null}},
+    "content": "or_E"},
+   "352":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Pf (Q✝ :: Γ) tm", "name": "_uniq.9"}},
+    "content": "c_ass_q"},
+   "35":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Beth.soundness.{u} {W : Type u} [BethFrame W] {Γ : Ctxt} {tm : Tm} : Pf Γ tm → Entails W Γ tm",
+      "name": ["Beth", "soundness"],
+      "isDef": true,
+      "docs": null}},
+    "content": "soundness"},
+   "349":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Pf (P✝ :: Γ) tm", "name": "_uniq.7"}},
+    "content": "c_ass_p"},
+   "344":
+   {"kind":
+    {"var":
+     {"typeFormat": null, "type": "Pf Γ (P✝ ∨ Q✝)", "name": "_uniq.981"}},
+    "content": "p_or_q"},
+   "343":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.980"}},
+    "content": "Q✝"},
+   "342":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.979"}},
+    "content": "P✝"},
+   "341":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.978"}},
+    "content": "Γ"},
+   "340":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.977"}},
+    "content": "tm"},
+   "336":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-711",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "332":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Beth.Semantics.or_I₂.{u} {W : Type u} [BethFrame W] (p q : Tm) (Γ : Ctxt) : Entails W Γ q → Entails W Γ (p ∨ q)",
+      "name": ["Beth", "Semantics", "or_I₂"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Semantics.or_I₂"},
+   "330":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-681",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "33":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.definition-91",
+      "name": ["Lean", "Parser", "Command", "definition"],
+      "docs": null}},
+    "content": "def"},
+   "324":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.byTactic-672",
+      "name": ["Lean", "Parser", "Term", "byTactic"],
+      "docs":
+      "`by tac` constructs a term of the expected type by running the tactic(s) `tac`. "}},
+    "content": "by"},
+   "320":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Syntax.Pf.or_I₂ {Γ : Ctxt} {P Q : Tm} : Pf Γ Q → Pf Γ (P ∨ Q)",
+      "name": ["Syntax", "Pf", "or_I₂"],
+      "isDef": false,
+      "docs": null}},
+    "content": "or_I₂"},
+   "313":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.923"}},
+    "content": "Q✝"},
+   "312":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.922"}},
+    "content": "P✝"},
+   "311":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.921"}},
+    "content": "Γ"},
+   "307":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-637",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "303":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Beth.Semantics.or_I₁.{u} {W : Type u} [BethFrame W] (p q : Tm) (Γ : Ctxt) : Entails W Γ p → Entails W Γ (p ∨ q)",
+      "name": ["Beth", "Semantics", "or_I₁"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Semantics.or_I₁"},
+   "301":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-607",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "30": {"kind": "unknown", "content": "Pf"},
+   "3":
+   {"kind": {"moduleName": {"name": ["Logic", "Syntax"]}},
+    "content": "Logic.Syntax"},
+   "295":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.byTactic-598",
+      "name": ["Lean", "Parser", "Term", "byTactic"],
+      "docs":
+      "`by tac` constructs a term of the expected type by running the tactic(s) `tac`. "}},
+    "content": "by"},
+   "290":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Syntax.Pf.or_I₁ {Γ : Ctxt} {P Q : Tm} : Pf Γ P → Pf Γ (P ∨ Q)",
+      "name": ["Syntax", "Pf", "or_I₁"],
+      "isDef": false,
+      "docs": null}},
+    "content": "or_I₁"},
+   "286":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm.or : Tm → Tm → Tm",
+      "name": ["Syntax", "Tm", "or"],
+      "isDef": false,
+      "docs": null}},
+    "content": ")"},
+   "283":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm.or : Tm → Tm → Tm",
+      "name": ["Syntax", "Tm", "or"],
+      "isDef": false,
+      "docs": null}},
+    "content": "∨"},
+   "281":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm.or : Tm → Tm → Tm",
+      "name": ["Syntax", "Tm", "or"],
+      "isDef": false,
+      "docs": null}},
+    "content": "("},
+   "28":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.open-82",
+      "name": ["Lean", "Parser", "Command", "open"],
+      "docs":
+      "Makes names from other namespaces visible without writing the namespace prefix.\n\nNames that are made available with `open` are visible within the current `section` or `namespace`\nblock. This makes referring to (type) definitions and theorems easier, but note that it can also\nmake [scoped instances], notations, and attributes from a different namespace available.\n\nThe `open` command can be used in a few different ways:\n\n* `open Some.Namespace.Path1 Some.Namespace.Path2` makes all non-protected names in\n  `Some.Namespace.Path1` and `Some.Namespace.Path2` available without the prefix, so that\n  `Some.Namespace.Path1.x` and `Some.Namespace.Path2.y` can be referred to by writing only `x` and\n  `y`.\n\n* `open Some.Namespace.Path hiding def1 def2` opens all non-protected names in `Some.Namespace.Path`\n  except `def1` and `def2`.\n\n* `open Some.Namespace.Path (def1 def2)` only makes `Some.Namespace.Path.def1` and\n  `Some.Namespace.Path.def2` available without the full prefix, so `Some.Namespace.Path.def3` would\n  be unaffected.\n\n  This works even if `def1` and `def2` are `protected`.\n\n* `open Some.Namespace.Path renaming def1 → def1', def2 → def2'` same as `open Some.Namespace.Path\n  (def1 def2)` but `def1`/`def2`'s names are changed to `def1'`/`def2'`.\n\n  This works even if `def1` and `def2` are `protected`.\n\n* `open scoped Some.Namespace.Path1 Some.Namespace.Path2` **only** opens [scoped instances],\n  notations, and attributes from `Namespace1` and `Namespace2`; it does **not** make any other name\n  available.\n\n* `open <any of the open shapes above> in` makes the names `open`-ed visible only in the next\n  command or expression.\n\n[scoped instance]: https://lean-lang.org/theorem_proving_in_lean4/type_classes.html#scoped-instances\n(Scoped instances in Theorem Proving in Lean)\n\n\n## Examples\n\n```lean\n/-- SKI combinators https://en.wikipedia.org/wiki/SKI_combinator_calculus -/\nnamespace Combinator.Calculus\n  def I (a : α) : α := a\n  def K (a : α) : β → α := fun _ => a\n  def S (x : α → β → γ) (y : α → β) (z : α) : γ := x z (y z)\nend Combinator.Calculus\n\nsection\n  -- open everything under `Combinator.Calculus`, *i.e.* `I`, `K` and `S`,\n  -- until the section ends\n  open Combinator.Calculus\n\n  theorem SKx_eq_K : S K x = I := rfl\nend\n\n-- open everything under `Combinator.Calculus` only for the next command (the next `theorem`, here)\nopen Combinator.Calculus in\ntheorem SKx_eq_K' : S K x = I := rfl\n\nsection\n  -- open only `S` and `K` under `Combinator.Calculus`\n  open Combinator.Calculus (S K)\n\n  theorem SKxy_eq_y : S K x y = y := rfl\n\n  -- `I` is not in scope, we have to use its full path\n  theorem SKxy_eq_Iy : S K x y = Combinator.Calculus.I y := rfl\nend\n\nsection\n  open Combinator.Calculus\n    renaming\n      I → identity,\n      K → konstant\n\n  #check identity\n  #check konstant\nend\n\nsection\n  open Combinator.Calculus\n    hiding S\n\n  #check I\n  #check K\nend\n\nsection\n  namespace Demo\n    inductive MyType\n    | val\n\n    namespace N1\n      scoped infix:68 \" ≋ \" => BEq.beq\n\n      scoped instance : BEq MyType where\n        beq _ _ := true\n\n      def Alias := MyType\n    end N1\n  end Demo\n\n  -- bring `≋` and the instance in scope, but not `Alias`\n  open scoped Demo.N1\n\n  #check Demo.MyType.val == Demo.MyType.val\n  #check Demo.MyType.val ≋ Demo.MyType.val\n  -- #check Alias -- unknown identifier 'Alias'\nend\n```\n"}},
+    "content": "open"},
+   "277":
+   {"kind": {"var": {"typeFormat": null, "type": "Pf Γ P✝", "name": "_uniq.9"}},
+    "content": "p"},
+   "276":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.882"}},
+    "content": "Q✝"},
+   "275":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.881"}},
+    "content": "P✝"},
+   "274":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.880"}},
+    "content": "Γ"},
+   "270":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-563",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "266":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Beth.Semantics.and_E₂.{u} {W : Type u} [BethFrame W] (p q : Tm) (Γ : Ctxt) : Entails W Γ (p ∧ q) → Entails W Γ q",
+      "name": ["Beth", "Semantics", "and_E₂"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Semantics.and_E₂"},
+   "264":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-532",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "259": {"kind": "unknown", "content": "?p"},
+   "255":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.byTactic-523",
+      "name": ["Lean", "Parser", "Term", "byTactic"],
+      "docs":
+      "`by tac` constructs a term of the expected type by running the tactic(s) `tac`. "}},
+    "content": "by"},
+   "250":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Syntax.Pf.and_E₂ {Γ : Ctxt} {P Q : Tm} : Pf Γ (P ∧ Q) → Pf Γ Q",
+      "name": ["Syntax", "Pf", "and_E₂"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Pf.and_E₂"},
+   "25": {"kind": "unknown", "content": "Syntax"},
+   "243":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Pf Γ (P✝ ∧ tm)", "name": "_uniq.9"}},
+    "content": "p"},
+   "242":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.841"}},
+    "content": "P✝"},
+   "241":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.840"}},
+    "content": "Γ"},
+   "240":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.839"}},
+    "content": "tm"},
+   "236":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-484",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "232":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Beth.Semantics.and_E₁.{u} {W : Type u} [BethFrame W] (p q : Tm) (Γ : Ctxt) : Entails W Γ (p ∧ q) → Entails W Γ p",
+      "name": ["Beth", "Semantics", "and_E₁"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Semantics.and_E₁"},
+   "230":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-453",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "23":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.open-70",
+      "name": ["Lean", "Parser", "Command", "open"],
+      "docs":
+      "Makes names from other namespaces visible without writing the namespace prefix.\n\nNames that are made available with `open` are visible within the current `section` or `namespace`\nblock. This makes referring to (type) definitions and theorems easier, but note that it can also\nmake [scoped instances], notations, and attributes from a different namespace available.\n\nThe `open` command can be used in a few different ways:\n\n* `open Some.Namespace.Path1 Some.Namespace.Path2` makes all non-protected names in\n  `Some.Namespace.Path1` and `Some.Namespace.Path2` available without the prefix, so that\n  `Some.Namespace.Path1.x` and `Some.Namespace.Path2.y` can be referred to by writing only `x` and\n  `y`.\n\n* `open Some.Namespace.Path hiding def1 def2` opens all non-protected names in `Some.Namespace.Path`\n  except `def1` and `def2`.\n\n* `open Some.Namespace.Path (def1 def2)` only makes `Some.Namespace.Path.def1` and\n  `Some.Namespace.Path.def2` available without the full prefix, so `Some.Namespace.Path.def3` would\n  be unaffected.\n\n  This works even if `def1` and `def2` are `protected`.\n\n* `open Some.Namespace.Path renaming def1 → def1', def2 → def2'` same as `open Some.Namespace.Path\n  (def1 def2)` but `def1`/`def2`'s names are changed to `def1'`/`def2'`.\n\n  This works even if `def1` and `def2` are `protected`.\n\n* `open scoped Some.Namespace.Path1 Some.Namespace.Path2` **only** opens [scoped instances],\n  notations, and attributes from `Namespace1` and `Namespace2`; it does **not** make any other name\n  available.\n\n* `open <any of the open shapes above> in` makes the names `open`-ed visible only in the next\n  command or expression.\n\n[scoped instance]: https://lean-lang.org/theorem_proving_in_lean4/type_classes.html#scoped-instances\n(Scoped instances in Theorem Proving in Lean)\n\n\n## Examples\n\n```lean\n/-- SKI combinators https://en.wikipedia.org/wiki/SKI_combinator_calculus -/\nnamespace Combinator.Calculus\n  def I (a : α) : α := a\n  def K (a : α) : β → α := fun _ => a\n  def S (x : α → β → γ) (y : α → β) (z : α) : γ := x z (y z)\nend Combinator.Calculus\n\nsection\n  -- open everything under `Combinator.Calculus`, *i.e.* `I`, `K` and `S`,\n  -- until the section ends\n  open Combinator.Calculus\n\n  theorem SKx_eq_K : S K x = I := rfl\nend\n\n-- open everything under `Combinator.Calculus` only for the next command (the next `theorem`, here)\nopen Combinator.Calculus in\ntheorem SKx_eq_K' : S K x = I := rfl\n\nsection\n  -- open only `S` and `K` under `Combinator.Calculus`\n  open Combinator.Calculus (S K)\n\n  theorem SKxy_eq_y : S K x y = y := rfl\n\n  -- `I` is not in scope, we have to use its full path\n  theorem SKxy_eq_Iy : S K x y = Combinator.Calculus.I y := rfl\nend\n\nsection\n  open Combinator.Calculus\n    renaming\n      I → identity,\n      K → konstant\n\n  #check identity\n  #check konstant\nend\n\nsection\n  open Combinator.Calculus\n    hiding S\n\n  #check I\n  #check K\nend\n\nsection\n  namespace Demo\n    inductive MyType\n    | val\n\n    namespace N1\n      scoped infix:68 \" ≋ \" => BEq.beq\n\n      scoped instance : BEq MyType where\n        beq _ _ := true\n\n      def Alias := MyType\n    end N1\n  end Demo\n\n  -- bring `≋` and the instance in scope, but not `Alias`\n  open scoped Demo.N1\n\n  #check Demo.MyType.val == Demo.MyType.val\n  #check Demo.MyType.val ≋ Demo.MyType.val\n  -- #check Alias -- unknown identifier 'Alias'\nend\n```\n"}},
+    "content": "open"},
+   "225": {"kind": "unknown", "content": "?q"},
+   "221":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.byTactic-444",
+      "name": ["Lean", "Parser", "Term", "byTactic"],
+      "docs":
+      "`by tac` constructs a term of the expected type by running the tactic(s) `tac`. "}},
+    "content": "by"},
+   "216":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Syntax.Pf.and_E₁ {Γ : Ctxt} {P Q : Tm} : Pf Γ (P ∧ Q) → Pf Γ P",
+      "name": ["Syntax", "Pf", "and_E₁"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Pf.and_E₁"},
+   "209":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Pf Γ (tm ∧ Q✝)", "name": "_uniq.9"}},
+    "content": "p"},
+   "208":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.802"}},
+    "content": "Q✝"},
+   "207":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.801"}},
+    "content": "Γ"},
+   "206":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.800"}},
+    "content": "tm"},
+   "202":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-405",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "20": {"kind": "unknown", "content": "Beth"},
+   "198":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-381",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "194":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Beth.Semantics.and_I.{u} {W : Type u} [BethFrame W] (p q : Tm) (Γ : Ctxt) :\n  Entails W Γ p → Entails W Γ q → Entails W Γ (p ∧ q)",
+      "name": ["Beth", "Semantics", "and_I"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Semantics.and_I"},
+   "192":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-353",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "184":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.byTactic-344",
+      "name": ["Lean", "Parser", "Term", "byTactic"],
+      "docs":
+      "`by tac` constructs a term of the expected type by running the tactic(s) `tac`. "}},
+    "content": "by"},
+   "18":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.namespace-55",
+      "name": ["Lean", "Parser", "Command", "namespace"],
+      "docs":
+      "`namespace <id>` opens a section with label `<id>` that influences naming and name resolution inside\nthe section:\n* Declarations names are prefixed: `def seventeen : ℕ := 17` inside a namespace `Nat` is given the\n  full name `Nat.seventeen`.\n* Names introduced by `export` declarations are also prefixed by the identifier.\n* All names starting with `<id>.` become available in the namespace without the prefix. These names\n  are preferred over names introduced by outer namespaces or `open`.\n* Within a namespace, declarations can be `protected`, which excludes them from the effects of\n  opening the namespace.\n\nAs with `section`, namespaces can be nested and the scope of a namespace is terminated by a\ncorresponding `end <id>` or the end of the file.\n\n`namespace` also acts like `section` in delimiting the scope of `variable`, `open`, and other scoped commands.\n"}},
+    "content": "namespace"},
+   "178":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Syntax.Pf.and_I {Γ : Ctxt} {P Q : Tm} : Pf Γ P → Pf Γ Q → Pf Γ (P ∧ Q)",
+      "name": ["Syntax", "Pf", "and_I"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Pf.and_I"},
+   "174":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm.and : Tm → Tm → Tm",
+      "name": ["Syntax", "Tm", "and"],
+      "isDef": false,
+      "docs": null}},
+    "content": ")"},
+   "172":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm.and : Tm → Tm → Tm",
+      "name": ["Syntax", "Tm", "and"],
+      "isDef": false,
+      "docs": null}},
+    "content": "∧"},
+   "170":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "Syntax.Tm.and : Tm → Tm → Tm",
+      "name": ["Syntax", "Tm", "and"],
+      "isDef": false,
+      "docs": null}},
+    "content": "("},
+   "167":
+   {"kind": {"var": {"typeFormat": null, "type": "Pf Γ Q✝", "name": "_uniq.9"}},
+    "content": "q"},
+   "163":
+   {"kind": {"var": {"typeFormat": null, "type": "Pf Γ P✝", "name": "_uniq.7"}},
+    "content": "p"},
+   "162":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.761"}},
+    "content": "Q✝"},
+   "161":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.760"}},
+    "content": "P✝"},
+   "160":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.759"}},
+    "content": "Γ"},
+   "159":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.7"}},
+    "content": "Γ✝"},
+   "155":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Beth.soundness.{u} {W : Type u} [BethFrame W] {Γ : Ctxt} {tm : Tm} : Pf Γ tm → Entails W Γ tm",
+      "name": ["Beth", "soundness"],
+      "isDef": false,
+      "docs": null}},
+    "content": "soundness"},
+   "153":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-305",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "15": {"kind": "unknown", "content": "u"},
+   "149":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.exact-290",
+      "name": ["Lean", "Parser", "Tactic", "exact"],
+      "docs":
+      "`exact e` closes the main goal if its target type matches that of `e`.\n"}},
+    "content": "exact"},
+   "145":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Beth.Semantics.wk.{u} {W : Type u} [BethFrame W] (t : Tm) (Γ : Ctxt) {Δ : Ctxt} : Γ ≤ Δ → Entails W Γ t → Entails W Δ t",
+      "name": ["Beth", "Semantics", "wk"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Semantics.wk"},
+   "143":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-265",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "136": {"kind": "unknown", "content": "?Γ"},
+   "132":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.byTactic-256",
+      "name": ["Lean", "Parser", "Term", "byTactic"],
+      "docs":
+      "`by tac` constructs a term of the expected type by running the tactic(s) `tac`. "}},
+    "content": "by"},
+   "13":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Command.universe-43",
+      "name": ["Lean", "Parser", "Command", "universe"],
+      "docs":
+      "Declares one or more universe variables.\n\n`universe u v`\n\n`Prop`, `Type`, `Type u` and `Sort u` are types that classify other types, also known as\n*universes*. In `Type u` and `Sort u`, the variable `u` stands for the universe's *level*, and a\nuniverse at level `u` can only classify universes that are at levels lower than `u`. For more\ndetails on type universes, please refer to [the relevant chapter of Theorem Proving in Lean][tpil\nuniverses].\n\nJust as type arguments allow polymorphic definitions to be used at many different types, universe\nparameters, represented by universe variables, allow a definition to be used at any required level.\nWhile Lean mostly handles universe levels automatically, declaring them explicitly can provide more\ncontrol when writing signatures. The `universe` keyword allows the declared universe variables to be\nused in a collection of definitions, and Lean will ensure that these definitions use them\nconsistently.\n\n[tpil universes]: https://lean-lang.org/theorem_proving_in_lean4/dependent_type_theory.html#types-as-objects\n(Type universes on Theorem Proving in Lean)\n\n```lean\n/- Explicit type-universe parameter. -/\ndef id₁.{u} (α : Type u) (a : α) := a\n\n/- Implicit type-universe parameter, equivalent to `id₁`.\n  Requires option `autoImplicit true`, which is the default. -/\ndef id₂ (α : Type u) (a : α) := a\n\n/- Explicit standalone universe variable declaration, equivalent to `id₁` and `id₂`. -/\nuniverse u\ndef id₃ (α : Type u) (a : α) := a\n```\n\nOn a more technical note, using a universe variable only in the right-hand side of a definition\ncauses an error if the universe has not been declared previously.\n\n```lean\ndef L₁.{u} := List (Type u)\n\n-- def L₂ := List (Type u) -- error: `unknown universe level 'u'`\n\nuniverse u\ndef L₃ := List (Type u)\n```\n\n## Examples\n\n```lean\nuniverse u v w\n\nstructure Pair (α : Type u) (β : Type v) : Type (max u v) where\n  a : α\n  b : β\n\n#check Pair.{v, w}\n-- Pair : Type v → Type w → Type (max v w)\n```\n"}},
+    "content": "universe"},
+   "126":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Syntax.Pf.wk {Γ Δ : Ctxt} {P : Tm} : Γ ≤ Δ → Pf Γ P → Pf Δ P",
+      "name": ["Syntax", "Pf", "wk"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Pf.wk"},
+   "121":
+   {"kind":
+    {"var": {"typeFormat": null, "type": "Pf Γ✝ tm", "name": "_uniq.9"}},
+    "content": "pf"},
+   "117":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature": "LE.le.{u} {α : Type u} [self : LE α] : α → α → Prop",
+      "name": ["LE", "le"],
+      "isDef": false,
+      "docs":
+      "The less-equal relation: `x ≤ y` \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `≤` in identifiers is `le`.\n\n * The recommended spelling of `<=` in identifiers is `le` (prefer `≤` over `<=`)."}},
+    "content": "≤"},
+   "115":
+   {"kind": {"var": {"typeFormat": null, "type": "Γ✝ ≤ Γ", "name": "_uniq.7"}},
+    "content": "le"},
+   "114":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.713"}},
+    "content": "Γ✝"},
+   "113":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.712"}},
+    "content": "Γ"},
+   "112":
+   {"kind": {"var": {"typeFormat": null, "type": "Tm", "name": "_uniq.711"}},
+    "content": "tm"},
+   "111":
+   {"kind": {"var": {"typeFormat": null, "type": "Ctxt", "name": "_uniq.7"}},
+    "content": "Γ✝¹"},
+   "107":
+   {"kind":
+    {"const":
+     {"signatureFormat": null,
+      "signature":
+      "Beth.Semantics.assumption.{u} {W : Type u} [BethFrame W] (p : Tm) (Γ : Ctxt) : Entails W (p :: Γ) p",
+      "name": ["Beth", "Semantics", "assumption"],
+      "isDef": false,
+      "docs": null}},
+    "content": "Semantics.assumption"},
+   "105":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Tactic.apply-210",
+      "name": ["Lean", "Parser", "Tactic", "apply"],
+      "docs":
+      "`apply e` tries to match the current goal against the conclusion of `e`'s type.\nIf it succeeds, then the tactic returns as many subgoals as the number of premises that\nhave not been fixed by type inference or type class resolution.\nNon-dependent premises are added before dependent ones.\n\nThe `apply` tactic uses higher-order pattern matching, type class resolution,\nand first-order unification with dependent types.\n\n\nExtensions:\n\n * * `apply (config := cfg) e` allows for additional configuration (see `Lean.Meta.ApplyConfig`):\n     * `newGoals` controls which new goals are added by `apply`, in which order.\n     * `-synthAssignedInstances` will not synthesize instance implicit arguments if they have been\n       assigned by `isDefEq`.\n     * `+allowSynthFailures` will create new goals when instance synthesis fails, rather than erroring.\n     * `+approx` enables `isDefEq` approximations (see `Lean.Meta.approxDefEq`)."}},
+    "content": "apply"},
+   "100":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Term.byTactic-201",
+      "name": ["Lean", "Parser", "Term", "byTactic"],
+      "docs":
+      "`by tac` constructs a term of the expected type by running the tactic(s) `tac`. "}},
+    "content": "by"},
+   "0":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Module.import-0",
+      "name": ["Lean", "Parser", "Module", "import"],
+      "docs": null}},
+    "content": "import"}},
+  "nextKey": 514,
+  "messageContents": {},
+  "goals":
+  {"91":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [55]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [80]},
+     {"typeAndVal": 77, "ppType": null, "names": [81]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 90},
+   "499":
+   {"ppConclusion": null,
+    "name": "a",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [479]},
+     {"typeAndVal": 77, "ppType": null, "names": [480]},
+     {"typeAndVal": 485, "ppType": null, "names": [481]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 498},
+   "488":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [479]},
+     {"typeAndVal": 77, "ppType": null, "names": [480]},
+     {"typeAndVal": 485, "ppType": null, "names": [481]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 487},
+   "456":
+   {"ppConclusion": null,
+    "name": "p",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [430]},
+     {"typeAndVal": 77, "ppType": null, "names": [431]},
+     {"typeAndVal": 79, "ppType": null, "names": [432]},
+     {"typeAndVal": 437, "ppType": null, "names": [433]},
+     {"typeAndVal": 439, "ppType": null, "names": [438]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 79},
+   "455":
+   {"ppConclusion": null,
+    "name": "a",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [430]},
+     {"typeAndVal": 77, "ppType": null, "names": [431]},
+     {"typeAndVal": 79, "ppType": null, "names": [432]},
+     {"typeAndVal": 437, "ppType": null, "names": [433]},
+     {"typeAndVal": 439, "ppType": null, "names": [438]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 454},
+   "453":
+   {"ppConclusion": null,
+    "name": "a",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [430]},
+     {"typeAndVal": 77, "ppType": null, "names": [431]},
+     {"typeAndVal": 79, "ppType": null, "names": [432]},
+     {"typeAndVal": 437, "ppType": null, "names": [433]},
+     {"typeAndVal": 439, "ppType": null, "names": [438]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 452},
+   "441":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [430]},
+     {"typeAndVal": 77, "ppType": null, "names": [431]},
+     {"typeAndVal": 79, "ppType": null, "names": [432]},
+     {"typeAndVal": 437, "ppType": null, "names": [433]},
+     {"typeAndVal": 439, "ppType": null, "names": [438]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 440},
+   "419":
+   {"ppConclusion": null,
+    "name": "a",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [59]},
+     {"typeAndVal": 77, "ppType": null, "names": [393]},
+     {"typeAndVal": 79, "ppType": null, "names": [394]},
+     {"typeAndVal": 79, "ppType": null, "names": [395]},
+     {"typeAndVal": 400, "ppType": null, "names": [396]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 418},
+   "408":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [59]},
+     {"typeAndVal": 77, "ppType": null, "names": [393]},
+     {"typeAndVal": 79, "ppType": null, "names": [394]},
+     {"typeAndVal": 79, "ppType": null, "names": [395]},
+     {"typeAndVal": 400, "ppType": null, "names": [396]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 407},
+   "374":
+   {"ppConclusion": null,
+    "name": "q",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [340]},
+     {"typeAndVal": 77, "ppType": null, "names": [341]},
+     {"typeAndVal": 79, "ppType": null, "names": [342]},
+     {"typeAndVal": 79, "ppType": null, "names": [343]},
+     {"typeAndVal": 348, "ppType": null, "names": [344]},
+     {"typeAndVal": 351, "ppType": null, "names": [349]},
+     {"typeAndVal": 353, "ppType": null, "names": [352]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 79},
+   "373":
+   {"ppConclusion": null,
+    "name": "p",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [340]},
+     {"typeAndVal": 77, "ppType": null, "names": [341]},
+     {"typeAndVal": 79, "ppType": null, "names": [342]},
+     {"typeAndVal": 79, "ppType": null, "names": [343]},
+     {"typeAndVal": 348, "ppType": null, "names": [344]},
+     {"typeAndVal": 351, "ppType": null, "names": [349]},
+     {"typeAndVal": 353, "ppType": null, "names": [352]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 79},
+   "372":
+   {"ppConclusion": null,
+    "name": "a",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [340]},
+     {"typeAndVal": 77, "ppType": null, "names": [341]},
+     {"typeAndVal": 79, "ppType": null, "names": [342]},
+     {"typeAndVal": 79, "ppType": null, "names": [343]},
+     {"typeAndVal": 348, "ppType": null, "names": [344]},
+     {"typeAndVal": 351, "ppType": null, "names": [349]},
+     {"typeAndVal": 353, "ppType": null, "names": [352]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 371},
+   "370":
+   {"ppConclusion": null,
+    "name": "a",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [340]},
+     {"typeAndVal": 77, "ppType": null, "names": [341]},
+     {"typeAndVal": 79, "ppType": null, "names": [342]},
+     {"typeAndVal": 79, "ppType": null, "names": [343]},
+     {"typeAndVal": 348, "ppType": null, "names": [344]},
+     {"typeAndVal": 351, "ppType": null, "names": [349]},
+     {"typeAndVal": 353, "ppType": null, "names": [352]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 369},
+   "368":
+   {"ppConclusion": null,
+    "name": "a",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [340]},
+     {"typeAndVal": 77, "ppType": null, "names": [341]},
+     {"typeAndVal": 79, "ppType": null, "names": [342]},
+     {"typeAndVal": 79, "ppType": null, "names": [343]},
+     {"typeAndVal": 348, "ppType": null, "names": [344]},
+     {"typeAndVal": 351, "ppType": null, "names": [349]},
+     {"typeAndVal": 353, "ppType": null, "names": [352]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 367},
+   "355":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [340]},
+     {"typeAndVal": 77, "ppType": null, "names": [341]},
+     {"typeAndVal": 79, "ppType": null, "names": [342]},
+     {"typeAndVal": 79, "ppType": null, "names": [343]},
+     {"typeAndVal": 348, "ppType": null, "names": [344]},
+     {"typeAndVal": 351, "ppType": null, "names": [349]},
+     {"typeAndVal": 353, "ppType": null, "names": [352]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 354},
+   "329":
+   {"ppConclusion": null,
+    "name": "a",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [59]},
+     {"typeAndVal": 77, "ppType": null, "names": [311]},
+     {"typeAndVal": 79, "ppType": null, "names": [312]},
+     {"typeAndVal": 79, "ppType": null, "names": [313]},
+     {"typeAndVal": 316, "ppType": null, "names": [167]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 328},
+   "319":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [59]},
+     {"typeAndVal": 77, "ppType": null, "names": [311]},
+     {"typeAndVal": 79, "ppType": null, "names": [312]},
+     {"typeAndVal": 79, "ppType": null, "names": [313]},
+     {"typeAndVal": 316, "ppType": null, "names": [167]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 318},
+   "300":
+   {"ppConclusion": null,
+    "name": "a",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [59]},
+     {"typeAndVal": 77, "ppType": null, "names": [274]},
+     {"typeAndVal": 79, "ppType": null, "names": [275]},
+     {"typeAndVal": 79, "ppType": null, "names": [276]},
+     {"typeAndVal": 280, "ppType": null, "names": [277]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 299},
+   "289":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [59]},
+     {"typeAndVal": 77, "ppType": null, "names": [274]},
+     {"typeAndVal": 79, "ppType": null, "names": [275]},
+     {"typeAndVal": 79, "ppType": null, "names": [276]},
+     {"typeAndVal": 280, "ppType": null, "names": [277]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 288},
+   "263":
+   {"ppConclusion": null,
+    "name": "p",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [240]},
+     {"typeAndVal": 77, "ppType": null, "names": [241]},
+     {"typeAndVal": 79, "ppType": null, "names": [242]},
+     {"typeAndVal": 247, "ppType": null, "names": [243]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 79},
+   "262":
+   {"ppConclusion": null,
+    "name": "a",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [240]},
+     {"typeAndVal": 77, "ppType": null, "names": [241]},
+     {"typeAndVal": 79, "ppType": null, "names": [242]},
+     {"typeAndVal": 247, "ppType": null, "names": [243]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 261},
+   "249":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [240]},
+     {"typeAndVal": 77, "ppType": null, "names": [241]},
+     {"typeAndVal": 79, "ppType": null, "names": [242]},
+     {"typeAndVal": 247, "ppType": null, "names": [243]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 248},
+   "229":
+   {"ppConclusion": null,
+    "name": "q",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [206]},
+     {"typeAndVal": 77, "ppType": null, "names": [207]},
+     {"typeAndVal": 79, "ppType": null, "names": [208]},
+     {"typeAndVal": 213, "ppType": null, "names": [209]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 79},
+   "228":
+   {"ppConclusion": null,
+    "name": "a",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [206]},
+     {"typeAndVal": 77, "ppType": null, "names": [207]},
+     {"typeAndVal": 79, "ppType": null, "names": [208]},
+     {"typeAndVal": 213, "ppType": null, "names": [209]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 227},
+   "215":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [206]},
+     {"typeAndVal": 77, "ppType": null, "names": [207]},
+     {"typeAndVal": 79, "ppType": null, "names": [208]},
+     {"typeAndVal": 213, "ppType": null, "names": [209]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 214},
+   "191":
+   {"ppConclusion": null,
+    "name": "a",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [59]},
+     {"typeAndVal": 77, "ppType": null, "names": [160]},
+     {"typeAndVal": 79, "ppType": null, "names": [161]},
+     {"typeAndVal": 79, "ppType": null, "names": [162]},
+     {"typeAndVal": 166, "ppType": null, "names": [163]},
+     {"typeAndVal": 169, "ppType": null, "names": [167]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 190},
+   "189":
+   {"ppConclusion": null,
+    "name": "a",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [59]},
+     {"typeAndVal": 77, "ppType": null, "names": [160]},
+     {"typeAndVal": 79, "ppType": null, "names": [161]},
+     {"typeAndVal": 79, "ppType": null, "names": [162]},
+     {"typeAndVal": 166, "ppType": null, "names": [163]},
+     {"typeAndVal": 169, "ppType": null, "names": [167]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 188},
+   "177":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [159]},
+     {"typeAndVal": 79, "ppType": null, "names": [59]},
+     {"typeAndVal": 77, "ppType": null, "names": [160]},
+     {"typeAndVal": 79, "ppType": null, "names": [161]},
+     {"typeAndVal": 79, "ppType": null, "names": [162]},
+     {"typeAndVal": 166, "ppType": null, "names": [163]},
+     {"typeAndVal": 169, "ppType": null, "names": [167]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 176},
+   "142":
+   {"ppConclusion": null,
+    "name": "Γ",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [111]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [112]},
+     {"typeAndVal": 77, "ppType": null, "names": [113]},
+     {"typeAndVal": 77, "ppType": null, "names": [114]},
+     {"typeAndVal": 120, "ppType": null, "names": [115]},
+     {"typeAndVal": 123, "ppType": null, "names": [121]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 77},
+   "141":
+   {"ppConclusion": null,
+    "name": "a",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [111]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [112]},
+     {"typeAndVal": 77, "ppType": null, "names": [113]},
+     {"typeAndVal": 77, "ppType": null, "names": [114]},
+     {"typeAndVal": 120, "ppType": null, "names": [115]},
+     {"typeAndVal": 123, "ppType": null, "names": [121]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 140},
+   "139":
+   {"ppConclusion": null,
+    "name": "a",
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [111]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [112]},
+     {"typeAndVal": 77, "ppType": null, "names": [113]},
+     {"typeAndVal": 77, "ppType": null, "names": [114]},
+     {"typeAndVal": 120, "ppType": null, "names": [115]},
+     {"typeAndVal": 123, "ppType": null, "names": [121]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 138},
+   "125":
+   {"ppConclusion": null,
+    "name": null,
+    "hypotheses":
+    [{"typeAndVal": 74, "ppType": null, "names": [39]},
+     {"typeAndVal": 76, "ppType": null, "names": [75]},
+     {"typeAndVal": 77, "ppType": null, "names": [111]},
+     {"typeAndVal": 79, "ppType": null, "names": [78]},
+     {"typeAndVal": 79, "ppType": null, "names": [112]},
+     {"typeAndVal": 77, "ppType": null, "names": [113]},
+     {"typeAndVal": 77, "ppType": null, "names": [114]},
+     {"typeAndVal": 120, "ppType": null, "names": [115]},
+     {"typeAndVal": 123, "ppType": null, "names": [121]}],
+    "goalPrefix": "⊢ ",
+    "conclusion": 124}},
+  "code":
+  {"99":
+   {"tactics": {"startPos": 186, "info": [91], "endPos": 200, "content": 98}},
+   "98": {"seq": {"highlights": [93, 2, 95, 2, 97, 10]}},
+   "97": {"token": {"tok": 96}},
+   "95": {"token": {"tok": 94}},
+   "93": {"token": {"tok": 92}},
+   "90":
+   {"seq": {"highlights": [71, 69, 2, 40, 2, 83, 84, 2, 86, 2, 87, 89, 2, 84]}},
+   "9": {"token": {"tok": 8}},
+   "89": {"token": {"tok": 88}},
+   "87": {"token": {"tok": 81}},
+   "86": {"token": {"tok": 85}},
+   "84": {"token": {"tok": 80}},
+   "83": {"token": {"tok": 82}},
+   "79": {"seq": {"highlights": [71, 62, 71]}},
+   "77": {"seq": {"highlights": [71, 58, 71]}},
+   "76": {"seq": {"highlights": [71, 52, 2, 40]}},
+   "74": {"seq": {"highlights": [71, 73, 71]}},
+   "73": {"token": {"tok": 72}},
+   "71": {"text": {"str": ""}},
+   "70": {"text": {"str": "\n  "}},
+   "7": {"token": {"tok": 6}},
+   "69": {"token": {"tok": 68}},
+   "67": {"token": {"tok": 66}},
+   "65": {"text": {"str": "  "}},
+   "64": {"token": {"tok": 63}},
+   "62": {"token": {"tok": 61}},
+   "60": {"token": {"tok": 59}},
+   "58": {"token": {"tok": 57}},
+   "56": {"token": {"tok": 55}},
+   "54": {"token": {"tok": 53}},
+   "52": {"token": {"tok": 51}},
+   "513": {"seq": {"highlights": [5, 512, 10]}},
+   "512": {"token": {"tok": 511}},
+   "510":
+   {"seq":
+    {"highlights":
+     [12,
+      34,
+      2,
+      36,
+      2,
+      38,
+      40,
+      2,
+      42,
+      2,
+      44,
+      2,
+      46,
+      48,
+      50,
+      52,
+      2,
+      40,
+      54,
+      2,
+      38,
+      56,
+      2,
+      42,
+      2,
+      58,
+      48,
+      38,
+      60,
+      2,
+      42,
+      2,
+      62,
+      48,
+      2,
+      42,
+      2,
+      64,
+      2,
+      56,
+      2,
+      60,
+      65,
+      67,
+      2,
+      69,
+      2,
+      40,
+      2,
+      56,
+      2,
+      60,
+      70,
+      99,
+      2,
+      103,
+      104,
+      110,
+      70,
+      131,
+      2,
+      135,
+      104,
+      148,
+      104,
+      152,
+      104,
+      158,
+      70,
+      183,
+      2,
+      187,
+      104,
+      197,
+      104,
+      201,
+      104,
+      205,
+      70,
+      220,
+      2,
+      224,
+      104,
+      235,
+      104,
+      239,
+      70,
+      254,
+      2,
+      258,
+      104,
+      269,
+      104,
+      273,
+      70,
+      294,
+      2,
+      298,
+      104,
+      306,
+      104,
+      310,
+      70,
+      323,
+      2,
+      327,
+      104,
+      335,
+      104,
+      339,
+      70,
+      362,
+      2,
+      366,
+      104,
+      380,
+      104,
+      384,
+      104,
+      388,
+      104,
+      392,
+      70,
+      413,
+      2,
+      417,
+      104,
+      425,
+      104,
+      429,
+      70,
+      447,
+      2,
+      451,
+      104,
+      462,
+      104,
+      466,
+      104,
+      470,
+      70,
+      93,
+      2,
+      472,
+      2,
+      97,
+      2,
+      474,
+      2,
+      476,
+      2,
+      476,
+      2,
+      97,
+      2,
+      478,
+      70,
+      493,
+      2,
+      497,
+      104,
+      505,
+      104,
+      509,
+      10]}},
+   "509":
+   {"tactics": {"startPos": 1143, "info": [], "endPos": 1161, "content": 508}},
+   "508": {"seq": {"highlights": [507, 2, 156, 2, 491, 10]}},
+   "507": {"token": {"tok": 506}},
+   "505":
+   {"tactics":
+    {"startPos": 1116, "info": [499], "endPos": 1136, "content": 504}},
+   "504": {"seq": {"highlights": [501, 2, 503, 10]}},
+   "503": {"token": {"tok": 502}},
+   "501": {"token": {"tok": 500}},
+   "50": {"token": {"tok": 49}},
+   "5": {"text": {"str": "\n"}},
+   "498": {"seq": {"highlights": [71, 69, 2, 40, 2, 482, 2, 484]}},
+   "497":
+   {"tactics":
+    {"startPos": 1107, "info": [488], "endPos": 1109, "content": 496}},
+   "496": {"seq": {"highlights": [495, 10]}},
+   "495": {"token": {"tok": 494}},
+   "493":
+   {"tactics":
+    {"startPos": 1091, "info": [488], "endPos": 1106, "content": 492}},
+   "492": {"seq": {"highlights": [93, 2, 490, 2, 491, 2, 97, 10]}},
+   "491": {"token": {"tok": 481}},
+   "490": {"token": {"tok": 489}},
+   "487": {"seq": {"highlights": [71, 69, 2, 40, 2, 482, 2, 486]}},
+   "486": {"token": {"tok": 479}},
+   "485": {"seq": {"highlights": [71, 64, 2, 482, 2, 484]}},
+   "484": {"token": {"tok": 483}},
+   "482": {"token": {"tok": 480}},
+   "48": {"token": {"tok": 47}},
+   "478": {"token": {"tok": 477}},
+   "476": {"token": {"tok": 475}},
+   "474": {"token": {"tok": 473}},
+   "472": {"token": {"tok": 471}},
+   "470":
+   {"tactics": {"startPos": 1037, "info": [], "endPos": 1054, "content": 469}},
+   "469": {"seq": {"highlights": [468, 2, 156, 2, 445, 10]}},
+   "468": {"token": {"tok": 467}},
+   "466":
+   {"tactics":
+    {"startPos": 1013, "info": [455], "endPos": 1030, "content": 465}},
+   "465": {"seq": {"highlights": [464, 2, 156, 2, 444, 10]}},
+   "464": {"token": {"tok": 463}},
+   "462":
+   {"tactics":
+    {"startPos": 985, "info": [453, 455, 456], "endPos": 1006, "content": 461}},
+   "461": {"seq": {"highlights": [458, 2, 460, 10]}},
+   "460": {"token": {"tok": 459}},
+   "46": {"token": {"tok": 45}},
+   "458": {"token": {"tok": 457}},
+   "454": {"seq": {"highlights": [71, 69, 2, 40, 2, 434, 2, 260]}},
+   "452":
+   {"seq":
+    {"highlights": [71, 69, 2, 40, 2, 434, 2, 402, 260, 2, 404, 2, 436, 406]}},
+   "451":
+   {"tactics": {"startPos": 976, "info": [441], "endPos": 978, "content": 450}},
+   "450": {"seq": {"highlights": [449, 10]}},
+   "449": {"token": {"tok": 448}},
+   "447":
+   {"tactics": {"startPos": 958, "info": [441], "endPos": 975, "content": 446}},
+   "446": {"seq": {"highlights": [93, 2, 443, 2, 444, 2, 445, 2, 97, 10]}},
+   "445": {"token": {"tok": 438}},
+   "444": {"token": {"tok": 433}},
+   "443": {"token": {"tok": 442}},
+   "440": {"seq": {"highlights": [71, 69, 2, 40, 2, 434, 2, 436]}},
+   "44": {"token": {"tok": 43}},
+   "439": {"seq": {"highlights": [71, 64, 2, 434, 2, 435]}},
+   "437":
+   {"seq": {"highlights": [71, 64, 2, 434, 2, 402, 435, 2, 404, 2, 436, 406]}},
+   "436": {"token": {"tok": 430}},
+   "435": {"token": {"tok": 432}},
+   "434": {"token": {"tok": 431}},
+   "429":
+   {"tactics": {"startPos": 938, "info": [], "endPos": 955, "content": 428}},
+   "428": {"seq": {"highlights": [427, 2, 156, 2, 411, 10]}},
+   "427": {"token": {"tok": 426}},
+   "425":
+   {"tactics": {"startPos": 910, "info": [419], "endPos": 931, "content": 424}},
+   "424": {"seq": {"highlights": [421, 2, 423, 10]}},
+   "423": {"token": {"tok": 422}},
+   "421": {"token": {"tok": 420}},
+   "42": {"token": {"tok": 41}},
+   "418":
+   {"seq":
+    {"highlights": [71, 69, 2, 40, 2, 83, 397, 2, 86, 2, 398, 89, 2, 399]}},
+   "417":
+   {"tactics": {"startPos": 901, "info": [408], "endPos": 903, "content": 416}},
+   "416": {"seq": {"highlights": [415, 10]}},
+   "415": {"token": {"tok": 414}},
+   "413":
+   {"tactics": {"startPos": 885, "info": [408], "endPos": 900, "content": 412}},
+   "412": {"seq": {"highlights": [93, 2, 410, 2, 411, 2, 97, 10]}},
+   "411": {"token": {"tok": 396}},
+   "410": {"token": {"tok": 409}},
+   "407":
+   {"seq":
+    {"highlights": [71, 69, 2, 40, 2, 398, 2, 402, 397, 2, 404, 2, 399, 406]}},
+   "406": {"token": {"tok": 405}},
+   "404": {"token": {"tok": 403}},
+   "402": {"token": {"tok": 401}},
+   "400":
+   {"seq": {"highlights": [71, 64, 2, 83, 397, 2, 86, 2, 398, 89, 2, 399]}},
+   "40": {"token": {"tok": 39}},
+   "4": {"token": {"tok": 3}},
+   "399": {"token": {"tok": 395}},
+   "398": {"token": {"tok": 393}},
+   "397": {"token": {"tok": 394}},
+   "392":
+   {"tactics": {"startPos": 859, "info": [], "endPos": 882, "content": 391}},
+   "391": {"seq": {"highlights": [390, 2, 156, 2, 360, 10]}},
+   "390": {"token": {"tok": 389}},
+   "388":
+   {"tactics": {"startPos": 829, "info": [372], "endPos": 852, "content": 387}},
+   "387": {"seq": {"highlights": [386, 2, 156, 2, 359, 10]}},
+   "386": {"token": {"tok": 385}},
+   "384":
+   {"tactics":
+    {"startPos": 800, "info": [370, 372], "endPos": 822, "content": 383}},
+   "383": {"seq": {"highlights": [382, 2, 156, 2, 358, 10]}},
+   "382": {"token": {"tok": 381}},
+   "380":
+   {"tactics":
+    {"startPos": 773,
+     "info": [368, 370, 372, 373, 374],
+     "endPos": 793,
+     "content": 379}},
+   "38": {"token": {"tok": 37}},
+   "379": {"seq": {"highlights": [376, 2, 378, 10]}},
+   "378": {"token": {"tok": 377}},
+   "376": {"token": {"tok": 375}},
+   "371":
+   {"seq":
+    {"highlights": [71, 69, 2, 40, 2, 83, 226, 2, 86, 2, 345, 89, 2, 350]}},
+   "369":
+   {"seq":
+    {"highlights": [71, 69, 2, 40, 2, 83, 260, 2, 86, 2, 345, 89, 2, 350]}},
+   "367":
+   {"seq":
+    {"highlights": [71, 69, 2, 40, 2, 345, 2, 282, 260, 2, 284, 2, 226, 287]}},
+   "366":
+   {"tactics": {"startPos": 764, "info": [355], "endPos": 766, "content": 365}},
+   "365": {"seq": {"highlights": [364, 10]}},
+   "364": {"token": {"tok": 363}},
+   "362":
+   {"tactics": {"startPos": 731, "info": [355], "endPos": 763, "content": 361}},
+   "361":
+   {"seq": {"highlights": [93, 2, 357, 2, 358, 2, 359, 2, 360, 2, 97, 10]}},
+   "360": {"token": {"tok": 352}},
+   "36": {"token": {"tok": 35}},
+   "359": {"token": {"tok": 349}},
+   "358": {"token": {"tok": 344}},
+   "357": {"token": {"tok": 356}},
+   "354": {"seq": {"highlights": [71, 69, 2, 40, 2, 345, 2, 350]}},
+   "353":
+   {"seq": {"highlights": [71, 64, 2, 83, 347, 2, 86, 2, 345, 89, 2, 350]}},
+   "351":
+   {"seq": {"highlights": [71, 64, 2, 83, 346, 2, 86, 2, 345, 89, 2, 350]}},
+   "350": {"token": {"tok": 340}},
+   "348":
+   {"seq": {"highlights": [71, 64, 2, 345, 2, 282, 346, 2, 284, 2, 347, 287]}},
+   "347": {"token": {"tok": 343}},
+   "346": {"token": {"tok": 342}},
+   "345": {"token": {"tok": 341}},
+   "34": {"token": {"tok": 33}},
+   "339":
+   {"tactics": {"startPos": 711, "info": [], "endPos": 728, "content": 338}},
+   "338": {"seq": {"highlights": [337, 2, 156, 2, 181, 10]}},
+   "337": {"token": {"tok": 336}},
+   "335":
+   {"tactics": {"startPos": 681, "info": [329], "endPos": 704, "content": 334}},
+   "334": {"seq": {"highlights": [331, 2, 333, 10]}},
+   "333": {"token": {"tok": 332}},
+   "331": {"token": {"tok": 330}},
+   "328": {"seq": {"highlights": [71, 69, 2, 40, 2, 314, 2, 315]}},
+   "327":
+   {"tactics": {"startPos": 672, "info": [319], "endPos": 674, "content": 326}},
+   "326": {"seq": {"highlights": [325, 10]}},
+   "325": {"token": {"tok": 324}},
+   "323":
+   {"tactics": {"startPos": 657, "info": [319], "endPos": 671, "content": 322}},
+   "322": {"seq": {"highlights": [93, 2, 321, 2, 181, 2, 97, 10]}},
+   "321": {"token": {"tok": 320}},
+   "32": {"seq": {"highlights": [5, 29, 2, 31, 10]}},
+   "318":
+   {"seq":
+    {"highlights": [71, 69, 2, 40, 2, 314, 2, 282, 317, 2, 284, 2, 315, 287]}},
+   "317": {"token": {"tok": 312}},
+   "316": {"seq": {"highlights": [71, 64, 2, 314, 2, 315]}},
+   "315": {"token": {"tok": 313}},
+   "314": {"token": {"tok": 311}},
+   "310":
+   {"tactics": {"startPos": 637, "info": [], "endPos": 654, "content": 309}},
+   "31": {"token": {"tok": 30}},
+   "309": {"seq": {"highlights": [308, 2, 156, 2, 292, 10]}},
+   "308": {"token": {"tok": 307}},
+   "306":
+   {"tactics": {"startPos": 607, "info": [300], "endPos": 630, "content": 305}},
+   "305": {"seq": {"highlights": [302, 2, 304, 10]}},
+   "304": {"token": {"tok": 303}},
+   "302": {"token": {"tok": 301}},
+   "299": {"seq": {"highlights": [71, 69, 2, 40, 2, 278, 2, 279]}},
+   "298":
+   {"tactics": {"startPos": 598, "info": [289], "endPos": 600, "content": 297}},
+   "297": {"seq": {"highlights": [296, 10]}},
+   "296": {"token": {"tok": 295}},
+   "294":
+   {"tactics": {"startPos": 583, "info": [289], "endPos": 597, "content": 293}},
+   "293": {"seq": {"highlights": [93, 2, 291, 2, 292, 2, 97, 10]}},
+   "292": {"token": {"tok": 277}},
+   "291": {"token": {"tok": 290}},
+   "29": {"token": {"tok": 28}},
+   "288":
+   {"seq":
+    {"highlights": [71, 69, 2, 40, 2, 278, 2, 282, 279, 2, 284, 2, 285, 287]}},
+   "287": {"token": {"tok": 286}},
+   "285": {"token": {"tok": 276}},
+   "284": {"token": {"tok": 283}},
+   "282": {"token": {"tok": 281}},
+   "280": {"seq": {"highlights": [71, 64, 2, 278, 2, 279]}},
+   "279": {"token": {"tok": 275}},
+   "278": {"token": {"tok": 274}},
+   "273":
+   {"tactics": {"startPos": 563, "info": [], "endPos": 580, "content": 272}},
+   "272": {"seq": {"highlights": [271, 2, 156, 2, 252, 10]}},
+   "271": {"token": {"tok": 270}},
+   "27": {"seq": {"highlights": [5, 24, 2, 26, 10]}},
+   "269":
+   {"tactics":
+    {"startPos": 532, "info": [262, 263], "endPos": 556, "content": 268}},
+   "268": {"seq": {"highlights": [265, 2, 267, 10]}},
+   "267": {"token": {"tok": 266}},
+   "265": {"token": {"tok": 264}},
+   "261":
+   {"seq":
+    {"highlights": [71, 69, 2, 40, 2, 244, 2, 171, 260, 2, 173, 2, 246, 175]}},
+   "260": {"token": {"tok": 259}},
+   "26": {"token": {"tok": 25}},
+   "258":
+   {"tactics": {"startPos": 523, "info": [249], "endPos": 525, "content": 257}},
+   "257": {"seq": {"highlights": [256, 10]}},
+   "256": {"token": {"tok": 255}},
+   "254":
+   {"tactics": {"startPos": 504, "info": [249], "endPos": 522, "content": 253}},
+   "253": {"seq": {"highlights": [93, 2, 251, 2, 252, 2, 97, 10]}},
+   "252": {"token": {"tok": 243}},
+   "251": {"token": {"tok": 250}},
+   "248": {"seq": {"highlights": [71, 69, 2, 40, 2, 244, 2, 246]}},
+   "247":
+   {"seq": {"highlights": [71, 64, 2, 244, 2, 171, 245, 2, 173, 2, 246, 175]}},
+   "246": {"token": {"tok": 240}},
+   "245": {"token": {"tok": 242}},
+   "244": {"token": {"tok": 241}},
+   "24": {"token": {"tok": 23}},
+   "239":
+   {"tactics": {"startPos": 484, "info": [], "endPos": 501, "content": 238}},
+   "238": {"seq": {"highlights": [237, 2, 156, 2, 218, 10]}},
+   "237": {"token": {"tok": 236}},
+   "235":
+   {"tactics":
+    {"startPos": 453, "info": [228, 229], "endPos": 477, "content": 234}},
+   "234": {"seq": {"highlights": [231, 2, 233, 10]}},
+   "233": {"token": {"tok": 232}},
+   "231": {"token": {"tok": 230}},
+   "227":
+   {"seq":
+    {"highlights": [71, 69, 2, 40, 2, 210, 2, 171, 211, 2, 173, 2, 226, 175]}},
+   "226": {"token": {"tok": 225}},
+   "224":
+   {"tactics": {"startPos": 444, "info": [215], "endPos": 446, "content": 223}},
+   "223": {"seq": {"highlights": [222, 10]}},
+   "222": {"token": {"tok": 221}},
+   "220":
+   {"tactics": {"startPos": 425, "info": [215], "endPos": 443, "content": 219}},
+   "22": {"seq": {"highlights": [12, 19, 2, 21, 10]}},
+   "219": {"seq": {"highlights": [93, 2, 217, 2, 218, 2, 97, 10]}},
+   "218": {"token": {"tok": 209}},
+   "217": {"token": {"tok": 216}},
+   "214": {"seq": {"highlights": [71, 69, 2, 40, 2, 210, 2, 211]}},
+   "213":
+   {"seq": {"highlights": [71, 64, 2, 210, 2, 171, 211, 2, 173, 2, 212, 175]}},
+   "212": {"token": {"tok": 208}},
+   "211": {"token": {"tok": 206}},
+   "210": {"token": {"tok": 207}},
+   "21": {"token": {"tok": 20}},
+   "205":
+   {"tactics": {"startPos": 405, "info": [], "endPos": 422, "content": 204}},
+   "204": {"seq": {"highlights": [203, 2, 156, 2, 181, 10]}},
+   "203": {"token": {"tok": 202}},
+   "201":
+   {"tactics": {"startPos": 381, "info": [191], "endPos": 398, "content": 200}},
+   "200": {"seq": {"highlights": [199, 2, 156, 2, 180, 10]}},
+   "2": {"text": {"str": " "}},
+   "199": {"token": {"tok": 198}},
+   "197":
+   {"tactics":
+    {"startPos": 353, "info": [189, 191], "endPos": 374, "content": 196}},
+   "196": {"seq": {"highlights": [193, 2, 195, 10]}},
+   "195": {"token": {"tok": 194}},
+   "193": {"token": {"tok": 192}},
+   "190": {"seq": {"highlights": [71, 69, 2, 40, 2, 164, 2, 168]}},
+   "19": {"token": {"tok": 18}},
+   "188": {"seq": {"highlights": [71, 69, 2, 40, 2, 164, 2, 165]}},
+   "187":
+   {"tactics": {"startPos": 344, "info": [177], "endPos": 346, "content": 186}},
+   "186": {"seq": {"highlights": [185, 10]}},
+   "185": {"token": {"tok": 184}},
+   "183":
+   {"tactics": {"startPos": 326, "info": [177], "endPos": 343, "content": 182}},
+   "182": {"seq": {"highlights": [93, 2, 179, 2, 180, 2, 181, 2, 97, 10]}},
+   "181": {"token": {"tok": 167}},
+   "180": {"token": {"tok": 163}},
+   "179": {"token": {"tok": 178}},
+   "176":
+   {"seq":
+    {"highlights": [71, 69, 2, 40, 2, 164, 2, 171, 165, 2, 173, 2, 168, 175]}},
+   "175": {"token": {"tok": 174}},
+   "173": {"token": {"tok": 172}},
+   "171": {"token": {"tok": 170}},
+   "17": {"seq": {"highlights": [12, 14, 2, 16, 10]}},
+   "169": {"seq": {"highlights": [71, 64, 2, 164, 2, 168]}},
+   "168": {"token": {"tok": 162}},
+   "166": {"seq": {"highlights": [71, 64, 2, 164, 2, 165]}},
+   "165": {"token": {"tok": 161}},
+   "164": {"token": {"tok": 160}},
+   "16": {"token": {"tok": 15}},
+   "158":
+   {"tactics": {"startPos": 305, "info": [], "endPos": 323, "content": 157}},
+   "157": {"seq": {"highlights": [154, 2, 156, 2, 129, 10]}},
+   "156": {"token": {"tok": 155}},
+   "154": {"token": {"tok": 153}},
+   "152":
+   {"tactics": {"startPos": 290, "info": [141], "endPos": 298, "content": 151}},
+   "151": {"seq": {"highlights": [150, 2, 128, 10]}},
+   "150": {"token": {"tok": 149}},
+   "148":
+   {"tactics":
+    {"startPos": 265, "info": [139, 141, 142], "endPos": 283, "content": 147}},
+   "147": {"seq": {"highlights": [144, 2, 146, 10]}},
+   "146": {"token": {"tok": 145}},
+   "144": {"token": {"tok": 143}},
+   "140": {"seq": {"highlights": [71, 69, 2, 40, 2, 137, 2, 122]}},
+   "14": {"token": {"tok": 13}},
+   "138": {"seq": {"highlights": [71, 137, 2, 118, 2, 119]}},
+   "137": {"token": {"tok": 136}},
+   "135":
+   {"tactics": {"startPos": 256, "info": [125], "endPos": 258, "content": 134}},
+   "134": {"seq": {"highlights": [133, 10]}},
+   "133": {"token": {"tok": 132}},
+   "131":
+   {"tactics": {"startPos": 239, "info": [125], "endPos": 255, "content": 130}},
+   "130": {"seq": {"highlights": [93, 2, 127, 2, 128, 2, 129, 2, 97, 10]}},
+   "129": {"token": {"tok": 121}},
+   "128": {"token": {"tok": 115}},
+   "127": {"token": {"tok": 126}},
+   "124": {"seq": {"highlights": [71, 69, 2, 40, 2, 119, 2, 122]}},
+   "123": {"seq": {"highlights": [71, 64, 2, 116, 2, 122]}},
+   "122": {"token": {"tok": 112}},
+   "120": {"seq": {"highlights": [71, 116, 2, 118, 2, 119]}},
+   "12": {"text": {"str": "\n\n"}},
+   "119": {"token": {"tok": 113}},
+   "118": {"token": {"tok": 117}},
+   "116": {"token": {"tok": 114}},
+   "110":
+   {"tactics": {"startPos": 210, "info": [], "endPos": 236, "content": 109}},
+   "11": {"seq": {"highlights": [1, 2, 4, 5, 7, 2, 9, 10]}},
+   "109": {"seq": {"highlights": [106, 2, 108, 10]}},
+   "108": {"token": {"tok": 107}},
+   "106": {"token": {"tok": 105}},
+   "104": {"text": {"str": "\n      "}},
+   "103":
+   {"tactics": {"startPos": 201, "info": [91], "endPos": 203, "content": 102}},
+   "102": {"seq": {"highlights": [101, 10]}},
+   "101": {"token": {"tok": 100}},
+   "10": {"seq": {"highlights": []}},
+   "1": {"token": {"tok": 0}}}}}

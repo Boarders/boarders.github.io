@@ -1,0 +1,60 @@
+{"items":
+ [{"range":
+   {"start": {"line": 1, "column": 1}, "end": {"line": 3, "column": 27}},
+   "kind": "Lean.Parser.Module.header",
+   "defines": [],
+   "code": 15},
+  {"range":
+   {"start": {"line": 4, "column": 1}, "end": {"line": 4, "column": 1}},
+   "kind": "Lean.Parser.Command.eoi",
+   "defines": [],
+   "code": 18}],
+ "data":
+ {"tokens":
+  {"8":
+   {"kind": {"moduleName": {"name": ["Kripke", "Soundness"]}},
+    "content": "Kripke.Soundness"},
+   "6":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Module.import-20",
+      "name": ["Lean", "Parser", "Module", "import"],
+      "docs": null}},
+    "content": "import"},
+   "3":
+   {"kind": {"moduleName": {"name": ["Kripke", "Frame"]}},
+    "content": "Kripke.Frame"},
+   "16": {"kind": "unknown", "content": ""},
+   "12":
+   {"kind": {"moduleName": {"name": ["Kripke", "Completeness"]}},
+    "content": "Kripke.Completeness"},
+   "10":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Module.import-44",
+      "name": ["Lean", "Parser", "Module", "import"],
+      "docs": null}},
+    "content": "import"},
+   "0":
+   {"kind":
+    {"keyword":
+     {"occurrence": "Lean.Parser.Module.import-0",
+      "name": ["Lean", "Parser", "Module", "import"],
+      "docs": null}},
+    "content": "import"}},
+  "nextKey": 19,
+  "messageContents": {},
+  "goals": {},
+  "code":
+  {"9": {"token": {"tok": 8}},
+   "7": {"token": {"tok": 6}},
+   "5": {"text": {"str": "\n"}},
+   "4": {"token": {"tok": 3}},
+   "2": {"text": {"str": " "}},
+   "18": {"seq": {"highlights": [5, 17, 14]}},
+   "17": {"token": {"tok": 16}},
+   "15": {"seq": {"highlights": [1, 2, 4, 5, 7, 2, 9, 5, 11, 2, 13, 14]}},
+   "14": {"seq": {"highlights": []}},
+   "13": {"token": {"tok": 12}},
+   "11": {"token": {"tok": 10}},
+   "1": {"token": {"tok": 0}}}}}
