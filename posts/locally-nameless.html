@@ -207,9 +207,9 @@ ability to read terms written with DeBruijn indices as a “cylon
 detector”. What we gain in ease of implementation we give up in much
 worse readability.</p>
 <p>Instead we turn to the hybrid approach in the paper <a
-href="http://www.cs.ru.nl/~james/RESEARCH/haskell2004.pdf">I Am Not a
-Number – I am a Free Variable</a>. Let us keep free variables free and
-use De-Bruijn indices only for bound variables:</p>
+href="https://dl.acm.org/doi/10.1145/1017472.1017477">I Am Not a Number
+– I am a Free Variable</a>. Let us keep free variables free and use
+De-Bruijn indices only for bound variables:</p>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Our variable type keeps the old free variables and uses</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">--integers to represent bound variables.</span></span>
